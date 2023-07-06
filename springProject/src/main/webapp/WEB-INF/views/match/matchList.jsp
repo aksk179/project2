@@ -21,7 +21,7 @@
 </style>
 <script>
 	function redirectToToday() {
-		var url = "${pageContext.request.contextPath}/match/matchReg.ma?day=";
+		var url = "${pageContext.request.contextPath}/match/matchReg.ma?userId=${loginMember.userId}&day=";
 		
 		window.location.href = url;
 	}
@@ -35,88 +35,7 @@
     } else if(dates < today_days){
         //인덱스가 오늘의 날짜보다 작다면(지나온 날: 일정 추가 불가)
         weeks[indexs].style.backgroundColor = 'gray'; //CSS 불러오기
-    }
-} */
-/*	$(document).ready(function getDayOfWeek(){ //ex) getDayOfWeek('2022-06-13')	
-  		const sunday = new Date('2023-07-02');
- 		const sunday2 = new Date('2023-07-02');
-		console.log("날짜 : " + sunday.getDate());
-		
-		sunday2.setDate(sunday.getDate() + 7);
-		
-		console.log(sunday.getDate());
-		console.log(sunday2.getDate()); */
-/*
-		const tomorrow = 0;
-		tomorrow.setDate(today.getDate()+1);
-		console.log(tomorrow);
-		*/
-		
-/* 		function addDays(date, days) {
-			console.log(date);
-			console.log(date.getDate);
-			
-		  const sunday = new Date(date);
-		  console.log(sunday);
-		  
-		  
-		  //sunday.setDate(date.getDate() + days)
-		  return sunday;
-		}
-		
-		const sunday2 = addDays('2023-07-02', 7); */
-/* 		
-	    const week = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];   	    
-	    const num = new Date().getDay();
-	    console.log("요일 숫자로 : " + num);
-	    
-	    const dayOfWeek = week[num];
-	    console.log(dayOfWeek);
-	    
-/* 	    const date = new Date().getDate();
-	    console.log(date); 
-	    
-	    for(let i=0; i<7; i++) {
-	    	switch(dayOfWeek) {
-		    	case "sun":
-				    $("#"+i).html(date);	
-		    		break;
-		    	case "mon":
-				    $("#"+i).html(date);	
-		    		break;
-		    	case 2:
-				    $("#"+i).html(date);			    
-		    		break;
-		    	case "wed":
-				    $("#"+i).html(date);	
-		    		break;
-		    	case "thu":
-				    $("#"+i).html(date);	
-		    		break;
-		    	case "fri":
-				    $("#"+i).html(date);	
-				    break;
-		    	case "sat":
-				    $("#"+i).html(date);	
-				    break;
-	    	}
-	    }
-	
-	}); */
-	
-	
-/* 	function getYoilDate() {
-		let today = new Date();
-		console.log("날짜 : " + today);
-		
-		console.log("요일 : " + getDayOfWeek(today));
-		let yoil = today.getDay();
-		console.log("숫자로 : " + yoil)
-		return yoil;
-	};
-	
-	var value = getYoilDate()
-	$("#yoil").html(value); */
+    } */
 </script>
 </head>
 <body>

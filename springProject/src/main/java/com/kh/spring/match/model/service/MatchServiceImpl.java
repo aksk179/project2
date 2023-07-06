@@ -41,8 +41,8 @@ public class MatchServiceImpl implements MatchService{
 	}
 
 	@Override
-	public List<MatchInfo> selectMatchList(String userId1, String matchDate) {
-		return matchDao.selectMatchList(userId1, matchDate);
+	public List<MatchInfo> selectMatchList(String userId, String matchDate) {
+		return matchDao.selectMatchList(userId, matchDate);
 	}
 
 }

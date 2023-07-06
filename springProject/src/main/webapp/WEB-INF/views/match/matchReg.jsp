@@ -15,13 +15,19 @@
 	table {
 		width: 100%;
 	}
-	td {
+	.dateform {
 		width: 14%;
 		height: 60px;
 		text-align: center;
 	}
 	.pre {
-		background-color: grey;
+		background-color: #BDBDBD;
+		width: 14%;
+		height: 60px;
+		text-align: center;
+	}
+	td {
+		text-align: center;
 	}
 </style>
 <script>
@@ -54,7 +60,8 @@
 			</c:if>
 			
 			<c:if test="${item.day ge item.today}">
-				<td id="dateFilter" onclick="dateFilter('${item.day}');">
+				<td class="dateform" id="dateFilter" onclick="dateFilter('${item.day}');">
+					<a href="#map"></a>
 					<span>${item.yoil}</span>
 					<p>${item.date}</p>
 				</td>
@@ -71,11 +78,21 @@
 
 
 <!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width:70%; height:350px; float:left;"></div>
-<div style="width:30%; height:350px; float:left;">
+<div id="map" style="width:70%; height:500px; float:left;"></div>
+<div style="width:30%; height:500px; float:left;">
 	<form>
 		<table>
-			<thead></thead>
+			<thead>
+				<tr>
+					<th colspan="4">삭제 후 등록버튼을 눌러주세요!</th>
+				</tr>
+				<tr>
+					<th>체육관 이름</th>
+					<th>매치 날짜</th>
+					<th>매치 시간</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
 			<tbody id="register">
  			<c:forEach items="${inSchedList}" var="inSchedule">
 				<tr id='${inSchedule.code}'>
@@ -88,7 +105,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button type="button" onclick="registerMatch();">등록하기</button></td>
+					<td colspan="4"><button type="button" onclick="registerMatch();">등록하기</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -194,7 +211,6 @@
 				
 				desc.appendChild(jibun);
 				
-	
 				var footerDev = document.createElement('div');
 				desc.appendChild(footerDev);
 
@@ -204,12 +220,15 @@
 					link${status.index}.className = "link";
 					
 					var text${status.index} = document.createTextNode("${time} ");
-					//link.target = "_blank";
-					link${status.index}.href = "javascript:setMarkerOverlay('${markerOverlay.gymNo}', '${markerOverlay.gymName}', '${markerOverlay.codeList[status.index]}', '${markerOverlay.matchdateList[status.index]}', '${markerOverlay.matchdayList[status.index]}', '${time}')";
-					
+
+					link${status.index}.href = "javascript:setMarkerOverlay('${markerOverlay.gymNo}', '${markerOverlay.gymName}', '${markerOverlay.codeList[status.index]}', '${markerOverlay.matchdateList[status.index]}', '${markerOverlay.matchdayList[status.index]}', '${time}')";				
 					link${status.index}.appendChild(text${status.index});
 					
 					footerDev.appendChild(link${status.index});	
+					<c:if test="${status.index eq 4}">						
+						var footerDev = document.createElement('div');
+						desc.appendChild(footerDev);
+					</c:if>
 				</c:forEach>
 								
 				console.log("커스텀오버레이 다 그림");	
@@ -298,7 +317,6 @@
 		}
 		
 		function deleteTime(code) {
-			alert("아아");
 			console.log(code);
 			$("#"+code).remove();
 			//matchList.map((item) => item.code === code ? { ...item, value: "Y"} : item);
@@ -314,7 +332,7 @@
 			console.log(matchList);
 			//alert('hoho~~2');
  			$.ajax({
-				url: "${pageContext.request.contextPath}/match/register.do",
+				url: "${pageContext.request.contextPath}/match/register.do?userId=${loginMember.userId}",
 				type: "post",
 				data:  JSON.stringify(matchList),
 				dataType: "JSON",
@@ -329,7 +347,6 @@
 			});
 		}
 	</script>
-
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>

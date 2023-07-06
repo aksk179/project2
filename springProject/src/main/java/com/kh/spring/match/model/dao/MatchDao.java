@@ -24,5 +24,5 @@ public interface MatchDao {
 
 	int updateMatch(Match match);
 
-	List<MatchInfo> selectMatchList(@Param("userId1")String userId1, @Param("matchdate")String matchDate);
+	List<MatchInfo> selectMatchList(@Param("userId")String userId, @Param("matchdate")String matchDate);
 }

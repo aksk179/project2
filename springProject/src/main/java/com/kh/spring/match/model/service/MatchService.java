@@ -19,5 +19,5 @@ public interface MatchService {
 
 	int updateMatch(Match match);
 
-	List<MatchInfo> selectMatchList(String userId1, String matchDate);
+	List<MatchInfo> selectMatchList(String userId, String matchDate);
 }

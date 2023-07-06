@@ -16,7 +16,7 @@
 
 <div id="nav2">
 	<div id="gym"><a href="${pageContext.request.contextPath}/manager/mnGymList.mn">공지사항</a></div>
-	<div id="gym"></div>
+	<div id="matching"></div>
 	<div id="gym"><a href="${pageContext.request.contextPath}/manager/mnGymList.mn">체육관 정보조회</a></div>
 	<div id="gym"><a href="${pageContext.request.contextPath}/manager/mnMemberList.mn">회원 정보조회</a></div>
 </div>
