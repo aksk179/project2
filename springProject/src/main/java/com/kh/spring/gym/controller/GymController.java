@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,6 +26,7 @@ import com.kh.spring.gym.model.dao.GymDao;
 import com.kh.spring.gym.model.service.GymService;
 import com.kh.spring.gym.model.vo.Gym;
 import com.kh.spring.gym.model.vo.Schedule;
+import com.kh.spring.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/gym")
@@ -57,11 +59,68 @@ public class GymController {
 		return "/support/vincero";
 	}
 
+	// 체육관 메인페이지 
 	@GetMapping("/gymMainPage.gym")
-	public void gymMainPage() {}
+	public String gymMainPage(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession();
+		
+		Member loginMemberInfo = (Member)session.getAttribute("loginMember");
+		String userId = loginMemberInfo.getUserId();
+		Gym gym = gymService.getGymByUserId(userId);
+		
+		System.out.print(gym);
+		
+		model.addAttribute("gym", gym);
+		return "gym/gymMainPage";
+	}
+	/*
+	@GetMapping("/gymMainPage.gym")
+	public String gymMainPage(String loginId, Model model) {
+		Gym gym = gymService.loginGym(loginId);
+		model.addAttribute("gym", gym);
+		return "gym/gymMainPage";
+	}
+
+	@GetMapping("/gymMainPage.gym")
+	public void gymMainPage(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		Member loginMemberInfo = (Member)session.getAttribute("loginMember");
+		List<Gym> gymMainPage = gymDAO.getGymMainPageByUserId(loginMemberInfo.getUserId());
+		model.addAttribute("gymMainPage", gymMainPage); 
+	}
+	*/
+
 	
-	@GetMapping("/gymUpdateForm.gym")
-	public void gymUpdateForm() {}
+	// 내 체육관 정보보기 
+	@GetMapping("/gymForm.gym")
+	public String gymForm(int gymNo, Model model) {
+		Gym gym = gymService.myGym(gymNo);
+		model.addAttribute("gym", gym);
+		return "gym/gymForm";
+	}
+	
+	// 내 체육관 정보 가져오기(수정)
+	@GetMapping("/gymUpdate.gym")
+	public String selectMyGym(int gymNo, Model model) {
+		Gym gym = gymService.selectMyGym(gymNo);
+		model.addAttribute("gym", gym);
+		return "gym/gymUpdate";
+	}
+	
+	// 내 체육관 정보 보내기(수정)
+	@PostMapping("/gymUpdate.gym")
+	public String myGymUpdate(Gym gym, RedirectAttributes redirectAttr) {
+		
+		int result = gymService.myGymUpdate(gym);
+		
+		if (result > 0) {
+			redirectAttr.addFlashAttribute("msg", "체육관 정보수정 완료");
+		} else {
+			redirectAttr.addFlashAttribute("msg", "체육관 정보수정 실패");
+		}
+		return "redirect:/gym/gymForm.gym?gymNo=" + gym.getGymNo();
+	}
 	
 	@GetMapping("/gymCalendar.gym")
 	public void gymCalendar() {}

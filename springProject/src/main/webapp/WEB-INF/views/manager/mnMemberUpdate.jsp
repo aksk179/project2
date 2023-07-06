@@ -6,84 +6,82 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <link rel="stylesheet"
-   href="${pageContext.request.contextPath}/resources/css/manager/mnGymList.css">
+   href="${pageContext.request.contextPath}/resources/css/manager/mnMember.css">
 <script
    src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp">
+      <jsp:param value="${member.userId}회원님의 정보 수정" name="title" />
+  	</jsp:include>
 
-<div id="container">
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
 
 	<!--  회원정보 리스트 테이블 -->
 	<form name="frmm" method="post" action="${pageContext.request.contextPath}/manager/mnMemberUpdate.mn">
-	<button id="reset" type="button" style="width:80px" onclick="window.location.reload()">원래대로</button>
-	<button type="button" style="width:80px" onclick="javascript:history.back()">목록으로</button>
-	<button type="button" style="width:100px" onclick="profileToggle()">프로필 보기</button>
+	<h1>${member.userId}&ensp;회원님 정보 수정</h1>
 	<table>
 		<tr align="center">
-			<th >아이디</th>
-			<th >주민번호</th>
-			<th >이름</th>
-			<th>성별</th>
+			<th rowspan="2">아이디</th>
+			<th>이름</th>
 			<th>이메일</th>
-			<th>휴대폰 번호</th>
-			<th colspan="2">우편번호</th>
+			<th>성별</th>
 			<th>주소</th>
-			<th>상세주소</th>
 			<th>타입</th>
 			<th>상태</th>
-			<th>통제기간</th>
+		</tr>
+		<tr>
+			<th>주민번호</th>
+			<th>휴대폰 번호</th>
+			<th>우편번호</th>
+			<th>상세주소</th>
 			<th>가입일</th>
+			<th>통제기간</th>
 		</tr>
 			<tr align="center">
 				<td>
-					<input type="text" style="border:0 solid black;width:80px;" id="userId" name="userId" value="${member.userId}" readonly>
-					<br><button type="submit" style="width:80px">수정완료</button>
-				</td>
-				<td>
-					<input type="text" style="border:0 solid black;width:68px;" id="userRnn" name="userRnn" value="${member.userRnn}" readonly>
+					<input type="text" style="border:0 solid black;width:70px;" id="userId" name="userId" value="${member.userId}" readonly>
+					<br><button style="margin:10px;" type="submit" >수정완료</button>
 				</td>
 				<td>
 					<input type="text" id="userName" name="userName" style="width:80px;" value="${member.userName}">
-				</td>
-				<td>
-					<input type="text" style="border:0 solid black;width:20px;" id="userGender" name="userGender" value="${member.userGender}" readonly>
+					<hr>
+					<input type="text" style="border:0 solid black;" id="userRnn" name="userRnn" value="${member.userRnn}" readonly>
 				</td>
 				<td>
 					<input type="email" id="userEmail" name="userEmail" style="width:150px;" value="${member.userEmail}">
+					<hr>
+					<input type="text" id="phone" name="phone" style="width:150px;" value="${member.phone}">
 				</td>
 				<td>
-					<input type="text" id="phone" name="phone" style="width:120px;" value="${member.phone}">
+					<input type="text" style="border:0 solid black;width:100px;" id="userGender" name="userGender" value="${member.userGender}" readonly>
+					<hr>
+					<input type="text" id="zipcode" name="zipcode" style="width:80px;" value="${member.zipcode}">
+					<button onclick="findAddr();">찾기</button>
 				</td>
 				<td>
-					<input type="text" id="postcode" name="zipcode" style="width:65px;" value="${member.zipcode}">
-				</td>
-				<td>
-					<input type="button" value="찾기" style="width:40px;" onclick="findAddr();">
-				</td>
-				<td>
-					<input type="text" id="addr" name="address" value="${member.address}" readonly>
-				</td>
-				<td>
+					<input type="text" id="address" name="address" style="width:270px;" value="${member.address}" readonly>
+					<hr>
+					<input id="detailaddress" name="detailaddress" style="width:270px;" value="${member.detailaddress}">
 					<input id="detailAddr" name="detailAddress" style="width:220px;" value="${member.detailaddress}">
 				</td>
 				<td>
-					<select name="userType" style="width:75px;">
+					<select name="userType">
 						<option value="admin" ${member.userType eq 'admin' ? 'selected' : '' }>관리자</option>
 						<option value="coach" ${member.userType eq 'coach' ? 'selected' : '' }>관장님</option>
 						<option value="user" ${member.userType eq 'user' ? 'selected' : '' }>일반</option>
 						<option value="young" ${member.userType eq 'young' ? 'selected' : '' }>청소년</option>
 					</select>
+					<hr>
+					<input style="border:0 solid black;width:130px;" id="userRegdate" name="userRegdate" value="${member.userRegdate}" readonly>
 				</td>
 				<td>
-					<select name="userStatus" style="width:85px;"onchange="handleUserStatusChange(this)">
+					<select name="userStatus" onchange="handleUserStatusChange(this)">
 						<option value=0 ${member.userStatus eq 0 ? 'selected' : '' }>탈퇴</option>
 						<option value=1 ${member.userStatus eq 1 ? 'selected' : '' }>회원가입</option>
 						<option value=2 ${member.userStatus eq 2 && member.userType ne 'young' ? 'selected' : '' } ${member.userType eq 'young' ? 'disabled' : '' }>프로필</option>
 						<option value=4 ${member.userStatus eq 4 ? 'selected' : '' }>제재상태</option>
 					</select>
-				</td>
-				<td>
-					<select name="userControl" style="width:85px;" ${member.userStatus ne 4 ? 'disabled' : ''}>
+					<hr>
+					<select name="userControl" ${member.userStatus ne 4 ? 'disabled' : ''}>
 						<option value=0 ${member.userControl eq 0 ? 'selected' : '' }>제재없음</option>
 						<option value=1 ${member.userControl eq 1 ? 'selected' : '' }>7일</option>
 						<option value=2 ${member.userControl eq 2 ? 'selected' : '' }>30일</option>
@@ -92,15 +90,20 @@
 						<option value=5 ${member.userControl eq 5 ? 'selected' : '' }>무기한</option>
 					</select>
 				</td>
-				<td>
-					<input style="border:0 solid black;width:80px;" id="userRegdate" name="userRegdate" value="${member.userRegdate}" readonly>
-				</td>
 			</tr>
 	</table>
-	</form>
+	<div id="btnmem">
+	<button type="reset" style="width:80px">원래대로</button>
+	<button type="button" style="width:80px" onclick="javascript:history.back()">목록으로</button>
+	<button type="button" style="width:100px" onclick="profileToggle()">프로필 보기</button>
+	</div>
+</form>
+	
+	<div style="margin-bottom: 10px;"></div>
 	
 	<!--  프로필 리스트 테이블 -->
-	<form name="frmp" method="post" action="${pageContext.request.contextPath}/manager/mnProfileUpdate.mn">
+	<form name="Memfrm" method="post" action="${pageContext.request.contextPath}/manager/mnProfileUpdate.mn">
+	<h1 id="profileH1" style="display: none;">${member.userId}&ensp;회원님 프로필 수정</h1>
 	<button id="profileButton" class="h3" type="submit" style="width:80px">수정완료</button>
 	<br>
 	<table id="profileTable" style="display: none;">
@@ -222,7 +225,7 @@ function findAddr() {
             let jibunAddr = data.jibunAddress;
             let extraAddr = '';
 
-            document.getElementById("postcode").value = data.zonecode;
+            document.getElementById("zipcode").value = data.zonecode;
 
             if (data.userSelectedType == 'R') {
                 if (roadAddr != '') {
@@ -233,13 +236,13 @@ function findAddr() {
                         extraAddr += extraAddr != '' ? ', ' + data.buildingName : data.buildingName;
                     }
                     roadAddr += extraAddr != '' ? '(' + extraAddr + ')' : '';
-                    document.getElementById("addr").value = roadAddr;
+                    document.getElementById("address").value = roadAddr;
                 }
             } else if (data.userSelectedType == 'J') {
-                document.getElementById("addr").value = jibunAddr;
+                document.getElementById("address").value = jibunAddr;
             }
 
-            document.getElementById("detailAddr").focus();
+            document.getElementById("detailaddress").focus();
         }
     }).open();
 }
@@ -256,13 +259,16 @@ function findAddr() {
   function profileToggle() {
     var table = document.getElementById("profileTable");
     var button = document.getElementById("profileButton");
+    var h1 = document.getElementById("profileH1");
     
     if (table.style.display === "none") {
       table.style.display = "table";
       button.style.display = "inline";
+      h1.style.display = "block"; // h1 요소를 나타나게 함
     } else {
       table.style.display = "none";
       button.style.display = "none";
+      h1.style.display = "none"; // h1 요소를 숨김
     }
   }
 </script>

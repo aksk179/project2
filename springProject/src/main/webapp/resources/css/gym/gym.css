@@ -1,0 +1,104 @@
+/* form {
+		padding: 20px;
+		align: center;
+} */
+#table1 {
+	width: 400px;
+	margin: 0 auto;
+	font-family: 'Arial', sans-serif;
+	background-color: #f7f7f7;
+	border-radius: 4px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+#table2 {
+	width: 550px;
+	margin: 0 auto;
+	font-family: 'Arial', sans-serif;
+	background-color: #f7f7f7;
+	border-radius: 4px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+h1{
+	text-align: center;
+	padding: 50px;
+}
+
+table {
+	width: 100%;
+	padding: 10px;
+}
+
+
+th {
+	width: 30%;
+	border: none;
+}
+
+td {
+	width: 35%;
+	padding: 15px;
+	border: none;
+}
+
+th {
+	text-align: center;
+	background-color: #eaeaea;
+	color: #333;
+}
+
+#table2 > th {
+	padding: 5px;
+}
+#table1 > th {
+	width: 30px;
+}
+
+
+input {
+	width: 100px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	outline: none;
+	transition: border-color 0.3s;
+}
+
+input:focus {
+	border-color: skyblue;
+}
+
+#gymZipcode, #gymAddress{
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	outline: none;
+	transition: border-color 0.3s;
+}
+
+#gymZipcode {
+	width: 70px;
+}
+
+#gymAddress {
+	width: 210px;
+}
+
+#gymDetailaddress {
+	width: 230px;
+}
+
+button {
+	padding: 10px 20px;
+	background-color: skyblue;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+button:hover {
+	background-color: blue;
+}

@@ -4,12 +4,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link rel="stylesheet"
-   href="${pageContext.request.contextPath}/resources/css/manager/mnGymList.css">
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+   href="${pageContext.request.contextPath}/resources/css/manager/mnMember.css">
+	<jsp:include page="/WEB-INF/views/common/header.jsp">
+      <jsp:param value="회원 정보 리스트" name="title" />
+  	</jsp:include>
 
-<div id="container">
 
-	<!-- 검색필터 -->
+
+	<!-- 검색필터 
 	<form name="searchFrm" action="${pageContext.request.contextPath}/manager/mnMemberList.mn" method="post">
 	  <select name="searchType">
 	      <option value="userId">아이디</option>
@@ -25,26 +27,38 @@
 	  
 	  <button type="submit">검색</button>
  	</form>
-
+	-->
+	
 	<!-- 회원정보 리스트 테이블 -->
-	<table>
+<div style="display: flex; justify-content: center;">
+	<form>
+	<h1>빈체로 회원 리스트</h1>
+	<table class="table">
 		<tr align="center">
-			<th style="width: 80px;">아이디</th>
-			<th style="width: 68px;">주민번호</th>
-			<th style="width: 80px;">이름</th>
-			<th style="width: 20px;">성별</th>
-			<th style="width: 150px;">이메일</th>
-			<th style="width: 120px;">휴대폰 번호</th>
-			<th style="width: 105px;">우편번호</th>
-			<th style="width: 120px;">주소</th>
-			<th style="width: 220px;">상세주소</th>
-			<th style="width: 75px;">타입</th>
-			<th style="width: 85px;">상태</th>
-			<th style="width: 80px;">통제기간</th>
-			<th style="width: 80px;">가입일</th>
+			<th rowspan="2">아이디</th>
+			<th>이름</th>
+			<th>이메일</th>
+			<th>성별</th>
+			<th>주소</th>
+			<th>타입</th>
+			<th>상태</th>
+		</tr>
+		<tr>
+			<th>주민번호</th>
+			<th>휴대폰 번호</th>
+			<th>우편번호</th>
+			<th>상세주소</th>
+			<th>가입일</th>
+			<th>통제기간</th>
 		</tr>
 		
 		<c:forEach items="${memberList}" var="member">
+			<tr>
+				<td>${member.userId}<br><br><button type="button" onclick="mnMemberUpdate('${member.userId}');">수정하기</button></td>
+				<td>${member.userName}<hr>${member.userRnn}</td>
+				<td>${member.userEmail}<hr>${member.phone}</td>
+				<td>${member.userGender}<hr>${member.zipcode}</td>
+				<td>${member.address}<hr>${member.detailaddress}</td>
 			<tr align="center">
 				<td>${member.userId}<br><br><button onclick="mnMemberUpdate('${member.userId}');">수정하기</button></td>
 				<td>${member.userRnn}</td>
@@ -68,6 +82,8 @@
 					<c:if test="${member.userType eq 'young'}">
 						청소년
 					</c:if>
+					<hr>
+					${member.userRegdate}
 				</td> 
 				<td>
 					<c:if test="${member.userStatus eq 0}">
@@ -82,8 +98,7 @@
 					<c:if test="${member.userStatus eq 4}">
 						제재상태
 					</c:if> 
-				</td>
-				<td>
+					<hr>
 					<c:if test="${member.userControl eq 0}">
 					</c:if>
 					<c:if test="${member.userControl eq 1}">
@@ -102,7 +117,6 @@
 						무기한
 					</c:if> 
 				</td>
-				<td>${member.userRegdate}</td>
 			</tr>
 		</c:forEach>	
 		
@@ -168,7 +182,7 @@
 			</tr>
 		</c:forEach>	
 	</table>
-
+</div>
 	
 	<!-- 페이지 코드 -->
 	<nav>
@@ -212,8 +226,8 @@
 			</c:if>
 		</ul>
 	</nav>
-	
-</div>
+</form>
+
 
 <!-- 수정하기버튼을 누르면 작동하는 스크립트 --> 
 <script>

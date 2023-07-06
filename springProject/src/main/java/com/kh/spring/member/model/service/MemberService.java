@@ -20,4 +20,6 @@ public interface MemberService {
 
 	int statusUpdate(String userId);
 
+	int mnStatusUpdate(String userId);
+
 }

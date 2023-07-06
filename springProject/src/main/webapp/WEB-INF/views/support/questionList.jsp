@@ -23,11 +23,19 @@
 			<th>첨부파일</th>
 			<th>작성일</th>
 			<th>조회수</th>
+			<th>답변여부</th>
 		</tr>
 		<c:forEach items="${questionList}" var="question">
 			<tr>
 				<td>${question.questionNo}</td>
-				<td width="500px"><a href="${pageContext.request.contextPath}/support/questionDetail.su?questionNo=${question.questionNo}">${question.questionTitle}</a></td>
+				<c:choose>
+					<c:when test="${loginMember.userId == question.questionWriter || loginMember.userType == 'admin'}">
+						<td width="500px"><a href="${pageContext.request.contextPath}/support/questionDetail.su?questionNo=${question.questionNo}">${question.questionTitle}</a></td>
+					</c:when>
+					<c:otherwise>
+						<td width="500px"><a href="${pageContext.request.contextPath}/support/questionList.su">${question.questionTitle}</a></td>
+					</c:otherwise>
+				</c:choose>
 				<td>${question.questionWriter}</td>
 				<td>
 					<c:if test="${not empty question.originalFilename}">
@@ -36,10 +44,17 @@
 				</td>
 				<td>${question.createDate}</td>
 				<td>${question.count}</td>
+				<c:if test="${question.questionStatus == 0}">
+					<td style="color:red">답변대기중</td>
+				</c:if>
+				<c:if test="${question.questionStatus == 1}">
+					<td style="color:blue">답변완료</td>
+				</c:if>
 			</tr>
 		</c:forEach>
 		
 	</table>
+
 		<nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">
 				<c:if test="${pi.nowPage ne 1}">
@@ -76,4 +91,9 @@
 	</c:if>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
+<script>
+	document.querySelector("#enrollBtn").addEventListener('click', (e) => {
+		location.href='${pageContext.request.contextPath}/support/questionForm.su';
+	});
+</script>
 </html>

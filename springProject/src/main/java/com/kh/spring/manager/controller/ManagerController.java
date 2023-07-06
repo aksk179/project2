@@ -16,15 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.spring.common.model.vo.PageInfo;
 import com.kh.spring.common.template.Pagination;
 import com.kh.spring.gym.model.vo.Gym;
+import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.model.vo.Member;
 import com.kh.spring.profile.model.vo.Profile;
 import com.kh.spring.manager.model.service.ManagerService;
-
+import com.kh.spring.manager.model.vo.Criteria;
 
 
 @Controller
@@ -33,12 +35,9 @@ public class ManagerController {
 	
 	@Autowired
 	private ManagerService managerService;
-	
+
 	@Autowired
-	private ServletContext application;
-	
-	@Autowired
-	private ResourceLoader resourceLoader;
+	private MemberService memberService;
 	
 	@GetMapping("/mnMainPage.mn")
 	public void mnMainPage() {}
@@ -71,12 +70,29 @@ public class ManagerController {
 	}
 	
 	@PostMapping("/mnGymUpdate.mn")
-	public String updateDev(Gym gym, RedirectAttributes redirectAttr) {
+	public String updateDev(Gym gym, Member member, Model model, RedirectAttributes redirectAttr) {
 		int result = managerService.mnGymUpdate(gym);
-		redirectAttr.addFlashAttribute("msg", "체육관 정보수정 완료");
+		
+		int result2 = 0;
+		if (result == 1 && gym.getGymStatus() == 2) {
+			result2 = memberService.mnStatusUpdate(gym.getUserId());
+			member.setUserType("coach");
+			model.addAttribute("mnStatusUpdate", member);
+			redirectAttr.addFlashAttribute("msg", "no."+ gym.getGymNo() +" 체육관 정보수정 및 회원상태 업데이 완료");
+		} else if(result == 1)
+			redirectAttr.addFlashAttribute("msg", "no."+ gym.getGymNo() +" 체육관 정보수정 완료");
 		return "redirect:/manager/mnGymList.mn";
 	}
-
+	/*
+	 * @PostMapping("/mnGymUpdate.mn") public String updateDev(Gym gym, Member
+	 * member, RedirectAttributes redirectAttr) { int result =
+	 * managerService.mnGymUpdate(gym);
+	 * 
+	 * int result2 = 0; if (result == 1 && gym.getGymStatus() == 2) { result2 =
+	 * memberService.mnStatusUpdate(gym.getUserId());
+	 * redirectAttr.addFlashAttribute("msg", "no."+ gym.getGymNo() +" 체육관 정보수정 완료");
+	 * } return "redirect:/manager/mnGymList.mn"; }
+	 */
 	
 	
 	// 회원정보 조회 및 수정
@@ -104,7 +120,7 @@ public class ManagerController {
 	@PostMapping("/mnMemberUpdate.mn")
 	public String updateMember(Member member, RedirectAttributes redirectAttr) {
 		int result = managerService.mnMemberUpdate(member);
-		redirectAttr.addFlashAttribute("msg", "회원 정보수정 완료");
+		redirectAttr.addFlashAttribute("msg", member.getUserId() + " 회원 정보수정 완료");
 		return "redirect:/manager/mnMemberList.mn";
 	}
 	
@@ -118,9 +134,9 @@ public class ManagerController {
 	@PostMapping("/mnProfileUpdate.mn")
 	public String updateProfile(Profile profile, RedirectAttributes redirectAttr) {
 		int result = managerService.mnProfileUpdate(profile);
-		redirectAttr.addFlashAttribute("msg", "프로필 정보수정 완료");
+		redirectAttr.addFlashAttribute("msg", profile.getUserId() + "회원 프로필수정 완료");
 		return "redirect:/manager/mnMemberList.mn";
 	}
-	
+
 	
 }

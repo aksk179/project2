@@ -14,7 +14,7 @@
 	<jsp:param value="상세보기" name="title"/>
 </jsp:include>
 <a href="${pageContext.request.contextPath}/support/questionList.su">질문게시판</a>
-<a href="${pageContext.request.contextPath}/support/publicGymList.su">공공체육시설안내</a>
+<a href="${pageContext.request.contextPath}/support/publicEmergency.su">공공체육시설안내</a>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

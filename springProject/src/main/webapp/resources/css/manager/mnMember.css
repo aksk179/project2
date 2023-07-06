@@ -1,0 +1,143 @@
+ /* mnGymList.css */
+
+/* 테이블에 대한 스타일 */
+.table {
+	width: 1200px;
+    margin-bottom: 20px;
+	border-radius: 4px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	padding: 10px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+th {
+  padding: 15px;
+  text-align: center;
+  background-color: #f2f2f2;
+}
+
+td {
+  padding: 20px;
+}
+
+h1{
+	text-align: center;
+	padding: 20px;
+}
+
+/* 버튼에 대한 스타일 */
+button {
+  padding: 5px 10px;
+  background-color: #f2f2f2;
+  color: black;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  background-color: skyblue;
+  color: white;
+}
+
+#btnmem {
+	padding :20px;
+}
+
+/* 입력 양식에 대한 스타일 */
+input {
+  padding: 5px;
+  text-align:center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+	border: 1px solid #ccc;
+  	border-radius: 4px;
+	resize: none;
+}
+select {
+  width: auto;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* .profileTable {
+	display: none;
+}
+ */
+/* 수평선에 대한 스타일 */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* footer에 대한 스타일 */
+footer {
+  margin-top: 20px;
+  text-align: center;
+} */
+
+/* 페이지네이션 스타일 */
+nav {
+  bottom: 20px; /* 아래에서 20px의 여백을 유지하도록 설정합니다. */
+  margin-top: 20px; /* 테이블 밑에서 20px만큼 떨어져서 배치되도록 설정합니다. */
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* 가운데 정렬을 위해 추가 */
+}
+
+nav ul li {
+  margin: 0 5px;
+}
+
+nav ul li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+nav ul li a:hover {
+  background-color: #e6e6e6;
+}
+
+nav ul li.active a {
+  background-color: #007bff;
+  color: #fff;
+}
+
+nav ul li.disabled a {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* 필터 */
+.filter {
+    margin-left:10%;
+  margin-top: 20px;
+  text-align: center; /* 가운데 정렬을 위해 추가 */
+}

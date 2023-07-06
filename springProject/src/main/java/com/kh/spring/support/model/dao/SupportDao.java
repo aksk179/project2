@@ -10,7 +10,7 @@ import com.kh.spring.support.model.vo.Question;
 
 @Mapper
 public interface SupportDao {
-	int selectTotalRecord();
+	int selectTotalRecordNotice();
 
 	List<Notice> selectNoticeList(RowBounds rowBounds);
 
@@ -23,6 +23,20 @@ public interface SupportDao {
 	int updateNotice(Notice notice);
 
 	int deleteNotice(int noticeNo);
+	
+	int selectTotalRecordQuestion();
 
 	List<Question> selectQuestionList(RowBounds rowBounds);
+
+	int insertQuestion(Question question);
+	
+	int updateCountQuestion(int questionNo);
+	
+	Question selectOneQuestion(int questionNo);
+
+	int updateQuestion(Question question);
+
+	int deleteQuestion(int questionNo);
+
+	int insertQuestionAnswer(Question question);
 }

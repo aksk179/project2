@@ -20,16 +20,17 @@
 		#{address},
 		#{detailaddress},
 		default,
-		#{userStatus},
 		default,
 		default,
+		default,
+		default
 		#{userInfo}
 		)
 	</insert>
 
 	<select id="selectOneMember" resultMap="memberMap">
-		select user_id, user_pw, substr(user_rnn,1,8)||'******' as user_rnn, user_name, user_email,
-		phone, zipcode, address, detailaddress, user_status
+		select user_id, user_pw, substr(user_rnn,1,8)||'******' as user_rnn, user_name, user_gender, user_email,
+		phone, zipcode, address, detailaddress, user_type, user_status, user_control, user_regdate, user_info
 		from member
 		where
 		user_id=#{userId}
@@ -39,17 +40,14 @@
 		update member
 		set
 		user_id = #{userId},
-		user_pw
-		=#{userPw},
-		user_name =#{userName},
-		user_rnn =#{userRnn},
-		phone =
-		#{phone},
+		user_pw = #{userPw},
+		user_name = #{userName},
+		user_rnn = #{userRnn},
+		phone = #{phone},
 		user_email = #{userEmail},
 		zipcode = #{zipcode},
-		address =
-		#{address},
-		detailAddress = #{detailAddress}
+		address = #{address},
+		detailaddress = #{detailaddress}
 		where user_id = #{userId}
 	</update>
 
@@ -57,8 +55,7 @@
 		update member
 		set
 		user_pw = #{userPw}
-		where user_id =
-		#{userId}
+		where user_id = #{userId}
 	</update>
 
 	<select id="selectTwoMember" resultMap="memberMap">
@@ -83,6 +80,16 @@
          set
          user_status = 2
       where user_id = #{userId}
+   </update>
+   
+   	 <update id="mnStatusUpdate">
+      update member
+         set user_type = 'coach'
+       where user_id in ( select m.user_id
+					   	    from gym g
+					       inner join member m on g.user_id = m.user_id
+					       where g.gym_status = 2) 
+		 and user_type != 'coach'
    </update>
 	
 </mapper>

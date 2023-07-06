@@ -65,7 +65,7 @@
 								</tr>
 								<tr>
 									<td><c:choose>
-											<c:when test="${profileMember.userStatus == 2}">
+											<c:when test="${loginMember.userStatus == 2}">
 												<button class="profilebtn" type="button"
 													onclick="location.href='${pageContext.request.contextPath}/profile/profileUpdate.pr'">프로필
 													수정</button>
@@ -79,11 +79,20 @@
 									<td><button class="myMatchbtn" type="button"
 											onclick="location.href='#'">내경기</button></td>
 								</tr>
+								
+								<!-- 유저타입에 맞게 버튼을 보여주는 조건문 -->
 								<tr>
-									<td><button class="managerbtn" type="button"
-											onclick="location.href='#'">관리자</button></td>
-									<td><button class="coachbtn" type="button"
-											onclick="location.href='#'">관장</button></td>
+									<c:choose>
+										<c:when test="${loginMember.userType eq 'admin'}">
+											<td><button class="managerbtn" type="button"
+													onclick="location.href='${pageContext.request.contextPath}/manager/mnMainPage.mn'">관리자</button></td>
+										</c:when>
+										<c:when test="${loginMember.userType eq 'coach'}">
+											<td><button class="coachbtn" type="button"
+													onclick="location.href='${pageContext.request.contextPath}/gym/gymMainPage.gym'">관장</button></td>
+<%-- 													onclick="location.href='${pageContext.request.contextPath}/gym/gymMainPage.gym?loginId=${loginMember.userId}'">관장</button></td> --%>
+										</c:when>
+									</c:choose>
 								</tr>
 							</table>
 						</div>

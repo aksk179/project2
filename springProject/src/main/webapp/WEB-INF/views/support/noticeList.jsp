@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/support/notice.css">
 </head>
 <body>
+${loginMember.userType}
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="공지게시판" name="title"/>
 </jsp:include>

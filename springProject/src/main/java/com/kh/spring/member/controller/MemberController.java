@@ -30,7 +30,7 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 @Controller
 @RequestMapping("/member")
-@SessionAttributes({ "loginMember" })
+@SessionAttributes({"loginMember"})
 public class MemberController {
 
 	@Autowired

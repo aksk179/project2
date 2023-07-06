@@ -132,7 +132,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td colspan="2"><input name="detailAddress" id="detailAddr"
+					<td colspan="2"><input name="detailaddress" id="detailAddr"
 						placeholder="상세주소를 입력하세요" required></td>
 				</tr>
 				<tr>

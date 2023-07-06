@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>${param.title}</title>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
 <c:if test="${not empty msg}">
 	<script type="text/javascript">
@@ -17,8 +18,6 @@
 </head>
 <body>
 <div id="nav1">
-	<div id="left"><a href="${pageContext.request.contextPath}/gym/gymMainPage.gym">관장님</a></div>
-	<div class="left"><a href="${pageContext.request.contextPath}/manager/mnMainPage.mn"><img src="${pageContext.request.contextPath}/resources/img/manager.png" alt="manager" width="80px" height="40px"></a></div>
 	<div id="logo"><a href="${pageContext.request.contextPath}"><img src="${pageContext.request.contextPath}/resources/img/logo.png" alt="logo" width="200px" height="90px"></a></div>
 	<div id="member"><a href="${pageContext.request.contextPath}/member/GoLoginPage.me"><img src="${pageContext.request.contextPath}/resources/img/member.png" alt="member" width="40px" height="40px"></a></div>
 </div>

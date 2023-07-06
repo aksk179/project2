@@ -40,7 +40,7 @@
 						<c:when test="${loginMember.userType == 'admin'}">
 							<c:if test="${not empty notice.originalFilename}">
 								<button type="button" id="detailFile" class="btn btn-outline-secondary"
-									onclick="location.href='${pageContext.request.contextPath}/support/fileDownload.su?noticeNo=${notice.noticeNo}'">${notice.originalFilename}
+									onclick="location.href='${pageContext.request.contextPath}/support/fileDownloadNotice.su?noticeNo=${notice.noticeNo}'">${notice.originalFilename}
 								</button>
 							</c:if>
 							<c:if test="${empty notice.originalFilename}">
@@ -51,7 +51,7 @@
 						<c:otherwise>
 							<c:if test="${not empty notice.originalFilename}">
 								<button type="button" id="detailFile" class="btn btn-outline-secondary"
-									onclick="location.href='${pageContext.request.contextPath}/support/fileDownload.su?noticeNo=${notice.noticeNo}'">${notice.originalFilename}
+									onclick="location.href='${pageContext.request.contextPath}/support/fileDownloadNotice.su?noticeNo=${notice.noticeNo}'">${notice.originalFilename}
 								</button>
 							</c:if>
 							<c:if test="${empty notice.originalFilename}">

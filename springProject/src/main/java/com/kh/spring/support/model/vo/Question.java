@@ -23,4 +23,7 @@ public class Question {
 	private String changeFilename;
 	private int count;
 	private Date createDate;
+	private String questionStatus;
+	private int ref;
+	private int depth;
 }

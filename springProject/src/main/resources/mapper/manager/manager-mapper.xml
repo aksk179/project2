@@ -90,34 +90,6 @@
 		   	   user_regdate = #{userRegdate}
 		 where user_id = #{userId}
 	</update>	
-<!--	
-	<select id="mnMemberSearch" resultMap="mnMemberMap">
-	 	select *
-	 	  where #{searchType} Like '%'||#{keyword}||'%'
- 	 <if test='searchType.equals("userId")'>
-	 	 WHERE user_id LIKE '%'||#{keyword}||'%'
-	 </if>
-	 <if test='searchType.equals("email")'>
-	  	WHERE user_email LIKE '%'||#{keyword}||'%'
-	 </if>
-	 <if test='searchType.equals("userName")'>
-	  WHERE user_name LIKE '%'||#{keyword}||'%'
-	 </if>
-	 <if test='searchType.equals("gender")'>
-	  WHERE user_gender LIKE '%'||#{keyword}||'%'
-	 </if>
-	 <if test='searchType.equals("userType")'>
-	  WHERE user_type LIKE '%'||#{keyword}||'%'
-	 </if>
-	 <if test='searchType.equals("userStatus")'>
-	  WHERE user_status LIKE '%'||#{keyword}||'%'
-	 </if>
-	 <if test='searchType.equals("userRegdate")'>
-	  WHERE user_regdate LIKE '%'||#{keyword}||'%'
-	 </if> 
-	 order by user_id desc
-	</select> 
--->	
 	
 	<resultMap type="profile" id="mnProfileMap"></resultMap>
 	

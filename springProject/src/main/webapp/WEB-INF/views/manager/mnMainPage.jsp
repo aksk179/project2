@@ -10,7 +10,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp">
+      <jsp:param value="관리자 페이지" name="title" />
+  	</jsp:include>
 
 <div id="nav2">
 	<div id="gym"><a href="${pageContext.request.contextPath}/manager/mnGymList.mn">공지사항</a></div>

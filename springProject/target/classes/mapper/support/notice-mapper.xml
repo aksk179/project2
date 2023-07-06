@@ -12,7 +12,7 @@
 		 order by notice_no desc 
 	</select>
 	
-	<select id="selectTotalRecord" resultType="_int">
+	<select id="selectTotalRecordNotice" resultType="_int">
 		select count(*)
 		  from notice
 	</select>

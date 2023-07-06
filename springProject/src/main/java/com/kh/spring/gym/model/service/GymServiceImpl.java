@@ -39,4 +39,25 @@ public class GymServiceImpl implements GymService {
 		return gymDao.selectGymNo(userId);
 	}
 
+	@Override
+	public Gym myGym(int gymNo) {
+		return gymDao.myGym(gymNo);
+	}
+
+	@Override
+	public Gym selectMyGym(int gymNo) {
+		return gymDao.selectMyGym(gymNo);
+	}
+
+	@Override
+	public int myGymUpdate(Gym gym) {
+		return gymDao.myGymUpdate(gym);
+	}
+
+	@Override
+	public Gym getGymByUserId(String userId) {
+		return gymDao.getGymByUserId(userId);
+	}
+
+
 }

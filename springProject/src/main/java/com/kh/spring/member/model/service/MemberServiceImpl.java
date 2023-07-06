@@ -53,4 +53,9 @@ public class MemberServiceImpl implements MemberService {
 	public int statusUpdate(String userId) {
         return memberDao.statusUpdate(userId);
 	}
+	
+	@Override
+	public int mnStatusUpdate(String userId) {
+		return memberDao.mnStatusUpdate(userId);
+	}
 }

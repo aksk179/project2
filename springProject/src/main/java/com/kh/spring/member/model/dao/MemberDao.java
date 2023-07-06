@@ -25,4 +25,6 @@ public interface MemberDao {
 	int deleteMember(String userId);
 
 	int statusUpdate(String userId);
+	
+	int mnStatusUpdate(String userId);
 }

@@ -60,4 +60,47 @@
 		  from gym
 		 where user_id = #{userId}
 	</select>
+	
+	<!-- 로그인한 정보로 체육관 정보 가져오기 -->
+	<select id="getGymByUserId" resultMap="gymMap">
+		select *
+		  from gym g
+		  inner join member m on g.user_id = m.user_id
+		 where g.user_id = #{userId} 
+	</select>
+	
+<!-- 	<select id="loginGym" resultMap="gymMap">
+		select *
+		  from gym g, member m
+		 where g.user_id = m.user_id
+	</select> -->
+	
+	<!-- 내 체육관 정보보기 -->
+	<select id="myGym" resultMap="gymMap">
+		select *
+		  from gym 
+		 where gym_no = #{gymNo}
+	</select>
+	
+	<!-- 내 체육관 정보 가져오기(수정) -->
+	<select id="selectMyGym" resultMap="gymMap">
+		select *
+		  from gym
+		 where gym_no = #{gymNo}
+	</select>
+	
+	<!-- 내 체육관 정보 보내기(수정) -->
+	<update id="myGymUpdate">
+		update gym
+		   set gym_boss = #{gymBoss},
+		   	   gym_coach = #{gymCoach},
+		   	   coach_phone = #{coachPhone},
+		   	   gym_phone = #{gymPhone},
+		   	   gym_zipcode = #{gymZipcode},
+		   	   gym_address = #{gymAddress},
+		   	   gym_detailaddress = #{gymDetailaddress},
+		   	   gym_bank = #{gymBank},
+		   	   gym_account = #{gymAccount}
+		 where gym_no = #{gymNo}
+	</update>
 </mapper>

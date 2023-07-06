@@ -19,4 +19,12 @@ public interface GymDao {
 	int deleteSchedule(Schedule schedule);
 
 	Gym selectGymNo(String userId);
+
+	Gym myGym(int gymNo);
+
+	Gym selectMyGym(int gymNo);
+
+	int myGymUpdate(Gym gym);
+
+	Gym getGymByUserId(String userId);
 }

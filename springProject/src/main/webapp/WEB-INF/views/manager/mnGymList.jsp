@@ -4,40 +4,37 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link rel="stylesheet"
-   href="${pageContext.request.contextPath}/resources/css/manager/mnGymList.css">
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+   href="${pageContext.request.contextPath}/resources/css/manager/mnGym.css">
+	<jsp:include page="/WEB-INF/views/common/header.jsp">
+      <jsp:param value="체육관 정보 리스트" name="title" />
+  	</jsp:include>
 
-<div id="container">
-
+<div style="display: flex; justify-content: center;">
+	<form>
+	<h1>빈체로 체육관 리스트</h1>
 	<!-- 체육관정보 리스트 테이블 -->
-	<table>
-		<tr align="center">
-			<th rowspan="2">계약 고유번호</th>
+	<table class="table">
+		<tr>
+			<th>계약 고유번호</th>
+			<th>계약일</th>
+			<th>사업자 번호</th>
+			<th>대표자 이름</th>
 			<th>체육관 이름</th>
 			<th>종목</th>
-			<th>대표자 이름</th>
-			<th>체육관 번호</th>
-			<th>은행명</th>
-			<th>계약일</th>
-			<th>체육관 주소</th>
-			<th>체육관상태</th>
-			<th>가입상태</form>
-		</tr>
-		<tr>
-			<th>사업자 번호</th>
 			<th>매치 수</th>
-			<th>관장 이름</th>
-			<th>관장 번호</th>
-			<th>계좌</th>
-			<th>체육관 우편번호</th>
-			<th>체육관 상세주소</th>
+			<th>체육관상태</th>
 			<th>사유</th>
 			<th>관장 ID</th>
+			<th>ID 상태</th>
 		</tr>
+
 		<c:forEach items="${gymList}" var="gym">
 			<tr align="center">
-				<td>${gym.gymNo}<br><br><button onclick="mnGymUpdate(${gym.gymNo});">수정하기</button></td>
-				<td>${gym.gymName}<br><br><hr><br>${gym.businessNo}</td>
+				<td>${gym.gymNo}<br><br><button type="button" onclick="mnGymUpdate(${gym.gymNo});">수정하기</button></td>
+				<td>${gym.gymRegdate}</td>
+				<td>${gym.businessNo}</td>
+				<td>${gym.gymBoss}</td>
+				<td>${gym.gymName}</td>
 				<td>
 					<c:if test="${gym.gymType eq 'taek'}">
 						태권도
@@ -50,13 +47,9 @@
 					</c:if> 
 					<c:if test="${gym.gymType eq 'box'}">
 						복싱
-					</c:if><br><br><hr><br>
-				${gym.matchCount}</td>
-				<td>${gym.gymBoss}<br><br><hr><br>${gym.gymCoach}</td>
-				<td>${gym.gymPhone}<br><br><hr><br>${gym.coachPhone}</td>
-				<td>${gym.gymBank}<br><br><hr><br>${gym.gymAccount}</td>
-				<td>${gym.gymRegdate}<br><br><hr><br>${gym.gymZipcode}</td>
-				<td>${gym.gymAddress}<br><br><hr><br>${gym.gymDetailaddress}</td>
+					</c:if>
+				</td>
+				<td>${gym.matchCount}</td>
 				<td>
 					<c:if test="${gym.gymStatus eq 0}">
 						가맹신청
@@ -72,16 +65,16 @@
 					</c:if> 
 					<c:if test="${gym.gymStatus eq 4}">
 						계약해지
-					</c:if><br><br><hr><br>
+					</c:if></td><td>
 					${gym.reason}</td>
 				<td>
-					<c:if test="${gym.userId == null}">
-						미가입
+					<c:if test="${gym.gymStatus ne 2}">
+						일반
 					</c:if>
-					<c:if test="${gym.userId != null}">
-						가입완료
+					<c:if test="${gym.gymStatus eq 2}">
+						관장님
 					</c:if>
-					<br><br><hr><br>
+					</td><td>
 					<c:if test="${gym.userId == null}">
 					</c:if>
 					<c:if test="${gym.userId != null}">
@@ -92,6 +85,7 @@
 		</c:forEach>	
 		
 	</table>
+</div>
 	
 	<!-- 페이지 코드 -->
 	<nav>
@@ -135,7 +129,6 @@
 			</c:if>
 		</ul>
 	</nav>
-</div>
 
 <!-- 수정하기버튼을 누르면 작동하는 스크립트 -->
 <script>

@@ -4723,10 +4723,11 @@
   <!-- deployment descriptor, that list *replaces* the list configured      -->
   <!-- here, so be sure to include any of the default values that you wish  -->
   <!-- to use within your application.                                       -->
-
+<!-- 주석처리해야 index로 바로가지않고 controller를 거쳐서 감 
+	login필수값 걸 때 주석처리안하면 해당 페이지에서 알트창이 안뜸
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
         <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+    </welcome-file-list> -->
 </web-app>
