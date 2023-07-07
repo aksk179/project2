@@ -11,7 +11,7 @@
 	href="${pageContext.request.contextPath}/resources/css/member.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/member.js"></script>
+<!--  <script src="${pageContext.request.contextPath}/resources/js/member.js"></script> -->
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
@@ -88,7 +88,7 @@
 				<tr>
 					<th><label for="phone" id="phonetitle">휴대폰번호</label></th>
 					<td><input id="phone" type="text" name="phone"
-						placeholder="ex) 010-1111-1111"></td>
+						placeholder="ex) 010-1111-1111" required></td>
 					<td><input type="button" id="phoneChk" class="doubleChk"
 						value="인증번호 보내기"></td>
 				</tr>
@@ -97,7 +97,7 @@
 					<td><input id="phone2" type="text" disabled required>
 					</td>
 					<td><input type="button" id="phoneChk2" class="doubleChk"
-						value="본인인증"></td>
+						value="본인인증" ></td>
 				</tr>
 
 				<tr>
@@ -118,7 +118,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageEmail" class="message"></td>
+					<td colspan="2" id="messageEmail" class="message" ></td>
 				</tr>
 				<tr>
 					<th></th>
@@ -132,13 +132,13 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td colspan="2"><input name="detailaddress" id="detailAddr"
+					<td colspan="2"><input name="detailAddress" id="detailAddr"
 						placeholder="상세주소를 입력하세요" required></td>
 				</tr>
 				<tr>
 					<th>개인정보동의</th>
-					<td>&emsp;<input type="checkBox" name="userInfo" id="userInfo"
-						checked disabled></td>
+					<td style="font-size: small">&emsp;<input type="checkBox" name="userInfo" id="userInfo"
+						checked disabled >&emsp;개인정보 동의를 완료하였습니다.</td>
 
 					<td></td>
 				</tr>
@@ -148,7 +148,7 @@
 		</table>
 		</tbody>
 		<div class="btn">
-			<button type="submit"  onclick="nice()">회원가입</button>
+			<button type="submit"  onclick="inputCheck()">회원가입</button>
 			&emsp;
 
 		</div>
@@ -156,11 +156,88 @@
 <body>
 <script type="text/javascript">
 
+function inputCheck() {
+  var userId = document.getElementById('userId').value;
+  var userPw = document.getElementById('userPw').value;
+  var pwc = document.getElementById('pwc').value;
+  var userName = document.getElementById('userName').value;
+  var userRnn = document.getElementById('userRnn').value;
+  var phone = document.getElementById('phone').value;
+  var phone2 = document.getElementById('phone2').value;
+  var userEmail = document.getElementById('userEmail').value;
+  
+  alert("회원가입을 축하합니다!");
+  // 아이디 유효성 검사
+  var userIdPattern = /^[a-zA-Z0-9]{5,13}$/;
+  if (!userIdPattern.test(userId)) {
+    alert('아이디는 6~13자의 영문 대소문자와 숫자로만 입력해야 합니다.');
+    return false;
+  }
+
+  // 비밀번호 유효성 검사
+  var userPwPattern = /^[a-zA-Z0-9!@#$%^&*()]{8,16}$/;
+  if (!userPwPattern.test(userPw)) {
+    alert('비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자로만 입력해야 합니다.');
+    return false;
+  }
+
+  // 비밀번호 확인
+  if (userPw !== pwc) {
+    alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+    return false;
+  }
+
+  // 이름 유효성 검사
+  var userNamePattern = /^[가-힣]{2,6}$/;
+  if (!userNamePattern.test(userName)) {
+    alert('이름은 2~6자의 한글로만 입력해야 합니다.');
+    return false;
+  }
+
+  // 주민등록번호 유효성 검사
+  var userRnnPattern = /^\d{6}-\d{7}$/;
+  if (!userRnnPattern.test(userRnn)) {
+    alert('주민등록번호는 XXXXXX-XXXXXXX 형식으로 입력해야 합니다.');
+    return false;
+  }
+
+  // 휴대폰번호 유효성 검사
+  var phonePattern = /^\d{3}-\d{4}-\d{4}$/;
+  if (!phonePattern.test(phone)) {
+    alert('휴대폰번호는 XXX-XXXX-XXXX 형식으로 입력해야 합니다.');
+    return false;
+  }
+
+  // 인증번호 확인
+  if (phone2 === '') {
+    alert('인증번호를 입력해야 합니다.');
+    return false;
+  }
+
+  // 이메일 유효성 검사
+  var userEmailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (!userEmailPattern.test(userEmail)) {
+    alert('이메일 주소를 올바른 형식으로 입력해야 합니다.');
+    return false;
+  }
+
+  // 개인정보 동의 확인
+  var userInfo = document.getElementById('userInfo').checked;
+  if (!userInfo) {
+    alert('개인정보 동의에 체크해야 합니다.');
+    return false;
+  }
+
+  // 모든 유효성 검사 통과
+  return true;
+  
+}
+
 document.getElementById("userId").addEventListener("focusout", () => {
 	setTimeout(() => {
 	const inputId = document.getElementById("userId").value;
 	let messageId = document.getElementById("messageId");
-	const regExp1 = /^[a-zA-Z][a-zA-Z0-9]{5,12}$/;
+	const regExp1 = /^[a-zA-Z][a-zA-Z0-9]{6,15}$/;
 
 	if (regExp1.test(inputId)) {
 	    idCheck = true;
@@ -179,7 +256,8 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	setTimeout(() => {
 	const inputPw = document.getElementById("userPw").value;
 	let messagePw = document.getElementById("messagePw");
-	const regExp2 = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
+	//const regExp2 = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
+	const regExp2 = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
 	if (regExp2.test(inputPw)) {
 	    messagePw.innerHTML = "멋진 비밀번호입니다 !";
@@ -237,7 +315,6 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	})
 
 
-
 	document.getElementById("userEmail").addEventListener("focusout", () => {
 	setTimeout(() => {
 	const inputMail = document.getElementById("userEmail").value;
@@ -291,7 +368,206 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	}
 	}, 200);
 	})   
+	
+	
+	
+	$(function(){
+	//휴대폰 번호 인증var code2 = "";
+
+	/* $("#phoneChk").click(function(){
+	    alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주십시오.");
+		var phone = $("#phone").val();
+		$.ajax({
+	        type:"GET",
+	        url:"phoneCheck?phone=" + phone,
+	        cache : false,
+	        success:function(data){
+	        	if(data == "error"){
+	        		alert("휴대폰 번호가 올바르지 않습니다.")
+					$(".successPhoneChk").text("유효한 번호를 입력해주세요.");
+					$("#phone").attr("autofocus",true);
+	        	}else{	        		
+	        		$("#phone2").attr("disabled",false);
+	        		$("#phoneChk2").css("display","inline-block");
+	        		$(".successPhoneChk").text("인증번호를 입력한 뒤 본인인증을 눌러주십시오.");
+	        		$("#phone").attr("readonly",true);
+	        		code2 = data;
+	        	}
+	        }
+	 	});
+	 }); */
+	 $("#phoneChk").click(function(){
+		    var phone = $("#phone").val();
+		    
+		    // 정규식 패턴
+		    var phonePattern = /^010-\d{4}-\d{4}$/;
+
+		    if (!phonePattern.test(phone)) {
+		        alert("올바른 휴대폰 번호 형식이 아닙니다.");
+		        return;
+		    }
+
+		    // 이하 코드는 정규식 패턴이 일치하는 경우에만 실행됩니다.
+		    
+		    alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주십시오.");
+
+		    $.ajax({
+		        type: "GET",
+		        url: "phoneCheck?phone=" + phone,
+		        cache: false,
+		        success: function(data) {
+		            if (data == "error") {
+		                alert("휴대폰 번호가 올바르지 않습니다.");
+		                $(".successPhoneChk").text("유효한 번호를 입력해주세요.");
+		                $("#phone").attr("autofocus", true);
+		            } else {                    
+		                $("#phone2").attr("disabled", false);
+		                $("#phoneChk2").css("display", "inline-block");
+		                $(".successPhoneChk").text("인증번호를 입력한 뒤 본인인증을 눌러주십시오.");
+		                $("#phone").attr("readonly", true);
+		                code2 = data;
+		            }
+		        }
+		    });
+		});
+	 
+	$("#phoneChk2").click(function(){
+		if($("#phone2").val() == code2){
+			$(".successPhoneChk").text("인증번호가 일치합니다.");
+			$("#phoneDoubleChk").val("true");
+			$("#phone2").attr("disabled",true);
+		}else{
+			$(".successPhoneChk").text("인증번호가 일치하지 않습니다. 확인해주시기 바랍니다.");
+			$("#phoneDoubleChk").val("false");
+			$(this).attr("autofocus",true);
+		}
+	});
+
+
+	});
+	function deleteMember() {
+		if(window.confirm("탈퇴하시겠습니까?")){
+		location.href="${pageContext.request.contextPath}/member/deleteMember.me";
+		}
+		
+	}
+	function nice() {
+		  alert("회원가입을 축하합니다!");
+		}
+	function nextBlank(N, Obj, nextB) {
+	   if(document.getElementById(Obj).value.length == N) {
+	      document.getElementById(nextB).focus();
+	   }
+	}
+
+	function findAddr() {
+	    new daum.Postcode({
+	        oncomplete: function (data) {
+	            let roadAddr = data.roadAddress;
+	            let jibunAddr = data.jibunAddress;
+	            let extraAddr = '';
+
+	            document.getElementById("postcode").value = data.zonecode;
+
+	            if (data.userSelectedType == 'R') {
+	                if (roadAddr != '') {
+	                    if (data.bname != '') {
+	                        extraAddr += data.bname;
+	                    }
+	                    if (data.buildingName != '') {
+	                        extraAddr += extraAddr != '' ? ', ' + data.buildingName : data.buildingName;
+	                    }
+	                    roadAddr += extraAddr != '' ? '(' + extraAddr + ')' : '';
+	                    document.getElementById("addr").value = roadAddr;
+	                }
+	            } else if (data.userSelectedType == 'J') {
+	                document.getElementById("addr").value = jibunAddr;
+	            }
+
+	            document.getElementById("detailAddr").focus();
+	        }
+	    }).open();
+	}
+
+	let idCheck = false;
+	let pwCheck = false;
+	let pwcCheck = false;
+	let nameCheck = false;
+	let emailCheck = false;
+	let rnnCheck1 = false;
+	let rnnCheck2 = false;
+	let rnnCheck = false;
+	let phoneCheck = false;
+
+	
+
+	function idChecka() {
+	  $.ajax({
+	       url: "/spring/member/id.ch",
+	       type: "get",
+	       data : {ida : $("#userId").val()},
+	       dataType : "json",
+	      
+	           success(result) {
+	                 console.log(result);
+	           
+	           const {userId, available} = result;
+	           console.log(result);
+	           
+	           if(available) {
+	              
+	              $("#messageId").text("멋진 아이디네요 !");
+	              document.getElementById("idc").addEventListener("focusout", () => {
+	                  const inputId = document.getElementById("userId").value;
+	                  let messageId = document.getElementById("messageId");
+	                  const regExp1 = /^[a-zA-Z][a-zA-Z0-9]{5,12}$/;
+
+	                  if (regExp1.test(inputId)) {
+	                      idCheck = true;
+	                  } else if (inputId === " ") {
+	                      messageId.innerHTML = "필수 정보입니다.";
+	                      idCheck = false;
+	                  } else {
+	                      messageId.innerHTML = "첫글자는 반드시 영문자이며, 숫자 포함 총 6~13자로 입력하시오.";
+	                      idCheck = false;
+	                  }
+	              })
+
+	              iddCheck = true;
+	              
+	              $("#idbtncheck").val("idCheck");
+	           } else {
+	              $("#messageId").text("이미 사용중이거나 탈퇴한 아이디입니다");
+	              iddCheck = false;
+	              $("#idbtncheck").val("idUncheck");
+	           }
+
+	        },
+	        error : console.log
+	   });
+	}
+
+	function updateEmAddress() {
+	 var emselect = document.getElementById("emselect");
+	 var emadress = document.getElementById("emadress");
+
+	 if (emselect.value === "") {
+	   // 선택한 값이 "직접입력"일 경우 emadress 입력란을 비웁니다.
+	   emadress.value = "";
+	   emadress.disabled = false; // 필요에 따라 입력란을 활성화할 수도 있습니다.
+	 } else {
+	   // 선택한 값이 이메일 도메인일 경우 emadress 입력란을 해당 값으로 설정합니다.
+	   emadress.value = emselect.value;
+	   emadress.disabled = true; // 필요에 따라 입력란을 비활성화할 수도 있습니다.
+	 }
+	}
+
+	function inputIdChk() {
+	regFrm.idbtncheck.value = "idUncheck";
+	}
 </script>
+
+
 	<div class="footer" align="center" style="padding: 50px;">
 
 		<p>&copy; 2023 VINCERO. All rights reserved.</p>

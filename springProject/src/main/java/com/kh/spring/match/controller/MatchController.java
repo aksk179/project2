@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,11 +35,9 @@ import com.kh.spring.match.model.vo.Match;
 import com.kh.spring.match.model.vo.MatchInfo;
 import com.kh.spring.match.model.vo.MatchInfoView;
 import com.kh.spring.match.model.vo.MatchRegInfo;
-import com.kh.spring.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/match")
-@SessionAttributes({"loginMember"})
 public class MatchController {
 		
 	@Autowired
@@ -49,32 +46,32 @@ public class MatchController {
 	@Autowired
 	private MatchDao matchDao;
 	
-
-	@RequestMapping(value="/matchList.ma", method = RequestMethod.GET)
-	public void matchList() {
-	}
+	
+	@GetMapping("/matchList.ma")
+	public void matchList() { }
 	
 
 	@RequestMapping(value="/matchReg.ma", method = RequestMethod.GET)
-	public String matchReg(HttpServletRequest request, HttpSession session, Model model) {	
+	public String matchReg(HttpServletRequest request, Model model) {	
 		String matchDate = request.getParameter("day");
 		if(matchDate == null || "".equals(matchDate)) {
 			LocalDateTime today = LocalDateTime.now();
 			System.out.println(today);
-			matchDate = today.toLocalDate().toString();	
+			matchDate = today.toLocalDate().toString();
 		}
 		System.out.println("matchDate : " + matchDate);
 		
 		//matchdateList포맷용 ex.2023/07/05
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d(E)");
-
-		Member member = (Member) session.getAttribute("loginMember");
-		String userId = member.getUserId();
+		
+		//user 하드코딩
+		String userId1 = "user_03";
 		
 		//지도 옆에 보이는 매치 신청한 리스트 조회
-		List<MatchInfo> insertScheduleList = matchService.selectMatchList(userId, matchDate);
+		List<MatchInfo> insertScheduleList = matchService.selectMatchList(userId1, matchDate);
 		System.out.println("화면에 보이는 등록된 스케줄 : " + insertScheduleList);
 
+		//MatchInfoView ifv = new MatchInfoView();
 		MatchInfoView infoView = new MatchInfoView();
 		List<MatchInfoView> inSchedList = new ArrayList<MatchInfoView>();
 		
@@ -100,6 +97,7 @@ public class MatchController {
 		System.out.println(inSchedList);
 		
 		model.addAttribute("inSchedList", inSchedList);		
+		
 		//////////////////////////////////////////////////////////////////////
 		
 		
@@ -131,12 +129,8 @@ public class MatchController {
 			String gymDetailAddress = scheduleList.get(i).getGymDetailAddress();
 			LocalDateTime matchdate = scheduleList.get(i).getMatchdate();
 			String matchtime = scheduleList.get(i).getMatchtime();
-			String code = scheduleList.get(i).getCode();
-			
-			System.out.println("localdatetime : " + matchdate);
-			Date dateTemp = java.sql.Timestamp.valueOf(matchdate);
-			System.out.println("date : " + dateTemp);
-					
+			String code = scheduleList.get(i).getCode();			
+									
 			if(!tempGymNo.equals(gymNo)) {
 				if(!tempGymNo.equals("0")) {
 					infoView.setMatchdateList(matchdates);
@@ -144,16 +138,18 @@ public class MatchController {
 					infoView.setMatchTimeList(times);
 					infoView.setCodeList(codes);
 					markerOverlayList.add(infoView);
+					//times = new ArrayList<MatchTimeCode>();
 					times = new ArrayList<String>();
 					codes = new ArrayList<String>();
 				}
 				infoView = new MatchInfoView();
+				//matchTimeCode = new MatchTimeCode();
 				
 				infoView.setGymNo(gymNo);
 				infoView.setGymName(gymName);
 				infoView.setGymAddress(gymAddress);
 				infoView.setGymDetailAddress(gymDetailAddress);
-				//System.out.println("matchdate : " + matchdate);
+				System.out.println("matchdate : " + matchdate);
 				
 				matchdate1 = formatter.format(matchdate);
 				matchday1 = matchdate;
@@ -163,13 +159,14 @@ public class MatchController {
 				matchdays.add(matchday1);
 				times.add(time);
 				codes.add(code);
-
+				
+				//
 				tempGymNo = gymNo;
 			} else {
 				matchdate1 = formatter.format(matchdate);
 				matchday1 = matchdate;
 				time = (matchtime.substring(0, 2) + ":" + matchtime.substring(2));
-				//System.out.println("시간 : " + time);
+				System.out.println("시간 : " + time);
 				
 				matchdates.add(matchdate1);
 				matchdays.add(matchday1);
@@ -183,7 +180,7 @@ public class MatchController {
 			infoView.setMatchTimeList(times);
 			infoView.setCodeList(codes);
 			markerOverlayList.add(infoView);
-			//System.out.println(markerOverlayList);
+			System.out.println(markerOverlayList);
 		}
 
 		model.addAttribute("dateFilter", getDateList());
@@ -194,30 +191,27 @@ public class MatchController {
 	
 	@ResponseBody
 	@RequestMapping(value="/register.do", method = RequestMethod.POST)
-	public String registerMatch(@RequestBody List<MatchRegInfo> matchRegInfoList, HttpSession session) {
-		//System.out.println("registerMatch 들어옴");
+	public String registerMatch(@RequestBody List<MatchRegInfo> matchRegInfoList) {
+		System.out.println("registerMatch 들어옴");
 		Match match = new Match();
 		int result = 0;
 		
 		for(MatchRegInfo mri : matchRegInfoList) {		
-			//System.out.println(mri.toString());
+			System.out.println(mri.toString());
 
 			String matchNo = mri.getCode();
 			int gymNo = mri.getGymNo();
-			
-			Member member = (Member) session.getAttribute("loginMember");
-			String userId = member.getUserId();
-			
+			String userId1 = "user_03";
 			String delYnCge = mri.getValue();
 			System.out.println("mri에서 가져온 값 : " + matchNo + gymNo + delYnCge);
 			
 			match.setMatchNo(matchNo);
 			match.setGymNo(gymNo);
-			match.setUserId1(userId);
+			match.setUserId1(userId1);
 			match.setMatchStatus(1);
 			match.setDelYn(delYnCge);
 			Match matchOne = matchService.selectMatch(match);
-			//System.out.println(matchOne);
+			System.out.println(matchOne);
 			
 			// 문자열
 	        String dateStr = mri.getMatchday();
@@ -233,17 +227,18 @@ public class MatchController {
 			//있으면
 			//} else {
 			//  update
-			//}	       
+			//}
+	       
 			if(matchOne == null) {		
 				match.setMatchdate(date);
 				match.setMatchtime(mri.getMatchtime());
 				match.setMatchStatus(1);
 				match.setDelYn(mri.getValue());
 				
-				//System.out.println("insert문");
+				System.out.println("insert문");
 				result = matchService.registerMatch(match);
 			} else {
-				//System.out.println("updat문");
+				System.out.println("updat문");
 
 				match.setDelYn(mri.getValue());				
 				System.out.println(match);

@@ -30,8 +30,7 @@
 						<tr>
 							<th>ID</th>
 							<td id="id-part"><input type="text" id="userId"
-								name="userId" value="${savedUserId}"
-								${savedUserId ? 'readonly' : ''}></td>
+								name="userId" value="${savedUserId}" ${savedUserId ? 'readonly' : ''}></td>
 							<td rowspan="2"><button class="btn" type="submit">로그인</button></td>
 						</tr>
 						<tr>
@@ -42,15 +41,15 @@
 						<tr id="signup-part">
 							<td></td>
 							<td><a
-								href="${pageContext.request.contextPath}/member/memberEnroll.me"
-								style="text-decoration: none">회원가입&emsp;</a>&ensp; <a
-								href="${pageContext.request.contextPath}/member/memberSearchId.me"
-								style="text-decoration: none">아이디 찾기</a> <a
+								href="${pageContext.request.contextPath}/member/memberPersonalInfo.me"
+								style="font-size: small; text-decoration: none;">회원가입&emsp;</a>&ensp; <a
+								href="${pageContext.request.contextPath}/member/memberfindId.me"
+								style="font-size: small; text-decoration: none;">아이디 /</a><a
 								href="${pageContext.request.contextPath}/member/memberNewpw.me"
-								style="text-decoration: none">비밀번호 찾기</a></td>
+								style="font-size: small; text-decoration: none;"> 비밀번호 찾기</a></td>
 
 							<td><input type="checkbox" id="saveIdCheckbox"
-								name="saveIdCheckbox" ${savedUserId ? 'checked' : ''}>&ensp;ID저장
+								name="saveIdCheckbox" ${savedUserId ? 'checked' : ''}>&ensp;<a style="font-size: small; text-decoration: none;">ID저장</a>
 							</td>
 						</tr>
 					</c:if>
@@ -67,7 +66,7 @@
 									<td><c:choose>
 											<c:when test="${loginMember.userStatus == 2}">
 												<button class="profilebtn" type="button"
-													onclick="location.href='${pageContext.request.contextPath}/profile/profileUpdate.pr'">프로필
+													onclick="location.href='${pageContext.request.contextPath}/profile/profileDetail.pr?userId=${loginMember.userId}'">프로필
 													수정</button>
 											</c:when>
 											<c:otherwise>
@@ -79,20 +78,11 @@
 									<td><button class="myMatchbtn" type="button"
 											onclick="location.href='#'">내경기</button></td>
 								</tr>
-								
-								<!-- 유저타입에 맞게 버튼을 보여주는 조건문 -->
 								<tr>
-									<c:choose>
-										<c:when test="${loginMember.userType eq 'admin'}">
-											<td><button class="managerbtn" type="button"
-													onclick="location.href='${pageContext.request.contextPath}/manager/mnMainPage.mn'">관리자</button></td>
-										</c:when>
-										<c:when test="${loginMember.userType eq 'coach'}">
-											<td><button class="coachbtn" type="button"
-													onclick="location.href='${pageContext.request.contextPath}/gym/gymMainPage.gym'">관장</button></td>
-<%-- 													onclick="location.href='${pageContext.request.contextPath}/gym/gymMainPage.gym?loginId=${loginMember.userId}'">관장</button></td> --%>
-										</c:when>
-									</c:choose>
+									<td><button class="managerbtn" type="button"
+											onclick="location.href='#'">관리자</button></td>
+									<td><button class="coachbtn" type="button"
+											onclick="location.href='#'">관장</button></td>
 								</tr>
 							</table>
 						</div>

@@ -90,4 +90,9 @@ public class SupportServiceImpl implements SupportService{
 	public int insertQuestionAnswer(Question question) {
 		return supportDao.insertQuestionAnswer(question);
 	}
+
+	@Override
+	public int updateQuestionStatus(int ref) {
+		return supportDao.updateQuestionStatus(ref);
+	}
 }

@@ -18,19 +18,25 @@
 		#{phone},
 		#{zipcode},
 		#{address},
-		#{detailaddress},
+		#{detailAddress},
+		#{userInfo},
 		default,
 		default,
 		default,
-		default,
-		default
-		#{userInfo}
+		#{userStatus}
 		)
 	</insert>
 
+
+<!-- 	<select id="selectOneMember" resultMap="memberMap">
+		select user_id, user_pw,substr(user_rnn,1,8)||'******' as user_rnn, user_name, user_email,
+		phone, zipcode, address, detailaddress, user_status
+		from member
+		where
+		user_id=#{userId}
+	</select> -->
 	<select id="selectOneMember" resultMap="memberMap">
-		select user_id, user_pw, substr(user_rnn,1,8)||'******' as user_rnn, user_name, user_gender, user_email,
-		phone, zipcode, address, detailaddress, user_type, user_status, user_control, user_regdate, user_info
+		select *
 		from member
 		where
 		user_id=#{userId}
@@ -39,15 +45,12 @@
 	<update id="updateMember">
 		update member
 		set
-		user_id = #{userId},
-		user_pw = #{userPw},
-		user_name = #{userName},
-		user_rnn = #{userRnn},
+		user_pw = #{userPw},		
 		phone = #{phone},
 		user_email = #{userEmail},
 		zipcode = #{zipcode},
 		address = #{address},
-		detailaddress = #{detailaddress}
+		detailAddress = #{detailAddress}
 		where user_id = #{userId}
 	</update>
 
@@ -62,12 +65,10 @@
 		select *
 		from member
 		where
-		user_email = #{userEmail}
+		user_Email = #{userEmail}
 	</select>
 
-	<!--<delete id="deleteMember" parameterType="String"> delete from member 
-		where user_id=#{userId} update member set m_status = '0' where user_id=#{userId} 
-		</delete> -->
+
 
 	<delete id="deleteMember">
 		delete 
@@ -75,21 +76,27 @@
 		where user_id = #{userId}
 	</delete>
 	
-	 <update id="statusUpdate">
+	   <update id="statusUpdate">
       update member
          set
          user_status = 2
       where user_id = #{userId}
    </update>
-   
-   	 <update id="mnStatusUpdate">
+	
+	
+    <select id="findUserIdByEmail" resultType="java.lang.String">
+        SELECT user_id
+        FROM member
+        WHERE user_email = #{userEmail}
+    </select>
+	
+	<update id="mnStatusUpdate">
       update member
          set user_type = 'coach'
        where user_id in ( select m.user_id
-					   	    from gym g
-					       inner join member m on g.user_id = m.user_id
-					       where g.gym_status = 2) 
-		 and user_type != 'coach'
+                         from gym g
+                      inner join member m on g.user_id = m.user_id
+                      where g.gym_status = 2) 
+       and user_type != 'coach'
    </update>
-	
 </mapper>

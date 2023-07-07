@@ -14,7 +14,7 @@
 	<jsp:param value="상세보기" name="title"/>
 </jsp:include>
 <div id="container">
-	<h1>- 질문게시판 -</h1>
+	<h1>- 질문게시판게시글 -</h1>
 		<form action="${pageContext.request.contextPath}/support/questionUpdate.su" method="post" enctype="multipart/form-data">>
 		<table id="detailTable">
 			<tr>
@@ -74,8 +74,6 @@
 						</c:otherwise>
 					</c:choose>
 				</td>
-				
-					
 			</tr>
 			<tr>
 				<th>조회수 &emsp; : &emsp;</th>
@@ -100,23 +98,31 @@
 			</tr>
 		</table>
 		<div id="detailButton">
-			<c:if test="${loginMember.userId == question.questionWriter}">
-				<button type="submit">수정</button>&emsp;
-				<button type="reset">취소</button>&emsp;
-				<button type="button" id="deleteQuestion">삭제</button>
+			<c:if test="${question.depth == 0}">
+				<c:if test="${loginMember.userId == question.questionWriter}">
+					<button type="submit">수정</button>&emsp;
+					<button type="reset">취소</button>&emsp;
+					<button type="button" id="deleteQuestion">삭제</button>
+				</c:if>
+				<c:if test="${loginMember.userType == 'admin'}">
+					<button type="button" id="answerQuestion" onclick="location.href='${pageContext.request.contextPath}/support/questionAnswerForm.su?questionNo=${question.questionNo}&questionWriter=${question.questionWriter}'">답변하기</button>
+				</c:if>
 			</c:if>
-			<c:if test="${loginMember.userType == 'admin'}">
-				<button type="button" id="answerQuestion" onclick="location.href='${pageContext.request.contextPath}/support/questionAnswerForm.su?questionNo=${question.questionNo}'">답변하기</button>
+			<c:if test="${question.depth == 1}">
+				<c:if test="${loginMember.userType == 'admin'}">
+					<button type="reset">취소</button>&emsp;
+					<button type="button" id="deleteQuestion">삭제</button>
+				</c:if>
 			</c:if>
+			<button type="button" onclick="location.href='${pageContext.request.contextPath}/support/questionList.su'">&emsp;리스트보기</button>&emsp;
 		</div>
 		</form>
 	</div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 <script>
-	document.querySelector("#deleteQuestion").addEventListener('click', (e) => {
-		const url = "${pageContext.request.contextPath}/support/questionDelete.su?questionNo=" + ${question.questionNo};
-		location.href = url;
+	$("#deleteQuestion").click(function() {
+	    location.href = '${pageContext.request.contextPath}/support/questionDelete.su?questionNo=${question.questionNo}';
 	});
 </script>	
 </html>

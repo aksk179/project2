@@ -7,6 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/support/question.css?v=<%=System.currentTimeMillis()%>">
 </head>
 <body>
@@ -17,7 +18,6 @@
 	<h2>- 질문게시판 -</h2>
 	<table id="listTable">
 		<tr>
-			<th>글번호</th>
 			<th>제목</th>
 			<th>작성자</th>
 			<th>첨부파일</th>
@@ -27,32 +27,42 @@
 		</tr>
 		<c:forEach items="${questionList}" var="question">
 			<tr>
-				<td>${question.questionNo}</td>
-				<c:choose>
-					<c:when test="${loginMember.userId == question.questionWriter || loginMember.userType == 'admin'}">
-						<td width="500px"><a href="${pageContext.request.contextPath}/support/questionDetail.su?questionNo=${question.questionNo}">${question.questionTitle}</a></td>
-					</c:when>
-					<c:otherwise>
-						<td width="500px"><a href="${pageContext.request.contextPath}/support/questionList.su">${question.questionTitle}</a></td>
-					</c:otherwise>
-				</c:choose>
-				<td>${question.questionWriter}</td>
-				<td>
-					<c:if test="${not empty question.originalFilename}">
-						<img src="${pageContext.request.contextPath}/resources/img/file.png" alt="파일" width="20px">
+				<c:if test="${question.depth == 0}">
+					<c:choose>
+						<c:when test="${loginMember.userId == question.questionWriter || loginMember.userType == 'admin'}">
+							<td width="500px"><a href="${pageContext.request.contextPath}/support/questionDetail.su?questionNo=${question.questionNo}">${question.questionTitle}</a></td>
+						</c:when>
+						<c:otherwise>
+							<td width="500px"><a id="titleLineFromOther" href="${pageContext.request.contextPath}/support/questionList.su">${question.questionTitle}</a></td>
+						</c:otherwise>
+					</c:choose>
+					<td>${question.questionWriter}</td>
+					<td>
+						<c:if test="${not empty question.originalFilename}">
+							<img src="${pageContext.request.contextPath}/resources/img/file.png" alt="파일" width="20px">
+						</c:if>
+					</td>
+					<td>${question.createDate}</td>
+					<td>${question.count}</td>
+					<c:if test="${question.questionStatus == 0}">
+						<td style="color:red">답변대기중</td>
 					</c:if>
-				</td>
-				<td>${question.createDate}</td>
-				<td>${question.count}</td>
-				<c:if test="${question.questionStatus == 0}">
-					<td style="color:red">답변대기중</td>
+					<c:if test="${question.questionStatus == 1}">
+						<td style="color:blue">답변완료</td>
+					</c:if>
 				</c:if>
-				<c:if test="${question.questionStatus == 1}">
-					<td style="color:blue">답변완료</td>
+				<c:if test="${question.depth == 1}">
+					<c:choose>
+						<c:when test="${loginMember.userId == question.questionWriter || loginMember.userType == 'admin'}">
+							<td colspan="6" class="replyLine"><a href="${pageContext.request.contextPath}/support/questionDetail.su?questionNo=${question.questionNo}">&#x21AA ${question.questionTitle}</a></td>
+						</c:when>
+						<c:otherwise>
+							<td colspan="6" class="replyLine"><a id="replyLineFromOther" href="javascript:void(0)">&#x21AA ${question.questionTitle}</a></td>
+						</c:otherwise>
+					</c:choose>
 				</c:if>
 			</tr>
 		</c:forEach>
-		
 	</table>
 
 		<nav aria-label="Page navigation example">
@@ -92,8 +102,18 @@
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 <script>
-	document.querySelector("#enrollBtn").addEventListener('click', (e) => {
-		location.href='${pageContext.request.contextPath}/support/questionForm.su';
-	});
+$(document).ready(function() {
+    $("#enrollBtn").click(function() {
+        location.href = '${pageContext.request.contextPath}/support/questionForm.su';
+    });
+
+    $("#replyLineFromOther").click(function() {
+        alert("질문 답변은 질문을 등록한 사람만 볼 수 있습니다.");
+    });
+    
+    $("#titleLineFromOther").click(function() {
+        alert("질문글은 질문자만 볼 수 있습니다.");
+    });
+});
 </script>
 </html>

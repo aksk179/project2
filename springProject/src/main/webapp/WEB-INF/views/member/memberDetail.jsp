@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,73 +24,65 @@
 			method="post" name="memInfofrm">
 			<h1>마이페이지</h1>
 			<table class="container">
-				<tbody>
+				
 					<tr>
 						<th scope="col">아이디</th>
-						<td scope="col" name="userId" id="userId">${loginMember.userId}</td>
+						<td scope="col"><input  name="userId" id="userId"  type="text" value="${loginMember.userId}" readonly style="background-color: #f1f0f0;"></td>
 					<tr>
-						<td colspan="2" id="messageId" class="message"></td>
+						<td colspan="2" id="message" class="message"></td>
 					</tr>
 					<tr>
 						<th scope="col">비밀번호</th>
-						<td scope="col"><input name="userPw" type="password" id="userPw"
-							type="text" placeholder="*****" required></td>
+						<td scope="col"><input name="userPw" id="userPw" type="password" placeholder="******" required></td>
 					</tr>
 					<tr>
-						<td colspan="2" id="messagePw" class="message"></td>
+						<td colspan="2" id="message" class="message"></td>
 					</tr>
 
 					<tr>
 						<th scope="col">이름</th>
-						<td scope="col" name="userName">${loginMember.userName}</td>
+						<td scope="col" > <input name="userName" id="userName" type="text" value="${loginMember.userName}" readonly style="background-color: #f1f0f0;"></td>
 					</tr>
 					<tr>
-						<td colspan="2" id="messageName" class="message"></td>
+						<td colspan="2" id="message" class="message"></td>
 					</tr>
 					<tr>
 						<th scope="col">주민번호</th>
-						<td scope="col" name="userRnn">${loginMember.userRnn}</td>
+						<td scope="col"> <input name="userRnn" id="userRnn" type="text" value="${loginMember.userRnn}" readonly style="background-color: #f1f0f0;"></td>
 					</tr>
 					<tr>
 						<td colspan="2" id="messageRnn" class="message"></td>
 					</tr>
-
-					<th scope="col">전화번호</th>
-					<td scope="col"><input name="phone" type="text" id="phone"
-						value="${loginMember.phone}"></td>
-
+					<tr>
+						<th scope="col">전화번호</th>
+						<td scope="col"><input name="phone" id="phone" type="text" value="${loginMember.phone}"></td>
+					</tr>
 					<tr>
 						<td colspan="2" id="messagePhone" class="message"></td>
 					</tr>
 					<tr>
 						<th scope="col">이메일</th>
-						<td scope="col"><input name="userEmail" type="text" id="userEmail"
-							value="${loginMember.userEmail}"></td>
-
+						<td scope="col"><input name="userEmail" id="userEmail" type="text" value="${loginMember.userEmail}"></td>
 					</tr>
 					<tr>
 						<td colspan="2" id="messageEmail" class="message"></td>
 					</tr>
 					<tr>
 						<th></th>
-						<td><input name="zipcode" id="postcode"
-							value="${loginMember.zipcode}"></td>
-						<td><input type="button" value="우편번호 찾기"
-							onclick="findAddr();"></td>
+						<td><input name="zipcode" id="postcode" value="${loginMember.zipcode}"></td>
+						<td><input type="button" value="우편번호 찾기" onclick="findAddr();"></td>
 					</tr>
 					<tr>
 						<th>주소</th>
-						<td colspan="2"><input name="address" id="addr"
-							value="${loginMember.address}"></td>
+						<td colspan="2"><input name="address" id="addr" value="${loginMember.address}"></td>
 					</tr>
 					<tr>
 						<th></th>
-						<td colspan="2"><input name="detailAddress" id="detailAddr"
-							value="${loginMember.detailaddress}"></td>
+						<td colspan="2"><input name="detailAddress" id="detailAddr" value="${loginMember.detailAddress}"></td>
 					</tr>
 			</table>
 
-			<button type="submit" class="btn btn-outline-success">수정</button>
+			<button type="submit" class="btn btn-outline-success" onclick="inputCheck()">수정</button>
 			<button type="button" onclick="deleteMember();">탈퇴</button>
 		</form>
 		<div class="footer" align="center" style="padding: 50px;">
@@ -102,7 +95,7 @@
 
 </body>
 
-<script type="text/javascript">
+<script>
 $(function(){
 
 	//휴대폰 번호 인증var code2 = "";
@@ -152,14 +145,8 @@ $(function(){
 		}
 		
 	}
-	function nice() {
-		  alert("회원가입을 축하합니다!");
-		}
-	function nextBlank(N, Obj, nextB) {
-	   if(document.getElementById(Obj).value.length == N) {
-	      document.getElementById(nextB).focus();
-	   }
-	}
+	
+		
 
 	function findAddr() {
 	    new daum.Postcode({
@@ -200,70 +187,6 @@ $(function(){
 	let rnnCheck = false;
 	let phoneCheck = false;
 
-	document.getElementById("userId").addEventListener("focusout", () => {
-	setTimeout(() => {
-	const inputId = document.getElementById("userId").value;
-	let messageId = document.getElementById("messageId");
-	const regExp1 = /^[a-zA-Z][a-zA-Z0-9]{5,12}$/;
-
-	if (regExp1.test(inputId)) {
-	    idCheck = true;
-	    messageId.innerHTML = "중복체크하세요.";
-	} else if (inputId === "") {
-	    messageId.innerHTML = "필수 정보입니다.";
-	    idCheck = false;
-	} else {
-	    messageId.innerHTML = "첫글자는 반드시 영문자이며, 숫자 포함 총 6~13자로 입력하시오.";
-	    idCheck = false;
-	}
-	}, 200);
-	})
-
-	function idChecka() {
-	  $.ajax({
-	       url: "/spring/member/id.ch",
-	       type: "get",
-	       data : {ida : $("#userId").val()},
-	       dataType : "json",
-	      
-	           success(result) {
-	                 console.log(result);
-	           
-	           const {userId, available} = result;
-	           console.log(result);
-	           
-	           if(available) {
-	              
-	              $("#messageId").text("멋진 아이디네요 !");
-	              document.getElementById("idc").addEventListener("focusout", () => {
-	                  const inputId = document.getElementById("userId").value;
-	                  let messageId = document.getElementById("messageId");
-	                  const regExp1 = /^[a-zA-Z][a-zA-Z0-9]{5,12}$/;
-
-	                  if (regExp1.test(inputId)) {
-	                      idCheck = true;
-	                  } else if (inputId === " ") {
-	                      messageId.innerHTML = "필수 정보입니다.";
-	                      idCheck = false;
-	                  } else {
-	                      messageId.innerHTML = "첫글자는 반드시 영문자이며, 숫자 포함 총 6~13자로 입력하시오.";
-	                      idCheck = false;
-	                  }
-	              })
-
-	              iddCheck = true;
-	              
-	              $("#idbtncheck").val("idCheck");
-	           } else {
-	              $("#messageId").text("이미 사용중이거나 탈퇴한 아이디입니다");
-	              iddCheck = false;
-	              $("#idbtncheck").val("idUncheck");
-	           }
-
-	        },
-	        error : console.log
-	   });
-	}
 
 	function updateEmAddress() {
 	 var emselect = document.getElementById("emselect");
@@ -303,28 +226,7 @@ $(function(){
 	}, 200);
 	})
 
-	document.getElementById("pwc").addEventListener("focusout", () => {
-	setTimeout(() => {
-	   const inputPw = document.getElementById("userPw").value;
-	   const inputPwc = document.getElementById("pwc").value;
-	   let messagePwc = document.getElementById("messagePwc");
-	   if ((inputPwc == inputPw)) {
-	       if (inputPwc === "") {
-	           messagePwc.innerHTML = "필수 정보입니다.";
-	           pwcCheck = false;
-	       } else {
-	           messagePwc.innerHTML = "비밀번호가 일치합니다 !";
-	           pwcCheck = true;
-	       }
-	   } else if (inputPw === "") {
-	       messagePwc.innerHTML = "필수 정보입니다.";
-	       pwcCheck = false;
-	   } else {
-	       messagePwc.innerHTML = "비밀번호가 일치하지 않습니다.";
-	       pwcCheck = false;
-	   }
-	}, 200);
-	})
+	
 
 	document.getElementById("userName").addEventListener("focusout", () => {
 	setTimeout(() => {

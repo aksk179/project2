@@ -4,81 +4,53 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kh.spring.profile.model.dao.ProfileDao">
-	<resultMap type="profile" id="profileMap"></resultMap>
-	
-	<insert id="profileEnroll">
-	insert into profile
-	  values(
-	  	#{userId},
-	  	#{proNick},
-	  	#{proPhoto},
-	  	#{proMajor},
-	  	#{proLevel},
-	  	#{proHeight},
-	  	#{proWeight},
-	  	default,
-	  	default,
-	  	default,
-	  	#{personal},
-	  	#{note},
-	  	default,
-	  	default,
-	  	default,
-	  	default
-	  )
-	</insert>
-	
-<!-- 	<insert id="profileUpdate">
-	insert into profile
-	  values(
-	  	#{userId},
-	  	#{proNick},
-	  	#{proPhoto},
-	  	#{proMajor},
-	  	#{proLevel},
-	  	#{proHeight},
-	  	#{proWeight},
-	  	default,
-	  	default,
-	  	default,
-	  	#{personal},
-	  	#{note},
-	  	default,
-	  	default,
-	  	default,
-	  	default
-	  )
-	</insert> -->
-	
-	<select id="profileUpdate" resultMap="profileMap">
-		select *
-		from profile
-		where user_id = #{userId}
-	</select>
-	
-	<update id="updateProfile">
-		update profile
-			set user_id = #{userId},
-				pro_nick = #{proNick},
-				pro_photo = #{proPhoto},
-				pro_major = #{proMajor},
-				pro_level = #{proLevel},
-				pro_height = #{proHeight},
-				pro_weight = #{proWeight},
-				win = #{win},
-				lose = #{lose},
-				official = #{official},
-				personal = #{personal},
-				note = #{note},
-				warn1 = #{warn1},
-				warn2 = #{warn2},
-				warn3 = #{warn3},
-				warn4 = #{warn4}
-				
-			where user_id = #{userId}
-	</update>
-	
-	
-
-	
-	</mapper>
+    <resultMap type="profile" id="profileMap"></resultMap>
+    
+    <insert id="insertProfile">
+        insert into profile
+          values(
+            #{userId},
+            #{proNick},
+            #{originalFilename},
+			#{changeFilename},   
+            #{proMajor},
+            #{proLevel},
+            #{proHeight},
+            #{proWeight},     
+            default,
+            default,         
+            #{personal},
+            #{note},
+            default,
+            default,
+            default,
+            default
+          )
+    </insert>
+    
+    <select id="selectOneProfile" resultMap="profileMap">
+        select *
+        from profile
+        where
+        user_id = #{userId}
+    </select>
+    
+    <select id="selectTwoProfile" resultMap="profileMap">
+        select *
+        from profile
+        where
+        pro_nick = #{proNick}
+    </select>
+    
+    <update id="updateProfile" parameterType="Profile">
+    UPDATE profile
+    SET
+		change_filename = #{changeFilename},   
+        pro_level = #{proLevel},
+        pro_height = #{proHeight},
+        pro_weight = #{proWeight},
+        personal = #{personal},
+        note = #{note}
+    WHERE user_id = #{userId}
+</update>
+</mapper>

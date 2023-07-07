@@ -23,7 +23,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="hidden" name="questionWriter" value="${loginMember.userId}" readonly>
+					<input type="hidden" name="questionWriter" value="${questionWriterFromParent}" readonly>
 				</td>
 			</tr>
 			<tr>
@@ -35,8 +35,8 @@
 		</table>
 		<c:if test="${loginMember.userType == 'admin'}">
 			<div id="questionButton">
-					<button type="submit">답변</button>&emsp;
-					<button type="reset">초기화</button>
+				<button type="submit">답변</button>&emsp;
+				<button type="reset">초기화</button>
 			</div>
 		</c:if>
 	</form>

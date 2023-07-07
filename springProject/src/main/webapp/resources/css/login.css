@@ -6,7 +6,7 @@ body {
 .container {
 	
 	height: 300px;
-	max-width: 300px;
+	max-width: 400px;
 	margin: 0 auto;
 	padding: 20px;
 }
@@ -77,11 +77,13 @@ th {
 	width:20%;
 	padding: 10px;
 	color: rgb(31, 9, 9);
+	text-decoration: none;
 }
 
 td {
 	padding: 10px;
 	color: rgb(31, 9, 9);
+	text-decoration: none;
 }
 
 .footer {

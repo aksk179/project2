@@ -23,7 +23,7 @@ public class Member {
 	   private String phone;
 	   private String zipcode;
 	   private String address;
-	   private String detailaddress;
+	   private String detailAddress;
 	   private String userType;
 	   private int userStatus;
 	   private int userControl;

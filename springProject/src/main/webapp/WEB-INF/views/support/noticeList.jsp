@@ -6,20 +6,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/support/notice.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/support/notice.css?v=<%=System.currentTimeMillis()%>"">
 </head>
 <body>
 ${loginMember.userType}
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="공지게시판" name="title"/>
+	<jsp:param value="공지사항" name="title"/>
 </jsp:include>
 <div id="container">
-	<div id="center"><h2>- 공지게시판 -</h2></div>
+	<div id="center"><h2>- 공지사항 -</h2></div>
 <table id="listTable">
 	<tr>
 		<th>글번호</th>
 		<th>제목</th>
-		<th>작성자</th>
 		<th>첨부파일</th>
 		<th>작성일</th>
 		<th>조회수</th>
@@ -27,18 +26,16 @@ ${loginMember.userType}
 	<c:forEach items="${noticeList}" var="notice">
 		<tr>
 			<td>${notice.noticeNo}</td>
-			<td width="500px"><a href="${pageContext.request.contextPath}/support/noticeDetail.su?noticeNo=${notice.noticeNo}">${notice.noticeTitle}</a></td>
-			<td>${notice.noticeWriter}</td>
+			<td align="left" width="500px"><a href="${pageContext.request.contextPath}/support/noticeDetail.su?noticeNo=${notice.noticeNo}">${notice.noticeTitle}</a></td>
 			<td>
 				<c:if test="${not empty notice.originalFilename}">
-					<img src="${pageContext.request.contextPath}/resources/img/file.png" alt="파일" width="20px">
+					<a href="${pageContext.request.contextPath}/support/fileDownloadNotice.su?noticeNo=${notice.noticeNo}"><img src="${pageContext.request.contextPath}/resources/img/file.png" alt="파일" width="20px"></a>
 				</c:if>
 			</td>
 			<td>${notice.createDate}</td>
 			<td>${notice.count}</td>
 		</tr>
 	</c:forEach>
-	
 </table>
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">

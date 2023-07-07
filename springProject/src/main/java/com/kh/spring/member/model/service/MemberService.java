@@ -20,6 +20,8 @@ public interface MemberService {
 
 	int statusUpdate(String userId);
 
+	String findUserIdByEmail(String userEmail);
+	
 	int mnStatusUpdate(String userId);
 
 }

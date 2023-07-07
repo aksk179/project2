@@ -162,9 +162,7 @@ public class GymController {
 		System.out.println(userId);
 		String dateStr = "";
 		String dateTime = "";
-		//Date date = new Date();
-		//LocalDateTime date = LocalDateTime.now();
-		//System.out.println(date);
+		Date date = new Date();
 		int sum = 0;
 		
 		Gym gym = gymService.selectGymNo(userId);
@@ -175,25 +173,16 @@ public class GymController {
 			schedule.setUserId(userId);
 			schedule.setCode(totalCodes[i]);
 			dateStr = totalCodes[i].substring(totalCodes[i].length()-12, totalCodes[i].length());
-			System.out.println(dateStr);
 			dateTime = totalCodes[i].substring(totalCodes[i].length()-4, totalCodes[i].length());
-			System.out.println(dateTime);
-
-			//SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
-			
-
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
-	        
-	        // 문자열 -> Date
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+	
 			int result = 0;
-//			try {
-//				date = LocalDateTime.parse(dateStr, formatter);
-//				System.out.println(date);
-//				date = formatter.parse(dateStr);
-//			} catch (ParseException e) {
-//				e.printStackTrace();
-//			}
-			schedule.setMatchDate(LocalDateTime.parse(dateStr, formatter));
+			try {
+				date = formatter.parse(dateStr);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			schedule.setMatchDate(date);
 			schedule.setMatchTime(dateTime);
 			schedule.setGymNo(gymNo);
 			

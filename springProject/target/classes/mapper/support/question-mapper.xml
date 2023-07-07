@@ -9,7 +9,8 @@
 	<select id="selectQuestionList" resultMap="questionMap">
 		select *
 		  from question
-		 order by question_no desc
+		 order by ref desc, question_no asc
+
 	</select>
 	
 	<select id="selectTotalRecordQuestion" resultType="_int">
@@ -76,4 +77,10 @@
 		delete from question
 		 where question_no = #{questionNo}
 	</delete>
+	
+	<update id="updateQuestionStatus">
+		update question
+		   set question_status = '1'
+		 where question_no = #{refFromReply}
+	</update>
 </mapper>

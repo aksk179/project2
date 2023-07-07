@@ -39,4 +39,6 @@ public interface SupportDao {
 	int deleteQuestion(int questionNo);
 
 	int insertQuestionAnswer(Question question);
+
+	int updateQuestionStatus(int ref);
 }

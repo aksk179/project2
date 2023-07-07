@@ -133,3 +133,8 @@ nav li {
 #detailFile {
 	size = 200;
 }
+
+.replyLine {
+	float: left;
+	margin-left: 300px;
+}

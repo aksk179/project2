@@ -91,6 +91,9 @@ public class SupportController {
 			notice.setOriginalFilename(originalFilename);
 			notice.setChangeFilename(changeFilename);
 		}
+		String contents = notice.getContent().replace("\r\n","<br>");
+		notice.setContent(contents);
+        
 		try {
 			result = supportService.insertNotice(notice);
 			model.addAttribute("msg", "공지게시판에 등록되었습니다.");
@@ -199,15 +202,18 @@ public class SupportController {
 	}
 	
 	@GetMapping("/questionAnswerForm.su")
-	public String questionAnswerForm(@RequestParam int questionNo, Model model) {
+	public String questionAnswerForm(@RequestParam int questionNo, @RequestParam String questionWriter, Model model) {
+		System.out.println(questionNo);
+		System.out.println(questionWriter);
 		model.addAttribute("questionNoFromParent", questionNo);
+		model.addAttribute("questionWriterFromParent", questionWriter);
 		return "/support/questionAnswerForm";
 	}
 	
 	@GetMapping("/questionList.su")
 	public void questionList(@RequestParam(defaultValue="1") int nowPage, Model model) {
 		int totalRecord = supportService.selectTotalRecordQuestion();
-		int limit = 10;
+		int limit = 20;
 		int offset = (nowPage - 1) * limit; 
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
@@ -251,10 +257,12 @@ public class SupportController {
 	@PostMapping("/questionAnswerEnroll.su")
 	public String questionAnswerEnroll(Question question, Model model) {
 		int result = 0;
+		int result2 = 0;
 		question.setQuestionStatus("1");
 		question.setDepth(1);
 		question.setOriginalFilename("null");
 		question.setChangeFilename("null");
+		int refFromReply = question.getRef();
 		
 		System.out.println(question.toString());
 		
@@ -262,6 +270,8 @@ public class SupportController {
 			result = supportService.insertQuestionAnswer(question);
 			model.addAttribute("msg", "답변이 등록되었습니다.");
 			System.out.println(result);
+			result2 = supportService.updateQuestionStatus(refFromReply);
+			System.out.println(result2);
 		} catch (Exception e) {
 			model.addAttribute("msg", "답변 등록 실패.");
 			System.out.println(result);

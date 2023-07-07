@@ -13,18 +13,27 @@
 	font-family: 'EF_watermelonSalad';
 }
 
+hr {
+	width: 1400px;
+	height: 1px;
+	background-color: tomato;
+	margin-bottom: 25px;
+}
+
 h1 {
 	margin-top: 50px;
-	margin-bottom: 50px;
+	margin-bottom: 25px;
+	font-weight: normal;
 }
 
 h2 {
 	margin-top: 50px;
+	font-weight: normal;
 }
 
 #noticeTable th {
 	text-align: right;
-	height: 50px;
+	height: 60px;
 }
 
 #noticeButton {
@@ -49,20 +58,25 @@ h2 {
 #listTable {
 	display: flex;
 	justify-content: center;
+	border-collapse: collapse;
+	margin-top: 30px;
 }
-
 #listTable th {
 	width: 150px;
 	font-family: 'EF_watermelonSalad';
 	font-size: 20px;
 	font-weight: normal;
-	height: 100px;
+	height: 50px;
+	color: white;
+	background-color: tomato;
 }
 
 #listTable td {
 	text-align: center;
-	height: 30px;
+	height: 60px;
+	font-size: 15px;
 }
+
 
 #listTable a {
 	text-decoration: none;
@@ -71,11 +85,10 @@ h2 {
 
 #detailTable {
 	text-align: right;
-	
 }
 
 nav {
-	margin-top: 50px;
+	margin-top: 20px;
 }
 nav a {
 	color: black;
@@ -133,3 +146,46 @@ nav li {
 #detailFile {
 	size = 200;
 }
+
+#content {
+	background-color: white;
+	margin-bottom: 30px;
+	font-family: normal;
+}
+
+#subInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+#subInfo>div {
+	height: 40px;
+}
+
+#fileDiv button {
+	width: 300px;
+	height: 30px;
+	border-width: 0px;
+	border-radius: 30px;
+	font-family: 'EF_watermelonSalad';
+}
+
+#fileDiv button:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#noticeDetailButton {
+	width: 100px;
+	height: 70px;
+	border-width: 0px;
+	border-radius: 30px;
+	font-family: 'EF_watermelonSalad';
+}
+
+#noticeDetailButton:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+
