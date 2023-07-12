@@ -20,4 +20,6 @@ public interface MatchService {
 	int updateMatch(Match match);
 
 	List<MatchInfo> selectMatchList(String userId, String matchDate);
+
+	int deleteMatch(Schedule schedule);
 }

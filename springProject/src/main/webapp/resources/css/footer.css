@@ -1,14 +1,10 @@
 *{
-	list-style: none; 
-	text-decoration: none; 
-	color:black;
+   list-style: none; 
+   text-decoration: none; 
+   color:black;
 }
-div{
-	display: flex;
-}
-
 footer {
-	width:1280px;
+  width:1280px;
   margin-top: 40px;
   background-color: rgb(247, 247, 255);
   align-items: center;
@@ -25,8 +21,17 @@ footer p {
   margin-bottom: 20px;
 }
 li{
-	margin-bottom:10px;
+   margin-bottom:10px;
 }
 .sns{
-	margin-right:150px;
+   margin-right:150px;
+}
+#scrollUp {
+    display: block;
+    position: fixed;
+    right: 40px;
+    bottom: 30px;
+    padding: 10px;
+    font: 15px Verdana;
+    color: black;
 }

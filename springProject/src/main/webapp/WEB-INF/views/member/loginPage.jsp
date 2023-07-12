@@ -79,10 +79,16 @@
 											onclick="location.href='#'">내경기</button></td>
 								</tr>
 								<tr>
-									<td><button class="managerbtn" type="button"
-											onclick="location.href='#'">관리자</button></td>
-									<td><button class="coachbtn" type="button"
-											onclick="location.href='#'">관장</button></td>
+									<c:choose>
+										<c:when test="${loginMember.userType eq 'manager'}">
+											<td><button class="managerbtn" type="button"
+													onclick="location.href='${pageContext.request.contextPath}/manager/mnMainPage.mn'">관리자</button></td>
+										</c:when>
+										<c:when test="${loginMember.userType eq 'coach'}">
+											<td><button class="coachbtn" type="button"
+													onclick="location.href='${pageContext.request.contextPath}/gym/gymMainPage.gym'">관장</button></td>
+										</c:when>
+									</c:choose>
 								</tr>
 							</table>
 						</div>

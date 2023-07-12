@@ -3,18 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/index.js"></script>
-</head>
-<body>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="홈페이지" name="title"/>
 </jsp:include>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/index.js"></script>
+
 <div id="billboard">
 	<div>
 		<img src="${pageContext.request.contextPath}/resources/img/match2.png" alt="match2" width="1024px" height="346px">
@@ -30,5 +26,3 @@
 	</div>
 </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
-</body>
-</html>

@@ -3,14 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b1a1baddfc194b964c714fcbe3f6d1aa&libraries=services"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/match/matchReg.css?v=<%=System.currentTimeMillis()%>">
+
 <style>
 	table {
 		width: 100%;
@@ -37,9 +35,6 @@
 		window.location.href = url;
 	}
 </script>
-</head>
-<body>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 <div id="nav2">
 	<div id="matching"></div>
@@ -330,7 +325,6 @@
 
 		function registerMatch() {
 			console.log(matchList);
-			//alert('hoho~~2');
  			$.ajax({
 				url: "${pageContext.request.contextPath}/match/register.do?userId=${loginMember.userId}",
 				type: "post",
@@ -349,5 +343,3 @@
 	</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
-</body>
-</html>

@@ -28,6 +28,7 @@ import com.kh.spring.gym.model.dao.GymDao;
 import com.kh.spring.gym.model.service.GymService;
 import com.kh.spring.gym.model.vo.Gym;
 import com.kh.spring.gym.model.vo.Schedule;
+import com.kh.spring.match.model.service.MatchService;
 import com.kh.spring.member.model.vo.Member;
 
 @Controller
@@ -37,6 +38,9 @@ public class GymController {
 	
 	@Autowired
 	private GymService gymService;
+	
+	@Autowired
+	private MatchService matchService;
 	
 	@Autowired
 	private GymDao gymDao;
@@ -162,7 +166,9 @@ public class GymController {
 		System.out.println(userId);
 		String dateStr = "";
 		String dateTime = "";
-		Date date = new Date();
+		//Date date = new Date();
+		//LocalDateTime date = LocalDateTime.now();
+		//System.out.println(date);
 		int sum = 0;
 		
 		Gym gym = gymService.selectGymNo(userId);
@@ -173,16 +179,25 @@ public class GymController {
 			schedule.setUserId(userId);
 			schedule.setCode(totalCodes[i]);
 			dateStr = totalCodes[i].substring(totalCodes[i].length()-12, totalCodes[i].length());
+			System.out.println(dateStr);
 			dateTime = totalCodes[i].substring(totalCodes[i].length()-4, totalCodes[i].length());
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
-	
+			System.out.println(dateTime);
+
+			//SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+			
+
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+	        
+	        // 문자열 -> Date
 			int result = 0;
-			try {
-				date = formatter.parse(dateStr);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			schedule.setMatchDate(date);
+//			try {
+//				date = LocalDateTime.parse(dateStr, formatter);
+//				System.out.println(date);
+//				date = formatter.parse(dateStr);
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+			schedule.setMatchDate(LocalDateTime.parse(dateStr, formatter));
 			schedule.setMatchTime(dateTime);
 			schedule.setGymNo(gymNo);
 			
@@ -218,7 +233,9 @@ public class GymController {
 			Schedule schedule = new Schedule();
 			schedule.setUserId(userId);
 			schedule.setCode(totalCodes[i]);
+			System.out.println(totalCodes[i]);
 			int result = gymService.deleteSchedule(schedule);
+			int result2 = matchService.deleteMatch(schedule);
 			sum += result;
 		}
 		if(sum==totalCodes.length) {

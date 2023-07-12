@@ -14,8 +14,8 @@
 		width: 100%;
 	}
 	td {
-		width: 14%;
-		height: 60px;
+		/*width: 14%;
+		height: 60px;*/
 		text-align: center;
 	}
 </style>
@@ -28,15 +28,36 @@
 </script>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
-<div id="nav2">
-	<div id="matching"></div>
-	<div id="matching"></div>
-	<div id="gym"><a onclick="redirectToToday();">매치 등록</a></div>
-	<div id="gym"><a href="${pageContext.request.contextPath}/match/matchList.ma">상대방 찾기</a></div>
+
+
+<div>
+	<table border="1">
+		<tr>
+			<th>알람시간</th>
+			<th>알람내용</th>
+			<th>비고</th>
+		</tr>
+		<c:forEach items="${selectAlarmList}" var="alarm" varStatus = "d">
+			<c:if test="${alarm.alarmStatus eq 1}">
+			<tr>
+				<td>${alarm.alarmTime}</td>
+				<td>${alarm.alarmMsg}</td>
+				<td>
+					<button type="button" onclick="">수락</button>
+					<button type="button" onclick="">거절</button>
+				</td>
+			</tr>
+			</c:if>
+			<c:if test="${alarm.alarmStatus eq 0}">
+			<tr>
+				<td>${alarm.alarmTime}</td>
+				<td>${alarm.alarmMsg}</td>
+				<td></td>
+			</tr>
+			</c:if>
+		</c:forEach>
+	</table>
 </div>
 
-
-<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

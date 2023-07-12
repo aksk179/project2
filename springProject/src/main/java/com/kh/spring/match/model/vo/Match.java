@@ -3,6 +3,7 @@ package com.kh.spring.match.model.vo;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,9 @@ import lombok.ToString;
 
 //DB VO
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Match {
 	private int no;
 	private String matchNo;

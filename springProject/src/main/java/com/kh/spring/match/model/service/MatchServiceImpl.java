@@ -42,7 +42,14 @@ public class MatchServiceImpl implements MatchService{
 
 	@Override
 	public List<MatchInfo> selectMatchList(String userId, String matchDate) {
+		System.out.println("ServiceImpl = selectMatchList : " + matchDate);
+
 		return matchDao.selectMatchList(userId, matchDate);
+	}
+
+	@Override
+	public int deleteMatch(Schedule schedule) {
+		return matchDao.deleteMatch(schedule);
 	}
 
 }
