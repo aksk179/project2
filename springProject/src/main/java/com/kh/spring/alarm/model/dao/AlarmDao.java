@@ -17,4 +17,6 @@ public interface AlarmDao {
 
 	int readYnUpdate(Alarm al);
 
+	int insertAlarm(Alarm alarm);
+
 }

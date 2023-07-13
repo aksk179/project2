@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ import com.kh.spring.profile.model.service.ProfileService;
 import com.kh.spring.profile.model.vo.Profile;
 
 @Controller
-@SessionAttributes({"profileMember"})
+/* @SessionAttributes({"loginMember"}) */
 @RequestMapping("/profile")
 public class ProfileController {
 
@@ -52,9 +53,10 @@ public class ProfileController {
 	@GetMapping("/profileEnroll.pr")
 	public void profileEnroll() {
 	}
-
+	
+	/*
 	@PostMapping("/profileEnroll.pr")
-	public String profileEnroll(Profile profile, Member member, Model model, @RequestParam MultipartFile upFile) {
+	public String profileEnroll(Profile profile, @ModelAttribute("loginMember") Member member, Model model, @RequestParam MultipartFile upFile) {
 		String saveDirectory = application.getRealPath("/resources/upload/profile");
 		if(upFile.getSize() > 0) {
 			String originalFilename = upFile.getOriginalFilename();
@@ -77,20 +79,13 @@ public class ProfileController {
 			int result2 = memberService.statusUpdate(profile.getUserId());
 			
 			member.setUserStatus(2);
-			model.addAttribute("profileMember", member);
+			model.addAttribute("loginMember", member);
+			//model.addAttribute("proMember", member.getUserStatus());
 		 }
-		return "redirect:/";			
-	}		
-
-	
-	@GetMapping("/profileDetail.pr")
-    public void profileDetail(String userId, Model model) {
-		Profile profile = profileService.selectOneProfile(userId);
-		model.addAttribute("profileMember", profile);		
-    }
-	
-	@PostMapping("/profileUpdate.pr")
-	public String memberUpdate(Profile profile, Model model, @RequestParam MultipartFile upFile, RedirectAttributes redirectAtt) {
+		return "/member/loginPage";			
+	}*/
+	@PostMapping("/profileEnroll.pr")
+	public String profileEnroll(Profile profile, @ModelAttribute("loginMember") Member member, Model model, @RequestParam MultipartFile upFile, HttpSession session) {
 		String saveDirectory = application.getRealPath("/resources/upload/profile");
 		if(upFile.getSize() > 0) {
 			String originalFilename = upFile.getOriginalFilename();
@@ -107,7 +102,45 @@ public class ProfileController {
 			System.out.println("original="+originalFilename);
 			System.out.println("change="+changeFilename);
 		}
+
+		int result = profileService.insertProfile(profile);			
+		if (result == 1) {
+			int result2 = memberService.statusUpdate(profile.getUserId());
+			
+			member.setUserStatus(2);
+			session.setAttribute("loginMember", member);
+			//model.addAttribute("proMember", member.getUserStatus());
+		 }
+		return "/member/loginPage";			
+	}
+
+	
+	@GetMapping("/profileDetail.pr")
+    public void profileDetail(String userId, Model model) {
+		Profile profile = profileService.selectOneProfile(userId);
+		model.addAttribute("profileMember", profile);		
+    }
+	
+	@PostMapping("/profileUpdate.pr")
+	public String memberUpdate(Profile profile, Model model, @RequestParam MultipartFile upFile, RedirectAttributes redirectAtt) {
 		System.out.println(profile);
+		String saveDirectory = application.getRealPath("/resources/upload/profile");
+		if(upFile.getSize() > 0) {
+			String originalFilename = upFile.getOriginalFilename();
+			String changeFilename = SpringUtils.changeMultipartFile(upFile);
+			
+			File destFile = new File(saveDirectory, changeFilename);
+			try {
+				upFile.transferTo(destFile);		// 실제로 저장
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			profile.setOriginalFilename(originalFilename);
+			profile.setChangeFilename(changeFilename);
+			//System.out.println("original="+originalFilename);
+			//System.out.println("change="+changeFilename);
+		}
+		//System.out.println(profile);
 		int result = profileService.updateProfile(profile);
 
 		if (result > 0) {
@@ -122,7 +155,7 @@ public class ProfileController {
 	
 	 @GetMapping("/profileInfo.pr") 
 	  public String profileInfo(String userId, Model model) { 
-	  System.out.println(userId); 
+	 
 	  model.addAttribute("profileMember", profileService.selectOneProfile(userId)); 
 	  return "redirect:/"; 
 	  }

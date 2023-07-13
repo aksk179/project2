@@ -38,6 +38,11 @@ import com.kh.spring.support.model.vo.Question;
 @RequestMapping("/support")
 public class SupportController {
 	
+	@RequestMapping("/FAQ.su")
+    public String FAQ() {
+        return "support/FAQ";
+	}
+	
 	@Autowired
 	private SupportService supportService;
 	
@@ -69,6 +74,7 @@ public class SupportController {
 		List<Notice> noticeList = supportService.selectNoticeList(rowBounds);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("pi", pi);
+		System.out.println(pi);
 	}
 	
 	@PostMapping("/noticeEnroll.su")
@@ -91,9 +97,7 @@ public class SupportController {
 			notice.setOriginalFilename(originalFilename);
 			notice.setChangeFilename(changeFilename);
 		}
-		String contents = notice.getContent().replace("\r\n","<br>");
-		notice.setContent(contents);
-        
+		
 		try {
 			result = supportService.insertNotice(notice);
 			model.addAttribute("msg", "공지게시판에 등록되었습니다.");
@@ -107,10 +111,12 @@ public class SupportController {
 	@GetMapping("/noticeDetail.su")
 	public String noticeDetail(@RequestParam int noticeNo, Model model) {
 		int result = supportService.updateCountNotice(noticeNo);
+		
 		Notice notice = supportService.selectOneNotice(noticeNo);
+
+		
 		
 		model.addAttribute("notice", notice);
-		System.out.println(notice.getNoticeNo());
 		return "/support/noticeDetail";
 	}
 	
@@ -141,6 +147,8 @@ public class SupportController {
 	
 	@PostMapping("/noticeUpdate.su")
 	public String noticeUpdate(Notice notice, @RequestParam MultipartFile upFile, Model model) {
+	
+		
 		String saveDirectory = application.getRealPath("/resources/upload/notice");
 		System.out.println(saveDirectory);
 		int result = 0;
@@ -161,8 +169,13 @@ public class SupportController {
 		}
 		
 		System.out.println(notice.getNoticeNo());
+		
 		try {
-			result = supportService.updateNotice(notice);
+			if(upFile.isEmpty()) {
+				result = supportService.updateNoticeWithoutFile(notice);
+			} else {
+				result = supportService.updateNotice(notice);
+			}
 			System.out.println(result);
 			model.addAttribute("msg", "공지게시글이 수정되었습니다.");
 		} catch (Exception e) {
@@ -338,9 +351,13 @@ public class SupportController {
 		}
 		
 		System.out.println(question.getQuestionNo());
+		
 		try {
-			result = supportService.updateQuestion(question);
-			System.out.println(result);
+			if(upFile.isEmpty()) {
+				result = supportService.updateQuestionWithoutFile(question);
+			} else {
+				result = supportService.updateQuestion(question);
+			}
 			model.addAttribute("msg", "질문게시글이 수정되었습니다.");
 		} catch (Exception e) {
 			model.addAttribute("msg", "질문게시글 수정 실패.");
@@ -349,11 +366,15 @@ public class SupportController {
 	}
 	
 	@GetMapping("/questionDelete.su")
-	public String questionDelete(@RequestParam int questionNo, Model model) {
+	public String questionDelete(@RequestParam int questionNo, Model model, @RequestParam int ref) {
 		int result = 0;
 		System.out.println(result);
 		try {
-			result = supportService.deleteQuestion(questionNo);
+			if(questionNo == ref) {
+				result = supportService.deleteQuestionWithReply(ref);
+			} else {
+				result = supportService.deleteQuestion(questionNo);
+			}
 			model.addAttribute("msg", "질문게시글이 삭제되었습니다.");
 			System.out.println(result);
 		} catch (Exception e) {
@@ -361,6 +382,37 @@ public class SupportController {
 		}
 		
 		return "redirect:/support/questionList.su?questionNo=1";
+	}
+	
+	@GetMapping("/searchQuestion.su")
+	public String searchQuestion(@RequestParam String searchType, @RequestParam String searchInput, Model model) {
+		System.out.println(searchType);
+		System.out.println(searchInput);
+		List<Question> searchQuest = null;
+		try {
+			if(searchType.equals("questionWriter")) {
+				searchQuest = supportService.selectSearchQuestionId(searchInput);
+			}
+			if(searchType.equals("questionTitle")) {
+				searchQuest = supportService.selectSearchQuestionTitle(searchInput);
+			}
+			if(searchType.equals("content")) {
+				searchQuest = supportService.selectSearchQuestionContent(searchInput);
+			}
+			if(searchType.equals("questionStatus")) {
+				if(searchInput.equals("완료")) {
+					searchQuest = supportService.selectSearchQuestionStatus("1");
+				}
+				if(searchInput.equals("대기중")) {
+					searchQuest = supportService.selectSearchQuestionStatus("0");
+				}
+			}
+			model.addAttribute("searchQuest", searchQuest);
+		} catch(Exception e) {
+			model.addAttribute("msg", "검색에 실패했습니다");
+		}
+		
+		return "/support/questionList";
 	}
 
 		public static final String SERVICE_KEY = "BLSU8cfc7cUf5JHf21bnI4ONXtjvud7j03E79f2iMyz0MOYvAo1XsYCarIwuSkAZJkErTfpSa2cMp6hIZIqO1A%3D%3D";

@@ -54,9 +54,10 @@
 	let checkAlarmId;
 	
 	$(document).ready(function(){
-	    checkAlarmId = setInterval(checkAlarmAjax, 10000); // 0.3초 간격으로 마지막 데이터 이후 입력 시	        
+	    checkAlarmId = setInterval(checkAlarmAjax, 10000); // 1초 간격으로 마지막 데이터 이후 입력 시	        
 	}); 
 	
+	//새로운 알람 있는지 체크 있으면 이미지 변경
 	function checkAlarmAjax(){
 	    $.ajax({
 	        url: "${pageContext.request.contextPath}/alarm/checkAlarm.al",
@@ -81,9 +82,10 @@
 	
 	var alarmList = [];
 	
+	//데이터 읽어와서 팝업창에 뿌려주기
 	function readAlarmAjax() {
 	    $.ajax({
-	        url: "${pageContext.request.contextPath}/alarm/read.do",
+	        url: "${pageContext.request.contextPath}/alarm/read.al",
 	        method: "POST",
 	        dataType: "json",
 	        contentType: "application/json",
@@ -130,12 +132,13 @@
 	        },
 	        error : function(xhr, status, error) {
 				clearInterval();
-				alert(status);
+				//alert();
 				console.log(status);
 			}
 	    });
 	}
 	
+	//팝업창 열기
 	function popOpen() {
 		var modalPopTitle = $('.modal-wrap-title');
 		var modalPop = $('.modal-wrap');
@@ -148,6 +151,7 @@
 		//window.open('${pageContext.request.contextPath}/alarm/readAlarm.al','win0','width=500,height=300,status=no,toolbar=0,scrollbars=yes,location=0,titlebar=0');
 	}
 	
+	//팝업창 닫기 누르면 이미지 다시 바뀜
 	function popClose() {	
 		var modalPopTitle = $('.modal-wrap-title');	
 		var modalPop = $('.modal-wrap');
@@ -161,8 +165,9 @@
 		
 		console.log("popClose() : " + JSON.stringify(alarmList));
 		readYnUpdate();
-	}
+	}	
 	
+	//닫기 누르면 readYn=Y로 바꿔주고, 팝업창 비워주기
 	function readYnUpdate() {
 		$.ajax({
 			url: "${pageContext.request.contextPath}/alarm/readYnUpdate.al",
@@ -180,5 +185,33 @@
 		});
 	}
 	
+	//수락 버튼
+	function accept(no) {
+		var accept = {};
+		accept.no = no;
+		$.ajax({
+			url: "${pageContext.request.contextPath}/alarm/acceptMatch.al",
+			type: "post",
+			data: JSON.stringify(accept),
+			dataType: "JSON",
+	        contentType : "application/json",
+			success : function(data, status, xhr) {
+				console.log(data.result);
+			},
+			error : function(xhr, status, error) {
+				alert(status);
+			}
+		});
+	}
+	
+	//거절 버튼
+	function reject() {
+		
+	}
+	
+	//결제 버튼
+	function pay() {
+		
+	}
 
 </script>

@@ -29,4 +29,9 @@ public class AlarmServiceImpl implements AlarmService{
 	public int readYnUpdate(Alarm al) {
 		return alarmDao.readYnUpdate(al);
 	}
+
+	@Override
+	public int insertAlarm(Alarm alarm) {
+		return alarmDao.insertAlarm(alarm);
+	}
 }

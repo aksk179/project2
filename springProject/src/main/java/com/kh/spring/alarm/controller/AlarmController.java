@@ -1,9 +1,11 @@
 package com.kh.spring.alarm.controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +23,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.kh.spring.alarm.model.service.AlarmService;
 import com.kh.spring.alarm.model.vo.Alarm;
-import com.kh.spring.match.model.vo.MatchRegInfo;
+import com.kh.spring.match.model.service.MatchService;
+import com.kh.spring.match.model.vo.Match;
+import com.kh.spring.match.model.vo.MatchList;
 import com.kh.spring.member.model.vo.Member;
 
 @Controller
@@ -31,6 +35,9 @@ public class AlarmController {
 	
 	@Autowired
 	private AlarmService alarmService;
+	
+	@Autowired
+	private MatchService matchService;
 	
 	@ResponseBody
 	@RequestMapping(value="/checkAlarm.al", method = RequestMethod.POST)
@@ -50,27 +57,27 @@ public class AlarmController {
 		return count;
 	}
 	
-	@RequestMapping(value="/readAlarm.al", method = RequestMethod.GET)
-	public String alarmPopup(HttpSession session, Model model) {
-		Gson gson = new Gson();
-		JSONArray jsonArr = new JSONArray(); 
-				
-		List<HashMap<String, String>> result = new ArrayList<>();
-		
-		Member member = (Member) session.getAttribute("loginMember");
-		String userId = member.getUserId();
-		System.out.println(userId);
-		
-		List<Alarm> readAlarmList = alarmService.readAlarmList(userId);
-		System.out.println(readAlarmList);
-		
-		model.addAttribute("readAlarmList", readAlarmList);
- 
-		return "/alarm/alarmPopup";
-	}
+//	@RequestMapping(value="/readAlarm.al", method = RequestMethod.GET)
+//	public String alarmPopup(HttpSession session, Model model) {
+//		Gson gson = new Gson();
+//		JSONArray jsonArr = new JSONArray(); 
+//				
+//		List<HashMap<String, String>> result = new ArrayList<>();
+//		
+//		Member member = (Member) session.getAttribute("loginMember");
+//		String userId = member.getUserId();
+//		System.out.println(userId);
+//		
+//		List<Alarm> readAlarmList = alarmService.readAlarmList(userId);
+//		System.out.println(readAlarmList);
+//		
+//		model.addAttribute("readAlarmList", readAlarmList);
+// 
+//		return "/alarm/alarmPopup";
+//	}
 
 	@ResponseBody
-	@RequestMapping(value="/read.do", method = RequestMethod.POST)
+	@RequestMapping(value="/read.al", method = RequestMethod.POST)
 	public List<HashMap<String, String>> readAlarmList(HttpSession session, Model model) {
 		Gson gson = new Gson();
 				
@@ -89,10 +96,7 @@ public class AlarmController {
 			String receiverId = ar.getReceiverId();
 			String senderId = ar.getSenderId();
 			String alarmMsg = ar.getAlarmMsg();
-			
-			LocalDateTime timeTemp = ar.getAlarmTime();
-			String alarmTime = timeTemp.toString();
-			
+			String alarmTime = ar.getAlarmTime2();
 			String readYn = ar.getReadYn();
 			
 			int staTemp = ar.getAlarmStatus();
@@ -135,6 +139,74 @@ public class AlarmController {
 			result = alarmService.readYnUpdate(al);
 			System.out.println("result : " + result);
 		}
+		
+		JsonObject jsonObject = new JsonObject();
+        if(result > 0) {
+	        jsonObject.addProperty("result", "OK");
+        } else {
+	        jsonObject.addProperty("result", "NOT_OK");
+        }        
+ 
+        // JsonObject를 Json 문자열로 변환
+        String jsonStr = gson.toJson(jsonObject);
+ 
+        // 생성된 Json 문자열 출력
+        System.out.println(jsonStr);
+	
+		return jsonStr;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/acceptMatch.al", method = RequestMethod.POST)
+	public String acceptMatch(HttpSession session, @RequestBody Alarm alarm) {
+		System.out.println(alarm.getNo());
+		
+		Gson gson = new Gson();
+		int result = 0;
+		
+		MatchList matchList = matchService.selectOneMatch(alarm.getNo());
+		System.out.println(matchList);
+		
+		String userId1 = matchList.getUserId1();
+		String userId2 = matchList.getUserId2();
+		String proNick = matchList.getProNick();
+		String proNick2 = matchList.getProNick2();
+		String gymName = matchList.getGymName();
+		
+		LocalDateTime dateTemp = matchList.getMatchdate();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
+		String matchdateString = formatter.format(dateTemp);
+		System.out.println(matchdateString);
+		
+		String matchTime = matchList.getMatchtime();
+		int no2 = matchList.getNo();
+		
+		//receiver(매치 등록한 사람)한테는 sender(pronick2)의 이름으로 메시지 보내야 함
+		//sender(매치 도전신청한 사람)한테는 receiver(pronick)의 이름으로 메시지 보내야 함
+		Member member = (Member) session.getAttribute("loginMember");
+		String userId = member.getUserId();
+		
+		//userId1이 userId2로부터 받음.
+		String alarmMsg = proNick2 + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 성사되었습니다. 결제해주세요";
+		alarm.setReceiverId(userId1);
+		alarm.setSenderId(userId2);
+		alarm.setAlarmMsg(alarmMsg);
+		alarm.setReadYn("N");
+		alarm.setAlarmStatus(1);
+		alarm.setNo(alarm.getNo());
+		result = alarmService.insertAlarm(alarm);
+		
+
+		alarm = new Alarm();
+		//userId2이 userId1로부터 받음.
+		String alarmMsg2 = proNick + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 성사되었습니다. 결제해주세요";
+		alarm.setReceiverId(userId2);
+		alarm.setSenderId(userId1);
+		alarm.setAlarmMsg(alarmMsg2);
+		alarm.setReadYn("N");
+		alarm.setAlarmStatus(1);
+		alarm.setNo(alarm.getNo());
+		result = alarmService.insertAlarm(alarm);
 		
 		JsonObject jsonObject = new JsonObject();
         if(result > 0) {

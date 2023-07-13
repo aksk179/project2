@@ -97,7 +97,7 @@
         </table>
        
 </div>
-<jsp:include page="/WEB-INF/views/gym/gymSchedule.jsp"/>
+<%-- <jsp:include page="/WEB-INF/views/gym/gymSchedule.jsp"/> --%>
 </div>
 
 <%-- <jsp:include page="/WEB-INF/views/common/footer.jsp" /> --%>

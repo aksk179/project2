@@ -54,7 +54,6 @@
 			<beans:bean class="com.kh.spring.common.interceptor.LoginInterceptor" />
 		</interceptor>
 	</interceptors>
-
 </beans:beans>
 
 

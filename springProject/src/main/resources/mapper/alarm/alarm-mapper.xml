@@ -14,10 +14,10 @@
 	</select>
 	
 	<select id="readAlarmList" resultMap="alarmMap">
-		SELECT *
+		SELECT ALARM_NO, RECEIVER_ID, SENDER_ID, ALARM_MSG, ALARM_TIME, READ_YN, ALARM_STATUS, NO, TO_CHAR(ALARM_TIME, 'MM/DD HH24:MI') AS ALARM_TIME2
 		FROM ALARM
 		WHERE RECEIVER_ID = #{receiverId}
-		ORDER BY ALARM_TIME DESC
+		ORDER BY ALARM_NO DESC
 	</select>
 	
 	<update id="readYnUpdate">
@@ -25,4 +25,19 @@
 		SET READ_YN = 'Y'
 		WHERE ALARM_NO = #{alarmNo}
 	</update>
+	
+	<insert id="insertAlarm">
+		INSERT INTO ALARM
+		(ALARM_NO, RECEIVER_ID, SENDER_ID, ALARM_MSG, ALARM_TIME, READ_YN, ALARM_STATUS, NO)
+		VALUES (
+			SEQ_ALARM_NO.NEXTVAL,
+			#{receiverId},
+			#{senderId},
+			#{alarmMsg},
+			SYSDATE,
+			#{readYn},
+			#{alarmStatus},
+			#{no}
+		)
+	</insert>
 </mapper>

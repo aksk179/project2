@@ -42,4 +42,18 @@ public interface SupportService {
 
 	int updateQuestionStatus(int ref);
 
+	int updateNoticeWithoutFile(Notice notice);
+
+	int updateQuestionWithoutFile(Question question);
+
+	int deleteQuestionWithReply(int ref);
+
+	List<Question> selectSearchQuestionId(String searchInput);
+
+	List<Question> selectSearchQuestionTitle(String searchInput);
+
+	List<Question> selectSearchQuestionContent(String searchInput);
+
+	List<Question> selectSearchQuestionStatus(String searchInput);
+
 }

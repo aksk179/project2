@@ -95,4 +95,39 @@ public class SupportServiceImpl implements SupportService{
 	public int updateQuestionStatus(int ref) {
 		return supportDao.updateQuestionStatus(ref);
 	}
+
+	@Override
+	public int updateNoticeWithoutFile(Notice notice) {
+		return supportDao.updateNoticeWithoutFile(notice);
+	}
+
+	@Override
+	public int updateQuestionWithoutFile(Question question) {
+		return supportDao.updateQuestionWithoutFile(question);
+	}
+
+	@Override
+	public int deleteQuestionWithReply(int ref) {
+		return supportDao.deleteQuestionWithReply(ref);
+	}
+
+	@Override
+	public List<Question> selectSearchQuestionId(String searchInput) {
+		return supportDao.selectSearchQuestionId(searchInput);
+	}
+
+	@Override
+	public List<Question> selectSearchQuestionTitle(String searchInput) {
+		return supportDao.selectSearchQuestionTitle(searchInput);
+	}
+
+	@Override
+	public List<Question> selectSearchQuestionContent(String searchInput) {
+		return supportDao.selectSearchQuestionContent(searchInput);
+	}
+
+	@Override
+	public List<Question> selectSearchQuestionStatus(String searchInput) {
+		return supportDao.selectSearchQuestionStatus(searchInput);
+	}
 }

@@ -66,7 +66,7 @@ public class MemberController {
 		String encodedPassword = passwordEncoder.encode(rawPassword);
 		member.setUserPw(encodedPassword);
 //		System.out.println("changePass = " + member);
-
+		
 		int result = memberService.insertMember(member);
 		return "redirect:/";
 	}
@@ -162,16 +162,18 @@ public class MemberController {
 	}
 
 	@PostMapping("/memberUpdate.me")
-	public String memberUpdate(Member member, Model model, RedirectAttributes redirectAtt) {
+	public String memberUpdate(Member member, RedirectAttributes redirectAtt) {
 		// pw암호화해서 member.userPwd에 넣기
+		
 		
 		String rawPassword = member.getUserPw();
 		String encodedPassword = passwordEncoder.encode(rawPassword);
 		member.setUserPw(encodedPassword);
 	
 		System.out.println(member);
+		
 		int result = memberService.updateMember(member);
-
+		System.out.println("result :"+result);
 		if (result > 0) {
 			redirectAtt.addFlashAttribute("msg", "회원정보 수정 성공");
 		} else {
@@ -179,6 +181,8 @@ public class MemberController {
 		}
 
 		return "redirect:/member/memberInfo.me?userId=" + member.getUserId();
+		
+		
 	}
 	
 	@GetMapping("/memberInfo.me")
@@ -195,7 +199,7 @@ public class MemberController {
 		member.setUserPw(encodedPassword);
 
 		int result = memberService.pwupdateMember(member);
-
+		
 		if (result > 0) {
 			redirectAtt.addFlashAttribute("msg", "회원정보 수정 성공");
 		} else {
@@ -204,6 +208,10 @@ public class MemberController {
 
 		return "redirect:/member/memberIdInfo.me?userEmail=" + member.getUserEmail();
 	}
+
+	
+
+
 	
 	@GetMapping("/memberfindId.me")
 	public void memberfindId(String userId) {                 
@@ -222,9 +230,10 @@ public class MemberController {
 	
 	@GetMapping("/deleteMember.me")
 	// 버튼을 통해 넘어왔기에 무조건 get post는 폼에서 post를 지정해줘야만 가능하다
-	public ModelAndView removeMember(HttpSession session, ModelAndView mv) {
+	public ModelAndView removeMember(HttpSession session, ModelAndView mv, SessionStatus status) {
 
 		Member member = (Member) session.getAttribute("loginMember");
+		
 		String userId = member.getUserId();
 		System.out.println(userId);
 			int result = memberService.deleteMember(userId);
@@ -233,6 +242,8 @@ public class MemberController {
 				 session.invalidate();
 				mv.setViewName("redirect:/");
 			}
+			if (!status.isComplete())
+				status.setComplete();
 		return mv;
 	}
 	
@@ -250,5 +261,21 @@ public class MemberController {
 
 	    return response;
 	}
-	
+    @RequestMapping("/payment.py")
+    public String payment() {
+        return "member/pay";
+    }
+    @RequestMapping("/p_bank.py")
+    public String p_bank() {
+        return "member/p_bank";
+    }
+    @RequestMapping("/p_mobile.py")
+    public String p_mobile() {
+        return "member/p_mobile";
+    }
+    @PostMapping("/p_mobilePass.py")
+	public String p_mobilePass(String userId, String userName, String userEmail, Model model) {
+    	
+		return "redirect:/";
+	}
 }

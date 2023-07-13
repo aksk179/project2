@@ -1,0 +1,183 @@
+@font-face {
+    font-family: 'EF_watermelonSalad';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_watermelonSalad.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'RixMomsBlanketR';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/RixMomsBlanketR.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#container {
+	font-family: 'EF_watermelonSalad';
+	background-image: url("../../img/match/ring3.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    height: 1600px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#game {
+    width: 1400px;
+    height: 1100px;
+    background-color: rgba(0,0,20,0.3);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 7px 15px 8px rgba(0,0,0,0.1);
+    color: white;
+   	font-size: 17px;
+}
+
+table {
+	width: 1300px;
+	border-spacing: 0px;
+}
+
+#table {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+table th {
+	 font-family: 'RixMomsBlanketR';
+	 background-color: rgba(0,0,128,0);
+	 height: 60px;
+	 font-weight: bold;
+	 font-size: 35px;
+	 color: black;
+	 text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+}
+
+#matchButton button {
+	color: white;
+	background-color: rgba(0,78,128,0.5);
+	border-radius: 30px;
+	border-width: 0px;
+	font-size: 15px;
+	margin-inline: 5px;
+}
+
+#matchButton {
+	display: flex;
+	align-items: bottom;
+	margin-left: 40px;
+	
+}
+
+td {
+	height: 100px;
+	text-align: center;
+	background-color: rgba(0,0,128,0);
+}
+
+tbody tr:hover {
+	background-color: rgba(0,0,20,0.2);
+}
+
+button {
+	font-family: 'EF_watermelonSalad';
+	color: white;
+	background-color: rgba(0,78,128,0.5);
+	border-radius: 30px;
+	border-width: 0px;
+	padding: 20px;
+}
+
+#matchButton button:hover {
+	font-size: 15px;
+	color: black;
+	font-weight: bold;
+	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+}
+
+button:hover {
+	font-size: 15px;
+	color: black;
+	font-weight: bold;
+	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+}
+
+button:active {
+	font-size: 18px;
+}
+
+nav {
+	margin-top: 50px;
+}
+nav a {
+	color: white;
+	text-decoration: none;
+	background-color: rgba(0,78,128,0.5);
+	margin-inline: 10px;
+	padding: 30px;
+	font-size: 20px;
+	
+}
+
+nav li {
+	text-decoration: none;
+	list-style: none;
+	float: left;
+}
+
+#filter {
+	display: flex;
+	flex-direction: row;
+}
+
+select, input {
+	font-family: 'EF_watermelonSalad';
+	font-size: 12px;
+	background-color: rgba(255,255,255,0.5);
+	border-width: 0px;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+select {
+	margin-inline: 5px;
+}
+
+select:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+
+input {
+	margin-inline: 3px;
+}
+
+#upperStuff {
+	display: flex;
+	flex-direction: row;
+	flex-direciont: center;
+	margin-bottom: 10px;
+}
+
+#search {
+	margin-left: 40px;
+	margin-right: 40px;
+	display: flex;
+	align-itmes: bottom;
+}
+
+#search input:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+#view {
+	display: flex;
+	align-items: bottom;
+}
+
+#view input:hover {
+	background-color: rgba(255,255,255,1);
+}

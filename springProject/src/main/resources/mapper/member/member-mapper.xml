@@ -18,12 +18,12 @@
 		#{phone},
 		#{zipcode},
 		#{address},
-		#{detailAddress},
-		#{userInfo},
+		#{detailaddress},
 		default,
 		default,
 		default,
-		#{userStatus}
+		default,
+		default
 		)
 	</insert>
 
@@ -39,18 +39,18 @@
 		select *
 		from member
 		where
-		user_id=#{userId}
+		user_id = #{userId}
 	</select>
 
 	<update id="updateMember">
 		update member
 		set
-		user_pw = #{userPw},		
+		user_pw = #{userPw},
 		phone = #{phone},
 		user_email = #{userEmail},
 		zipcode = #{zipcode},
 		address = #{address},
-		detailAddress = #{detailAddress}
+		detailaddress = #{detailaddress}
 		where user_id = #{userId}
 	</update>
 
@@ -76,12 +76,12 @@
 		where user_id = #{userId}
 	</delete>
 	
-	   <update id="statusUpdate">
+   <update id="statusUpdate">
       update member
          set
          user_status = 2
       where user_id = #{userId}
-   </update>
+   </update> 
 	
 	
     <select id="findUserIdByEmail" resultType="java.lang.String">

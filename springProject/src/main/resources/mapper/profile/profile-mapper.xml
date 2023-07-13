@@ -45,6 +45,7 @@
     <update id="updateProfile" parameterType="Profile">
     UPDATE profile
     SET
+    	original_filename = #{originalFilename},
 		change_filename = #{changeFilename},   
         pro_level = #{proLevel},
         pro_height = #{proHeight},

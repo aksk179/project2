@@ -12,4 +12,6 @@ public interface AlarmService {
 
 	int readYnUpdate(Alarm al);
 
+	int insertAlarm(Alarm alarm);
+
 }

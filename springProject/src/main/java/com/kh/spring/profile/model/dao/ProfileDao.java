@@ -22,5 +22,4 @@ public interface ProfileDao {
 
 	int getProfileCountByNickName(String proNick);
 
-
 }
