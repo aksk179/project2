@@ -36,4 +36,6 @@ public class MatchList {
 	//////////////////////////
 	private String gymName;
 	private String proNick2;
+	private int matchStatus;
+	private int gymNo;
 }

@@ -28,5 +28,5 @@ public class Member {
 	   private int userStatus;
 	   private int userControl;
 	   private Date userRegdate;
-	   private int userInfo;
+	   private String userInfo;
 	}

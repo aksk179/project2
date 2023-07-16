@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -158,62 +159,169 @@ public class AlarmController {
 	
 	@ResponseBody
 	@RequestMapping(value="/acceptMatch.al", method = RequestMethod.POST)
-	public String acceptMatch(HttpSession session, @RequestBody Alarm alarm) {
+	public String acceptMatch(HttpSession session, @RequestBody Alarm alarm, Model model, RedirectAttributes redirectAttr) {
+		System.out.println("accept매치 시작=========================================");
+		// 1. matchNo에 해당하는 상태를 읽음
+		// 2. 상태가 3이면 이미 수락되었습니다.를 return
+		// 3. 상태가 3이 아니면 알람메시지+상태를 3으로 update
 		System.out.println(alarm.getNo());
 		
 		Gson gson = new Gson();
+		JsonObject jsonObject = new JsonObject();
 		int result = 0;
 		
 		MatchList matchList = matchService.selectOneMatch(alarm.getNo());
 		System.out.println(matchList);
 		
-		String userId1 = matchList.getUserId1();
-		String userId2 = matchList.getUserId2();
-		String proNick = matchList.getProNick();
-		String proNick2 = matchList.getProNick2();
-		String gymName = matchList.getGymName();
-		
-		LocalDateTime dateTemp = matchList.getMatchdate();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
-		String matchdateString = formatter.format(dateTemp);
-		System.out.println(matchdateString);
-		
-		String matchTime = matchList.getMatchtime();
-		int no2 = matchList.getNo();
-		
-		//receiver(매치 등록한 사람)한테는 sender(pronick2)의 이름으로 메시지 보내야 함
-		//sender(매치 도전신청한 사람)한테는 receiver(pronick)의 이름으로 메시지 보내야 함
-		Member member = (Member) session.getAttribute("loginMember");
-		String userId = member.getUserId();
-		
-		//userId1이 userId2로부터 받음.
-		String alarmMsg = proNick2 + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 성사되었습니다. 결제해주세요";
-		alarm.setReceiverId(userId1);
-		alarm.setSenderId(userId2);
-		alarm.setAlarmMsg(alarmMsg);
-		alarm.setReadYn("N");
-		alarm.setAlarmStatus(1);
-		alarm.setNo(alarm.getNo());
-		result = alarmService.insertAlarm(alarm);
-		
-
-		alarm = new Alarm();
-		//userId2이 userId1로부터 받음.
-		String alarmMsg2 = proNick + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 성사되었습니다. 결제해주세요";
-		alarm.setReceiverId(userId2);
-		alarm.setSenderId(userId1);
-		alarm.setAlarmMsg(alarmMsg2);
-		alarm.setReadYn("N");
-		alarm.setAlarmStatus(1);
-		alarm.setNo(alarm.getNo());
-		result = alarmService.insertAlarm(alarm);
-		
-		JsonObject jsonObject = new JsonObject();
-        if(result > 0) {
-	        jsonObject.addProperty("result", "OK");
-        } else {
+		if(matchList != null) {		
+			System.out.println("matchList.getNo : " + matchList.getNo());
+			if(matchList.getMatchStatus() == 3) {
+				jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 수락 되었습니다.");
+			} else if(matchList.getMatchStatus() == 6) {
+				jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 거절 되었습니다.");
+			} else {
+				String userId1 = matchList.getUserId1();
+				String userId2 = matchList.getUserId2();
+				String proNick = matchList.getProNick();
+				String proNick2 = matchList.getProNick2();
+				String gymName = matchList.getGymName();
+				
+				LocalDateTime dateTemp = matchList.getMatchdate();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
+				String matchdateString = formatter.format(dateTemp);
+				System.out.println(matchdateString);
+				
+				String matchTime = matchList.getMatchtime();
+				int no2 = matchList.getNo();
+				
+				//receiver(매치 등록한 사람)한테는 sender(pronick2)의 이름으로 메시지 보내야 함
+				//sender(매치 도전신청한 사람)한테는 receiver(pronick)의 이름으로 메시지 보내야 함
+				Member member = (Member) session.getAttribute("loginMember");
+				String userId = member.getUserId();
+				
+				//userId1이 userId2로부터 받음.
+				String alarmMsg = proNick2 + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 성사되었습니다. 결제해주세요";
+				Alarm alarm2 = new Alarm();
+				alarm2.setReceiverId(userId1);
+				alarm2.setSenderId(userId2);
+				alarm2.setAlarmMsg(alarmMsg);
+				alarm2.setReadYn("N");
+				alarm2.setAlarmStatus(1);
+				alarm2.setNo(alarm.getNo());
+				result = alarmService.insertAlarm(alarm2);
+				
+				alarm2 = new Alarm();
+				//userId2이 userId1로부터 받음.
+				String alarmMsg2 = proNick + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 성사되었습니다. 결제해주세요";
+				alarm2.setReceiverId(userId2);
+				alarm2.setSenderId(userId1);
+				alarm2.setAlarmMsg(alarmMsg2);
+				alarm2.setReadYn("N");
+				alarm2.setAlarmStatus(1);
+				alarm2.setNo(alarm.getNo());
+				result = alarmService.insertAlarm(alarm2);
+				
+				////////////////////////////////////////////////
+				Match match = new Match();
+				match.setNo(alarm.getNo());
+				match.setMatchStatus(3);
+				
+				result = matchService.updateMatch(match);
+			
+				if(result > 0) {
+			        jsonObject.addProperty("result", "OK");
+			        jsonObject.addProperty("msg", "수락되었습니다.");
+		        }				
+			}
+		} else {
 	        jsonObject.addProperty("result", "NOT_OK");
-        }        
+	        jsonObject.addProperty("msg", "이미 취소된 매치입니다.");
+        }                 
+ 
+        // JsonObject를 Json 문자열로 변환
+        String jsonStr = gson.toJson(jsonObject);
+ 
+        // 생성된 Json 문자열 출력
+        System.out.println(jsonStr);
+	
+		return jsonStr;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/rejectMatch.al", method = RequestMethod.POST)
+	public String rejectMatch(HttpSession session, @RequestBody Alarm alarm, Model model, RedirectAttributes redirectAttr) {
+		System.out.println("reject매치 시작=========================================");
+		// 1. matchNo에 해당하는 상태를 읽음
+		// 2. 상태가 3이면 이미 수락되었습니다.를 return
+		// 3. 상태가 6이면 이미 거절되었습니다.를 return
+		// 4. 상태가 3이 아니면 알람메시지+상태를 6(매치취소)으로 update
+		System.out.println(alarm.getNo());
+		
+		Gson gson = new Gson();
+		JsonObject jsonObject = new JsonObject();
+		int result = 0;
+		
+		MatchList matchList = matchService.selectOneMatch(alarm.getNo());
+		System.out.println(matchList);
+		
+		if(matchList != null) {		
+			System.out.println("matchList.getNo : " + matchList.getNo());
+			if(matchList.getMatchStatus() == 3) {
+				jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 수락 되었습니다. 취소하시려면 내 경기 화면에서 해주세요");
+			} else if(matchList.getMatchStatus() == 6) {
+				jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 거절 되었습니다.");
+			} else {
+				String userId1 = matchList.getUserId1();
+				String userId2 = matchList.getUserId2();
+				String proNick = matchList.getProNick();
+				String proNick2 = matchList.getProNick2();
+				String gymName = matchList.getGymName();
+				
+				LocalDateTime dateTemp = matchList.getMatchdate();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
+				String matchdateString = formatter.format(dateTemp);
+				System.out.println(matchdateString);
+				
+				String matchTime = matchList.getMatchtime();
+				int no2 = matchList.getNo();
+				
+				//receiver(매치 등록한 사람)한테는 sender(pronick2)의 이름으로 메시지 보내야 함
+				//sender(매치 도전신청한 사람)한테는 receiver(pronick)의 이름으로 메시지 보내야 함
+				Member member = (Member) session.getAttribute("loginMember");
+				String userId = member.getUserId();
+				
+				Alarm alarm2 = new Alarm();
+				
+				//userId2이 userId1로부터 받음.
+				String alarmMsg2 = "죄송합니다. " + proNick + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 거절되었습니다.";
+				alarm2.setReceiverId(userId2);
+				alarm2.setSenderId(userId1);
+				alarm2.setAlarmMsg(alarmMsg2);
+				alarm2.setReadYn("N");
+				alarm2.setAlarmStatus(1);
+				alarm2.setNo(alarm.getNo());
+				result = alarmService.insertAlarm(alarm2);
+				
+				////////////////////////////////////////////////
+				Match match = new Match();
+				match.setNo(alarm.getNo());
+				match.setMatchStatus(6);
+				
+				result = matchService.updateMatch(match);
+			
+				if(result > 0) {
+			        jsonObject.addProperty("result", "OK");
+			        jsonObject.addProperty("msg", "거절되었습니다.");
+		        }				
+			}
+		} else {
+	        jsonObject.addProperty("result", "NOT_OK");
+	        jsonObject.addProperty("msg", "이미 취소된 매치입니다.");
+        }                 
  
         // JsonObject를 Json 문자열로 변환
         String jsonStr = gson.toJson(jsonObject);

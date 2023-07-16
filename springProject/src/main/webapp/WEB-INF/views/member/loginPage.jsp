@@ -66,21 +66,19 @@
 									<td><c:choose>
 											<c:when test="${loginMember.userStatus == 2}">
 												<button class="profilebtn" type="button"
-													onclick="location.href='${pageContext.request.contextPath}/profile/profileDetail.pr?userId=${loginMember.userId}'">프로필
-													수정</button>
+													onclick="location.href='${pageContext.request.contextPath}/profile/profileDetail.pr?userId=${loginMember.userId}'">프로필 수정</button>
 											</c:when>
 											<c:otherwise>
 												<button class="profilebtn" type="button"
-													onclick="location.href='${pageContext.request.contextPath}/profile/profileEnroll.pr'">프로필
-													등록</button>
+													onclick="location.href='${pageContext.request.contextPath}/profile/profileEnroll.pr'">프로필 등록</button>
 											</c:otherwise>
 										</c:choose></td>
 									<td><button class="myMatchbtn" type="button"
-											onclick="location.href='#'">내경기</button></td>
+											onclick="location.href='${pageContext.request.contextPath}/gym/gymMatch.gym?userId=${loginMember.userId}'">내경기</button></td>
 								</tr>
 								<tr>
 									<c:choose>
-										<c:when test="${loginMember.userType eq 'manager'}">
+										<c:when test="${loginMember.userType eq 'admin'}">
 											<td><button class="managerbtn" type="button"
 													onclick="location.href='${pageContext.request.contextPath}/manager/mnMainPage.mn'">관리자</button></td>
 										</c:when>

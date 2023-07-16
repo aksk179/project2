@@ -38,7 +38,10 @@
 			<tr>
 				<th>시간</th>
 				<th>메시지</th>
-				<th><button type="button" style="align:right;" class="modal-close" onClick="popClose()">X</button></th>
+				<th>
+					<button type="button" style="align:right; font-size:x-large;" class="modal-close" onClick="readAlarmAjax()">↻</button>
+					<button type="button" style="align:right; font-size:large;" class="modal-close" onClick="popClose()">X</button>
+				</th>
 			</tr>
 		</thead>
 	</table>
@@ -84,6 +87,7 @@
 	
 	//데이터 읽어와서 팝업창에 뿌려주기
 	function readAlarmAjax() {
+		$("#header_pop_up").html("");
 	    $.ajax({
 	        url: "${pageContext.request.contextPath}/alarm/read.al",
 	        method: "POST",
@@ -114,7 +118,7 @@
 								+	"</td>";
 							} else if(data[i].alarmStatus == 1) {
 						content	+= 	"<td>"
-								+		"<button type='button' style='align:right;' onclick='pay(`"+ data[i].no +"`);'>결제</button>"
+								+		"<button type='button' style='align:right;' onclick='pay();'>결제</button>"
 								+	"</td>"	;
 							} else if(data[i].alarmStatus == 2) {						
 						content	+= 	"<td>"
@@ -186,9 +190,10 @@
 	}
 	
 	//수락 버튼
-	function accept(no) {
+	function accept(no) {				
 		var accept = {};
 		accept.no = no;
+
 		$.ajax({
 			url: "${pageContext.request.contextPath}/alarm/acceptMatch.al",
 			type: "post",
@@ -197,21 +202,70 @@
 	        contentType : "application/json",
 			success : function(data, status, xhr) {
 				console.log(data.result);
+				alert(data.msg);
+				readAlarmAjax();
 			},
 			error : function(xhr, status, error) {
 				alert(status);
 			}
-		});
+		});			
 	}
 	
 	//거절 버튼
-	function reject() {
-		
+	function reject(no) {
+		var reject = {};
+		reject.no = no;
+
+		$.ajax({
+			url: "${pageContext.request.contextPath}/alarm/rejectMatch.al",
+			type: "post",
+			data: JSON.stringify(reject),
+			dataType: "JSON",
+	        contentType : "application/json",
+			success : function(data, status, xhr) {
+				console.log(data.result);
+				alert(data.msg);
+				readAlarmAjax();
+			},
+			error : function(xhr, status, error) {
+				alert(status);
+			}
+		});			
 	}
 	
 	//결제 버튼
 	function pay() {
-		
-	}
+        $.ajax({
+          url: "${pageContext.request.contextPath}/match/payment.ma",
+          method: "GET",
+          success: function(response) {
+            // 페이지 이동 또는 필요한 작업 수행
+            // response에는 서버에서 반환한 데이터가 포함됩니다.
+            console.log("결제 페이지로 이동");
+            console.log(response);
+            // 예: 페이지 이동
+            window.location.href = "${pageContext.request.contextPath}/match/payment.ma";
+          },
+          error: function(xhr, status, error) {
+            console.log("결제 에러");
+            console.log(status);
+          }
+        });
+      }
+      
+
+       var modal = document.getElementById("paymentModal");
+
+       function openModal() {
+           modal.style.display = "block";
+           document.addEventListener("click", closeModalOutside);
+       }
+
+       function closeModalOutside(event) {
+           if (event.target === modal) {
+               modal.style.display = "none";
+               document.removeEventListener("click", closeModalOutside);
+           }
+       }
 
 </script>

@@ -26,4 +26,5 @@ public class Match {
 	private String score2;
 	private int matchStatus;
 	private String delYn;
+	private int num;
 }

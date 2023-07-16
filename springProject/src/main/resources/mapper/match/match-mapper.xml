@@ -14,7 +14,7 @@
 	<resultMap type="ChallengerList" id="ChallengerListMap"></resultMap>
 	
 	<select id="selectScheduleList" resultMap="scheduleInfoMap">
-		SELECT S.GYM_NO, G.GYM_NAME, G.GYM_ADDRESS, G.GYM_DETAILADDRESS, S.MATCH_DATE, S.MATCH_TIME, S.CODE
+		SELECT S.GYM_NO, G.GYM_NAME, G.GYM_ADDRESS, G.GYM_DETAILADDRESS, S.MATCH_DATE, S.MATCH_TIME, S.CODE, S.NUM
 		FROM SCHEDULE S
 		JOIN GYM G ON S.GYM_NO = G.GYM_NO
 		WHERE S.MATCH_DATE BETWEEN TO_DATE(#{matchdate} || ' 00:00:00', 'YYYY/MM/DD HH24:MI:SS') AND TO_DATE(#{matchdate} || ' 23:59:59', 'YYYY/MM/DD HH24:MI:SS')
@@ -23,7 +23,7 @@
 	
 	<insert id="registerMatch">
 		INSERT INTO MATCH
-		(NO, MATCH_NO, GYM_NO, USER_ID1, MATCHDATE, MATCHTIME, MATCH_STATUS, DEL_YN)
+		(NO, MATCH_NO, GYM_NO, USER_ID1, MATCHDATE, MATCHTIME, MATCH_STATUS, DEL_YN, NUM)
 		VALUES(
 			SEQ_NO.NEXTVAL,
 			#{matchNo},
@@ -32,7 +32,8 @@
 			#{matchdate},
 			#{matchtime},
 			#{matchStatus},
-			#{delYn}
+			#{delYn},
+			#{num}
 		)		
 	</insert>
 	
@@ -56,12 +57,14 @@
 			<if test="matchStatus != null">MATCH_STATUS   = #{matchStatus},</if>
 			<if test="delYn       != null">DEL_YN         = #{delYn}       </if>
 		</set>
-		WHERE MATCH_NO = #{matchNo}
-		AND USER_ID1   = #{userId1}
+		WHERE 1=1
+		<if test="matchNo		!= null">AND MATCH_NO   = #{matchNo}</if>
+		<if test="userId1		!= null">AND USER_ID1   = #{userId1}</if>
+		<if test="no			!= null">AND NO         = #{no}</if>
 	</update>
 	
 	<select id="selectMatchList" resultMap="scheduleIfvMap" parameterType="map">
-		SELECT M.NO, M.MATCH_NO, G.GYM_NO, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME
+		SELECT M.NO, M.MATCH_NO, G.GYM_NO, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NUM
 		FROM MATCH M
 		JOIN GYM G ON M.GYM_NO = G.GYM_NO
 		WHERE M.USER_ID1 = #{userId}
@@ -308,7 +311,7 @@
 	</select>
 	
 	<select id="selectOneMatch" resultMap="MatchListMap">
-		SELECT M.USER_ID1, M.USER_ID2, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2
+		SELECT M.USER_ID1, M.USER_ID2, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2, M.MATCH_STATUS
 		FROM MATCH M
 		JOIN GYM G ON M.GYM_NO = G.GYM_NO
 		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID

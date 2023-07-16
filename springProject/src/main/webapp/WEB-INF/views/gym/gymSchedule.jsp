@@ -90,6 +90,7 @@ function delSelectedBoxIds() {
 	  console.log(totalCodes);
 	  const url = "${pageContext.request.contextPath}/gym/scheduleDel.gym?userId=" + userId + "&totalCodes=" + totalCodes;
 	  location.href = url;
+	  console.log(url);
 }
 </script>
 

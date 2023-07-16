@@ -9,4 +9,5 @@ public class MatchRegInfo {
 	private int gymNo;
 	private String matchday;
 	private String matchtime;
+	private int num;
 }

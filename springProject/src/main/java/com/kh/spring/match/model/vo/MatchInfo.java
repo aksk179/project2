@@ -21,4 +21,5 @@ public class MatchInfo {
 	private LocalDateTime matchdate;
 	private String matchtime;
 	private String code;
+	private int num;
 }

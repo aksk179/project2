@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.kh.spring.alarm.model.dao.AlarmDao;
 import com.kh.spring.alarm.model.vo.Alarm;
+import com.kh.spring.alarm.model.vo.AlarmArg;
+import com.kh.spring.match.model.vo.Match;
 
 @Service
 public class AlarmServiceImpl implements AlarmService{
@@ -33,5 +35,10 @@ public class AlarmServiceImpl implements AlarmService{
 	@Override
 	public int insertAlarm(Alarm alarm) {
 		return alarmDao.insertAlarm(alarm);
+	}
+
+	@Override
+	public List<AlarmArg> selectAlarmArg(Match m) {
+		return alarmDao.selectAlarmArg(m);
 	}
 }

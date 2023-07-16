@@ -2,6 +2,8 @@ package com.kh.spring.match.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.RowBounds;
@@ -35,9 +38,9 @@ import com.kh.spring.alarm.model.service.AlarmService;
 import com.kh.spring.alarm.model.vo.Alarm;
 import com.kh.spring.common.model.vo.PageInfo;
 import com.kh.spring.common.template.Pagination;
+import com.kh.spring.gym.model.service.GymService;
 import com.kh.spring.gym.model.vo.Gym;
 import com.kh.spring.gym.model.vo.Schedule;
-import com.kh.spring.match.model.dao.MatchDao;
 import com.kh.spring.match.model.service.MatchService;
 import com.kh.spring.match.model.vo.ChallengerList;
 import com.kh.spring.match.model.vo.Match;
@@ -45,6 +48,8 @@ import com.kh.spring.match.model.vo.MatchInfo;
 import com.kh.spring.match.model.vo.MatchInfoView;
 import com.kh.spring.match.model.vo.MatchList;
 import com.kh.spring.match.model.vo.MatchRegInfo;
+import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.model.service.MemberServiceImpl;
 import com.kh.spring.member.model.vo.Member;
 import com.kh.spring.profile.model.service.ProfileService;
 import com.kh.spring.profile.model.vo.Profile;
@@ -64,7 +69,11 @@ public class MatchController {
 	private ProfileService profileService;
 	
 	@Autowired
-	private MatchDao matchDao;
+	private MemberService memberSevice;
+	
+	@Autowired
+	private GymService gymService;
+
 	
 	@GetMapping("/matchList.ma")
 	public void matchList(@RequestParam(defaultValue="1") int nowPage, Model model,
@@ -297,6 +306,7 @@ public class MatchController {
 				if(1 <= challengerInsertDecision3 && challengerInsertDecision3 < 5) {
 					System.out.println(challengerInsertDecision4);
 					if(challengerInsertDecision4 == 0) {
+						System.out.println("decision4 통과");
 						Match toInputMatchData = matchService.toCopyMatchData(no);
 						toInputMatchData.setUserId2(userId2);
 						toInputMatchData.setMatchStatus(0);
@@ -367,220 +377,269 @@ public class MatchController {
 	
 
 	@RequestMapping(value="/matchReg.ma", method = RequestMethod.GET)
-	public String matchReg(HttpServletRequest request, HttpSession session, Model model) {	
-		String matchDate = request.getParameter("day");
-		if(matchDate == null || "".equals(matchDate)) {
-			LocalDateTime today = LocalDateTime.now();
-			System.out.println(today);
-			matchDate = today.toLocalDate().toString();	
-		}
-		System.out.println("matchDate : " + matchDate);
-		
-		//matchdateList포맷용 ex.2023/07/05
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d(E)");
-
+	public String matchReg(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {	
 		Member member = (Member) session.getAttribute("loginMember");
 		String userId = member.getUserId();
 		
-		//지도 옆에 보이는 매치 신청한 리스트 조회
-		List<MatchInfo> insertScheduleList = matchService.selectMatchList(userId, matchDate);
-		System.out.println("화면에 보이는 등록된 스케줄 : " + insertScheduleList);
-
-		MatchInfoView infoView = new MatchInfoView();
-		List<MatchInfoView> inSchedList = new ArrayList<MatchInfoView>();
+		Member member2 = memberSevice.selectOneMember(userId);
+		int userStatus = member2.getUserStatus();
 		
-		for(int i=0; i<insertScheduleList.size(); i++) {
-			System.out.println(insertScheduleList.get(i));
-			infoView = new MatchInfoView();
+		if(userStatus == 1) {
+			response.setContentType("text/html; charset=UTF-8");
+			 
+			PrintWriter out;
+			try {				
+				out = response.getWriter();
+				out.println("<script>alert('프로필 등록 후 이용해주세요.'); location.href='/spring/profile/profileEnroll.pr';</script>");				
+				out.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}		 
+		} else {
+			String matchDate = request.getParameter("day");
+			if(matchDate == null || "".equals(matchDate)) {
+				LocalDateTime today = LocalDateTime.now();
+				System.out.println(today);
+				matchDate = today.toLocalDate().toString();	
+			}
+			System.out.println("matchDate : " + matchDate);
 			
-			String gNo = insertScheduleList.get(i).getGymNo();
-			String name = insertScheduleList.get(i).getGymName();
-			LocalDateTime date = insertScheduleList.get(i).getMatchdate();
-			String tm = insertScheduleList.get(i).getMatchtime();
-			String cd = insertScheduleList.get(i).getCode();
+			//matchdateList포맷용 ex.2023/07/05
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d(E)");
+	
+	
 			
-			infoView.setGymNo(gNo);
-			infoView.setGymName(name);
-			infoView.setMatchdate(formatter.format(date));
-			infoView.setMatchday(date);
-			infoView.setTime(tm);
-			infoView.setCode(cd);
+			//지도 옆에 보이는 매치 신청한 리스트 조회
+			List<MatchInfo> insertScheduleList = matchService.selectMatchList(userId, matchDate);
+			System.out.println("화면에 보이는 등록된 스케줄 : " + insertScheduleList);
+	
+			MatchInfoView infoView = new MatchInfoView();
+			List<MatchInfoView> inSchedList = new ArrayList<MatchInfoView>();
 			
-			inSchedList.add(infoView);
-		}
-		System.out.println(inSchedList);
-		
-		model.addAttribute("inSchedList", inSchedList);		
-		//////////////////////////////////////////////////////////////////////
-		
-		
-		
-		 
-		
-		Match match = new Match();
-		//지도에 보여질 GYM, SCHEDULE 테이블 조인해서 조회하는 부분
-		List<MatchInfo> scheduleList = matchService.selectScheduleList(matchDate);
-		System.out.println("지도에 보이는 체육관 스케줄 : " + scheduleList);
-		
-		String tempGymNo = "0";
-		String matchdate1 = "";
-		LocalDateTime matchday1 = null;
-		String time = "";
-		
-		List<String> matchdates = new ArrayList<String>();
-		List<LocalDateTime> matchdays = new ArrayList<>();
-		List<String> times = new ArrayList<String>();
-		List<String> codes = new ArrayList<String>();
-		//MatchInfoView infoView = new MatchInfoView();
-		List<MatchInfoView> markerOverlayList = new ArrayList<MatchInfoView>();
-		
-		for(int i=0; i<scheduleList.size(); i++) {
-			System.out.println(scheduleList.get(i));
-			String gymNo = scheduleList.get(i).getGymNo();
-			String gymName = scheduleList.get(i).getGymName();
-			String gymAddress = scheduleList.get(i).getGymAddress();
-			String gymDetailAddress = scheduleList.get(i).getGymDetailAddress();
-			LocalDateTime matchdate = scheduleList.get(i).getMatchdate();
-			String matchtime = scheduleList.get(i).getMatchtime();
-			String code = scheduleList.get(i).getCode();
-			
-			//System.out.println("localdatetime : " + matchdate);
-			Date dateTemp = java.sql.Timestamp.valueOf(matchdate);
-			//System.out.println("date : " + dateTemp);
-					
-			if(!tempGymNo.equals(gymNo)) {
-				if(!tempGymNo.equals("0")) {
-					infoView.setMatchdateList(matchdates);
-					infoView.setMatchdayList(matchdays);
-					infoView.setMatchTimeList(times);
-					infoView.setCodeList(codes);
-					markerOverlayList.add(infoView);
-					times = new ArrayList<String>();
-					codes = new ArrayList<String>();
-				}
+			for(int i=0; i<insertScheduleList.size(); i++) {
+				System.out.println(insertScheduleList.get(i));
 				infoView = new MatchInfoView();
 				
-				infoView.setGymNo(gymNo);
-				infoView.setGymName(gymName);
-				infoView.setGymAddress(gymAddress);
-				infoView.setGymDetailAddress(gymDetailAddress);
-				//System.out.println("matchdate : " + matchdate);
+				String gNo = insertScheduleList.get(i).getGymNo();
+				String name = insertScheduleList.get(i).getGymName();
+				LocalDateTime date = insertScheduleList.get(i).getMatchdate();
+				String tm = insertScheduleList.get(i).getMatchtime();
+				String cd = insertScheduleList.get(i).getCode();
+				int num = insertScheduleList.get(i).getNum();
 				
-				matchdate1 = formatter.format(matchdate);
-				matchday1 = matchdate;
-				time = (matchtime.substring(0, 2) + ":" + matchtime.substring(2));
+				infoView.setGymNo(gNo);
+				infoView.setGymName(name);
+				infoView.setMatchdate(formatter.format(date));
+				infoView.setMatchday(date);
+				infoView.setTime(tm);
+				infoView.setCode(cd);
+				infoView.setNum(num);
 				
-				matchdates.add(matchdate1);
-				matchdays.add(matchday1);
-				times.add(time);
-				codes.add(code);
-
-				tempGymNo = gymNo;
-			} else {
-				matchdate1 = formatter.format(matchdate);
-				matchday1 = matchdate;
-				time = (matchtime.substring(0, 2) + ":" + matchtime.substring(2));
-				//System.out.println("시간 : " + time);
-				
-				matchdates.add(matchdate1);
-				matchdays.add(matchday1);
-				times.add(time);
-				codes.add(code);
+				inSchedList.add(infoView);
 			}
-		}
-		if(!tempGymNo.equals("0")) {
-			infoView.setMatchdateList(matchdates);
-			infoView.setMatchdayList(matchdays);
-			infoView.setMatchTimeList(times);
-			infoView.setCodeList(codes);
-			markerOverlayList.add(infoView);
-			//System.out.println(markerOverlayList);
-		}
-
-		model.addAttribute("dateFilter", getDateList());
-		model.addAttribute("markerOverlayList", markerOverlayList);
-
+			System.out.println(inSchedList);
+			
+			model.addAttribute("inSchedList", inSchedList);		
+			//////////////////////////////////////////////////////////////////////
+			
+			
+			
+			 
+			
+			Match match = new Match();
+			//지도에 보여질 GYM, SCHEDULE 테이블 조인해서 조회하는 부분
+			List<MatchInfo> scheduleList = matchService.selectScheduleList(matchDate);
+			System.out.println("지도에 보이는 체육관 스케줄 : " + scheduleList);
+			
+			String tempGymNo = "0";
+			String matchdate1 = "";
+			LocalDateTime matchday1 = null;
+			String time = "";
+			
+			List<String> matchdates = new ArrayList<String>();
+			List<LocalDateTime> matchdays = new ArrayList<>();
+			List<String> times = new ArrayList<String>();
+			List<String> codes = new ArrayList<String>();
+			List<String> nums = new ArrayList<String>();
+			//MatchInfoView infoView = new MatchInfoView();
+			List<MatchInfoView> markerOverlayList = new ArrayList<MatchInfoView>();
+			
+			for(int i=0; i<scheduleList.size(); i++) {
+				System.out.println(scheduleList.get(i));
+				String gymNo = scheduleList.get(i).getGymNo();
+				String gymName = scheduleList.get(i).getGymName();
+				String gymAddress = scheduleList.get(i).getGymAddress();
+				String gymDetailAddress = scheduleList.get(i).getGymDetailAddress();
+				LocalDateTime matchdate = scheduleList.get(i).getMatchdate();
+				String matchtime = scheduleList.get(i).getMatchtime();
+				String code = scheduleList.get(i).getCode();
+				int numTemp = scheduleList.get(i).getNum();
+				String num = Integer.toString(numTemp);
+				
+				//System.out.println("localdatetime : " + matchdate);
+				Date dateTemp = java.sql.Timestamp.valueOf(matchdate);
+				//System.out.println("date : " + dateTemp);
+						
+				if(!tempGymNo.equals(gymNo)) {
+					if(!tempGymNo.equals("0")) {
+						infoView.setMatchdateList(matchdates);
+						infoView.setMatchdayList(matchdays);
+						infoView.setMatchTimeList(times);
+						infoView.setCodeList(codes);
+						infoView.setNumList(nums);
+						markerOverlayList.add(infoView);
+						times = new ArrayList<String>();
+						codes = new ArrayList<String>();
+						nums = new ArrayList<String>();
+					}
+					infoView = new MatchInfoView();
+					
+					infoView.setGymNo(gymNo);
+					infoView.setGymName(gymName);
+					infoView.setGymAddress(gymAddress);
+					infoView.setGymDetailAddress(gymDetailAddress);
+					//System.out.println("matchdate : " + matchdate);
+					
+					matchdate1 = formatter.format(matchdate);
+					matchday1 = matchdate;
+					time = (matchtime.substring(0, 2) + ":" + matchtime.substring(2));
+					
+					matchdates.add(matchdate1);
+					matchdays.add(matchday1);
+					times.add(time);
+					codes.add(code);
+					nums.add(num);
+	
+					tempGymNo = gymNo;
+				} else {
+					matchdate1 = formatter.format(matchdate);
+					matchday1 = matchdate;
+					time = (matchtime.substring(0, 2) + ":" + matchtime.substring(2));
+					//System.out.println("시간 : " + time);
+					
+					matchdates.add(matchdate1);
+					matchdays.add(matchday1);
+					times.add(time);
+					codes.add(code);
+					nums.add(num);
+				}
+			}
+			if(!tempGymNo.equals("0")) {
+				infoView.setMatchdateList(matchdates);
+				infoView.setMatchdayList(matchdays);
+				infoView.setMatchTimeList(times);
+				infoView.setCodeList(codes);
+				infoView.setNumList(nums);
+				markerOverlayList.add(infoView);
+				//System.out.println(markerOverlayList);
+			}
+	
+	
+			model.addAttribute("dateFilter", getDateList());
+			model.addAttribute("markerOverlayList", markerOverlayList);
+			}
 		return "/match/matchReg";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/register.do", method = RequestMethod.POST)
-	public String registerMatch(@RequestBody List<MatchRegInfo> matchRegInfoList, HttpSession session) {
-		//System.out.println("registerMatch 들어옴");
+	public String registerMatch(@RequestBody List<MatchRegInfo> matchRegInfoList, HttpSession session, HttpServletResponse response) {
+		System.out.println("registerMatch() =======================================");
 		Match match = new Match();
 		int result = 0;
+		
+		Gson gson = new Gson();
+		 
+        // Json key, value 추가
+        JsonObject jsonObject = new JsonObject();		
 		
 		for(MatchRegInfo mri : matchRegInfoList) {		
 			//System.out.println(mri.toString());
 
 			String matchNo = mri.getCode();
 			int gymNo = mri.getGymNo();
-			
+
 			Member member = (Member) session.getAttribute("loginMember");
 			String userId = member.getUserId();
+			System.out.println(userId);
+			System.out.println(mri.getGymNo());
 			
-			String delYnCge = mri.getValue();
-			System.out.println("mri에서 가져온 값 : " + matchNo + gymNo + delYnCge);
+			Gym gym = gymService.getGymByUserId(userId);
+			System.out.println(gym.getGymNo());
 			
-			match.setMatchNo(matchNo);
-			match.setGymNo(gymNo);
-			match.setUserId1(userId);
-			match.setMatchStatus(1);
-			match.setDelYn(delYnCge);
-			Match matchOne = matchService.selectMatch(match);
-			//System.out.println(matchOne);
-			
-			// 문자열
-	        String dateStr = mri.getMatchday();
-	 
-	        // 포맷터
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-	        
-	        // 문자열 -> Date
-	        LocalDateTime date = LocalDateTime.parse(dateStr);
-			
-			//if(matchNo, gymNo, userId1 가 db에 없으면)
-			//	insert
-			//있으면
-			//} else {
-			//  update
-			//}	       
-			if(matchOne == null) {		
-				match.setMatchdate(date);
-				match.setMatchtime(mri.getMatchtime());
-				match.setMatchStatus(1);
-				match.setDelYn(mri.getValue());
-				
-				//System.out.println("insert문");
-				result = matchService.registerMatch(match);
+			if(mri.getGymNo() == gym.getGymNo()) {
+		        jsonObject.addProperty("result", "NOT_OK");
+		        jsonObject.addProperty("msg", "규정 상 본인 체육관에서는 매치를 할 수 없습니다. 다른 체육관을 이용해주세요.");
 			} else {
-				//System.out.println("updat문");
-
-				match.setDelYn(mri.getValue());				
-				System.out.println(match);
+				String delYnCge = mri.getValue();
+				System.out.println("mri에서 가져온 값 : " + matchNo + gymNo + delYnCge);
+				int num = mri.getNum();
 				
-				result = matchService.updateMatch(match);
-			}
-		}		
-		
-		Gson gson = new Gson();
+				match.setMatchNo(matchNo);
+				match.setGymNo(gymNo);
+				match.setUserId1(userId);
+				match.setMatchStatus(1);
+				match.setDelYn(delYnCge);
+				match.setNum(num);
+				Match matchOne = matchService.selectMatch(match);
+				//System.out.println(matchOne);
+				
+				// 문자열
+		        String dateStr = mri.getMatchday();
 		 
-        // Json key, value 추가
-        JsonObject jsonObject = new JsonObject();
-        if(result > 0) {
-	        jsonObject.addProperty("result", "OK");
-	        jsonObject.addProperty("msg", "등록되었습니다.");
-        } else {
-	        jsonObject.addProperty("result", "NOT_OK");
-	        jsonObject.addProperty("msg", "등록 실패했습니다.");
-        }        
- 
-        // JsonObject를 Json 문자열로 변환
-        String jsonStr = gson.toJson(jsonObject);
- 
-        // 생성된 Json 문자열 출력
-        System.out.println(jsonStr); // {"name":"anna","id":1}
+		        // 포맷터
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		        
+		        // 문자열 -> Date
+		        LocalDateTime date = LocalDateTime.parse(dateStr);
+				
+				//if(matchNo, gymNo, userId1 가 db에 없으면)
+				//	insert
+				//있으면
+				//} else {
+				//  update
+				//}	       
+				if(matchOne == null) {		
+					match.setMatchdate(date);
+					match.setMatchtime(mri.getMatchtime());
+					match.setMatchStatus(1);
+					match.setDelYn(mri.getValue());
+					
+					//System.out.println("insert문");
+					result = matchService.registerMatch(match);
+					
+					if(result > 0) {
+				        jsonObject.addProperty("result", "OK");
+				        jsonObject.addProperty("msg", "등록되었습니다.");
+			        } else {
+				        jsonObject.addProperty("result", "NOT_OK");
+				        jsonObject.addProperty("msg", "등록 실패했습니다.");
+			        } 
+				} else {
+					//System.out.println("updat문");
 	
+					match.setDelYn(mri.getValue());				
+					System.out.println(match);
+					
+					result = matchService.updateMatch(match);
+					
+					if(result > 0) {
+				        jsonObject.addProperty("result", "OK");
+				        jsonObject.addProperty("msg", "등록되었습니다.");
+			        } else {
+				        jsonObject.addProperty("result", "NOT_OK");
+				        jsonObject.addProperty("msg", "등록 실패했습니다.");
+			        } 
+				} 	
+			}
+			
+		}		
+		// JsonObject를 Json 문자열로 변환
+		String jsonStr = gson.toJson(jsonObject);
+		
+		// 생성된 Json 문자열 출력
+		System.out.println(jsonStr); // {"name":"anna","id":1}
+
 		return jsonStr;
 	}	
 	
@@ -633,6 +692,37 @@ public class MatchController {
 		System.out.println(result);
 		
 		return result;
+	}
+	
+	@RequestMapping(value = "/phoneCheck", method = RequestMethod.GET)
+	@ResponseBody
+	public String sendSMS(@RequestParam("phone") String userPhoneNumber) { // 휴대폰 문자보내기
+		int randomNumber = (int) ((Math.random() * (9999 - 1000 + 1)) + 1000);// 난수 생성
+
+		MemberServiceImpl.certifiedPhoneNumber(userPhoneNumber, randomNumber);
+
+		return Integer.toString(randomNumber);
+	}
+
+	@RequestMapping("/payment.ma")
+	public String payment() {
+		return "match/pay";
+	}
+
+	@RequestMapping("/p_bank.ma")
+	public String p_bank() {
+		return "match/p_bank";
+	}
+
+	@RequestMapping("/p_mobile.ma")
+	public String p_mobile() {
+		return "match/p_mobile";
+	}
+
+	@PostMapping("/p_mobilePass.ma")
+	public String p_mobilePass(String userId, String userName, String userEmail, Model model) {
+
+		return "redirect:/";
 	}
 	
 }

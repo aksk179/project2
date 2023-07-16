@@ -216,7 +216,7 @@
 					
 					var text${status.index} = document.createTextNode("${time} ");
 
-					link${status.index}.href = "javascript:setMarkerOverlay('${markerOverlay.gymNo}', '${markerOverlay.gymName}', '${markerOverlay.codeList[status.index]}', '${markerOverlay.matchdateList[status.index]}', '${markerOverlay.matchdayList[status.index]}', '${time}')";				
+					link${status.index}.href = "javascript:setMarkerOverlay('${markerOverlay.gymNo}', '${markerOverlay.gymName}', '${markerOverlay.codeList[status.index]}', '${markerOverlay.matchdateList[status.index]}', '${markerOverlay.matchdayList[status.index]}', '${time}', '${markerOverlay.numList[status.index]}')";				
 					link${status.index}.appendChild(text${status.index});
 					
 					footerDev.appendChild(link${status.index});	
@@ -258,6 +258,7 @@
 			codeValue.gymNo = '${inSchedule.gymNo}';
 			codeValue.matchday = '${inSchedule.matchday}';
 			codeValue.matchtime = '${inSchedule.time}';
+			codeValue.num = '${inSchedule.num}';
 			
 			matchList.push(codeValue);
 		</c:forEach>
@@ -265,8 +266,8 @@
 		console.log("matchList....");
 		console.log(matchList);
 		
-		function setMarkerOverlay(gymNo, gymName, code, matchdate, matchday, time) {
-			console.log(gymNo, gymName, code, matchdate, matchday, time);
+		function setMarkerOverlay(gymNo, gymName, code, matchdate, matchday, time, num) {
+			console.log(gymNo, gymName, code, matchdate, matchday, time, num);
 			//if문으로 담았는지 조건 체크해야 함
 			//없으면 담아주고, 화면에 띄우기
 			//있으면 alert창 경고
@@ -305,6 +306,7 @@
 					codeValue.gymNo = gymNo;
 					codeValue.matchday = matchday;
 					codeValue.matchtime = time;
+					codeValue.num = num;
 					matchList.push(codeValue);
 				}
 				console.log(matchList);

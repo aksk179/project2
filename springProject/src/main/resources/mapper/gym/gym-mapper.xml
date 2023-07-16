@@ -7,6 +7,9 @@
 
 	<resultMap type="gym" id="gymMap"></resultMap>
 	<resultMap type="schedule" id="scheduleMap"></resultMap>
+	<resultMap type="match" id="matchMap"></resultMap>
+	<resultMap type="AlarmArg" id="alarmArgMap"></resultMap>
+	<resultMap type="MatchList" id="matchListMap"></resultMap>
 	
 	<insert id="insertJoin">
 		insert into gym
@@ -103,4 +106,35 @@
 		   	   gym_account = #{gymAccount}
 		 where gym_no = #{gymNo}
 	</update>
+	
+	<select id="selectScheduleMatchList" resultMap="matchMap">
+		SELECT *
+		FROM MATCH M
+		JOIN SCHEDULE S ON M.NUM = S.NUM
+		WHERE M.MATCH_NO = #{code}
+	</select>
+	
+	<select id="selectScheduleDel" resultMap="alarmArgMap">
+		SELECT M.USER_ID1 AS RECEIVER_ID, M.USER_ID2 AS SENDER_ID, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO
+		FROM MATCH M
+		JOIN GYM G ON M.GYM_NO = G.GYM_NO
+		WHERE M.MATCH_NO = #{matchNo}
+	</select>
+	
+	<select id="selectMyGymMatchList" resultMap="matchListMap">
+		SELECT M.NO, M.GYM_NO, M.MATCHDATE, M.MATCHTIME, M.USER_ID1, M.USER_ID2, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2
+		FROM MATCH M
+		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID
+		JOIN PROFILE P2 ON M.USER_ID2 = P2.USER_ID
+		WHERE M.GYM_NO = #{gymNo}
+		AND M.MATCH_STATUS = 4
+		ORDER BY M.MATCHDATE, M.MATCHTIME
+	</select>
+	
+	<select id="selectTotalRecord" resultType="_int">
+		SELECT COUNT(*)
+		FROM MATCH
+		WHERE MATCH_STATUS = 4
+		AND GYM_NO = #{gymNo}
+	</select>
 </mapper>

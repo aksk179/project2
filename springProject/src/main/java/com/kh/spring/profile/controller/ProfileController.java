@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -189,4 +190,21 @@ public class ProfileController {
 //	    model.addAttribute("profileMember", profileService.selectOneProfile(userId));
 //	    return "profileInfo"; // 리다이렉트가 아니라 해당 페이지로 바로 이동하도록 수정합니다.
 //	}
+	 
+	 @RequestMapping(value = "/profileDetailTwice.pr", method = RequestMethod.GET)
+	 public String profileDetailTwice(HttpServletRequest request, Model model) {
+		 String userId1 = request.getParameter("userId1");
+		 String userId2 = request.getParameter("userId2");
+		 
+		 Profile profile1 = profileService.selectOneProfile(userId1);
+		 System.out.println(profile1);
+		 
+		 Profile profile2 = profileService.selectOneProfile(userId2);
+		 System.out.println(profile2);
+		 
+		 model.addAttribute("profile1", profile1);
+		 model.addAttribute("profile2", profile2);
+		 
+		 return "profile/profileDetailTwice";
+	 }
 }

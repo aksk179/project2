@@ -4,7 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.kh.spring.alarm.model.dao.AlarmDao">
-	<resultMap type="alarm" id="alarmMap"></resultMap>
+	<resultMap type="Alarm" id="alarmMap"></resultMap>
+	<resultMap type="AlarmArg" id="alarmArgMap"></resultMap>
 	
 	<select id="checkAlarm" resultType="int">
 		SELECT COUNT(*)
@@ -40,4 +41,13 @@
 			#{no}
 		)
 	</insert>
+	
+	<select id="selectAlarmArg" resultMap="alarmArgMap">
+		SELECT M.USER_ID1, M.USER_ID2, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2
+		FROM MATCH M
+		JOIN GYM G ON M.GYM_NO = G.GYM_NO
+		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID
+		JOIN PROFILE P2 ON M.USER_ID2 = P2.USER_ID
+		WHERE M.NO = #{no}
+	</select>
 </mapper>

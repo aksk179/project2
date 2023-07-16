@@ -19,7 +19,6 @@
 		 order by gym_no desc
 	</select>
 
-	
 	<select id="selectTotalRecord" resultType="_int">
 		select count(*)
 		  from gym

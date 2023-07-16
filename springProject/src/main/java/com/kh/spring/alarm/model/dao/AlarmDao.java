@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.kh.spring.alarm.model.vo.Alarm;
+import com.kh.spring.alarm.model.vo.AlarmArg;
+import com.kh.spring.match.model.vo.Match;
 
 @Mapper
 public interface AlarmDao {
@@ -18,5 +20,7 @@ public interface AlarmDao {
 	int readYnUpdate(Alarm al);
 
 	int insertAlarm(Alarm alarm);
+
+	List<AlarmArg> selectAlarmArg(Match m);
 
 }
