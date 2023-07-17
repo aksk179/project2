@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <title>${param.title}</title>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/common.css">
 <c:if test="${not empty msg}">
 	<script type="text/javascript">
 		alert('${msg}');

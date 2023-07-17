@@ -41,17 +41,26 @@
         where
         pro_nick = #{proNick}
     </select>
-    
-    <update id="updateProfile" parameterType="Profile">
-    UPDATE profile
-    SET
-    	original_filename = #{originalFilename},
-		change_filename = #{changeFilename},   
-        pro_level = #{proLevel},
-        pro_height = #{proHeight},
-        pro_weight = #{proWeight},
-        personal = #{personal},
-        note = #{note}
-    WHERE user_id = #{userId}
-</update>
+
+	<update id="updateProfile"  parameterType="Profile">
+		UPDATE PROFILE
+		<set>
+			<if test="originalFilename != null">ORIGINAL_FILENAME = #{originalFilename}, </if>
+			<if test="changeFilename   != null">CHANGE_FILENAME   = #{changeFilename},   </if>
+			<if test="proLevel         != null">PRO_LEVEL         = #{proLevel},         </if>
+			<if test="proHeight        != null">PRO_HEIGHT        = #{proHeight},        </if>
+			<if test="proWeight        != null">PRO_WEIGHT        = #{proWeight},        </if>
+			<if test="personal         != null">PERSONAL          = #{personal},         </if>
+			<if test="note             != null">NOTE              = #{note},              </if>
+			<if test="warn1            != null">WARN1             = #{warn1},              </if>
+			<if test="warn2            != null">WARN2             = #{warn2},              </if>
+			<if test="warn3            != null">WARN3             = #{warn3},              </if>
+			<if test="warn4            != null">WARN4             = #{warn4},              </if>
+			<if test="win              != null">WIN               = #{win},              </if>
+			<if test="lose             != null">LOSE              = #{lose}              </if>
+		</set>
+		WHERE 1=1
+		<if test="userId != null">AND USER_ID   = #{userId}</if>
+	</update>
+
 </mapper>

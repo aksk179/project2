@@ -5,37 +5,33 @@
 .container {
 	width: 600px;
 	margin: 0 auto;
-	font-family: 'Arial', sans-serif;
 	background-color: #f7f7f7;
 	border-radius: 4px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1{
+#searchid h1{
 	text-align: center;
 	padding: 50px;
+	text-align: center;
+	background-color: #eaeaea;
+	color: #333;
 }
 table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-th {
+#searchid th {
 	width: 34%;
 	padding: 10px;
 	border: none;
 }
 
-td {
+#searchid td {
 	width: 40%;
 	padding: 10px;
 	border: none;
-}
-
-th {
-	text-align: center;
-	background-color: #eaeaea;
-	color: #333;
 }
 
 input[type="text"], input[type="password"] {
@@ -70,7 +66,6 @@ input[type="button"]:hover {
 }
 
 .message {
-	font-style: italic;
 	color: #ff0000;
 }
 

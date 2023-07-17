@@ -1,31 +1,26 @@
-body {
-	font-family: Arial, sans-serif;
-}
-
-.container {
-	
+#loginPage .container {
 	height: 300px;
-	max-width: 400px;
+	max-width: 300px;
 	margin: 0 auto;
 	padding: 20px;
 }
 
-h1 {
+#loginPage h1 {
 	text-align: center;
 	font-size: 40px;
 }
 
-.form-group {
+#loginPage .form-group {
 	margin-bottom: 20px;
 }
 
-label {
+#loginPage label {
 	display: block;
 	font-weight: bold;
 	margin-bottom: 5px;
 }
 
-button[type="button"] {
+#loginPage button[type="button"] {
 	display: inline-block;
 	width: 120px;
 	height: 50px;
@@ -37,21 +32,21 @@ button[type="button"] {
 	border-radius: 4px;
 	cursor: pointer;
 }
-button[type="button"]:hover {
+#loginPage button[type="button"]:hover {
 	background-color: #c1120f;
 }
 
 
-input[type="text"], input[type="password"] {
+#loginPage input[type="text"], input[type="password"] {
 	width: 230px;
 	padding: 10px;
 	border: 1px solid #ddd;
 	border-radius: 4px;
 }
 
-.btn {
+#loginPage .btn {
 	display: inline-block;
-	width: 80px;
+	width: 90px;
 	height: 100px;
 	padding: 10px 20px;
 	background-color: #c8220f;
@@ -62,53 +57,29 @@ input[type="text"], input[type="password"] {
 	cursor: pointer;
 }
 
-.btn:hover {
+#loginPage .btn:hover {
 	background-color: #c1120f;
 }
 
-table {
+#loginPage table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 20px;
 }
 
-th {
+#loginPage th {
 	width:20%;
 	padding: 10px;
 	color: rgb(31, 9, 9);
-	text-decoration: none;
 }
 
-td {
+#loginPage td {
 	padding: 10px;
 	color: rgb(31, 9, 9);
-	text-decoration: none;
 }
 
-.footer {
-	background-color: #ffffff;
-	color: rgb(26, 17, 17);
-	padding: 10px;
-	text-align: center;
-}
-
-.header {
-	background-color: #ffffff;;
-	color: rgb(32, 24, 24);
-	padding: 10px;
-	text-align: center;
-}
-
-
-.button {
-    padding: 10px 20px;
-    background-color: #c8220f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background-color 0.3s;
+#loginPage a {
+	color:black;
 }
 
 .modal {
@@ -131,12 +102,3 @@ td {
     width: 300px;
     text-align: center;
 }
-
-.button-row {
-    margin-top: 20px;
-}
-
-.button-row button {
-    margin-right: 10px;
-}
-

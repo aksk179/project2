@@ -1,8 +1,6 @@
-form {
-	padding: 20px;
-	text-align: center;
+#file{
+    display: none;
 }
-
 .container {
 	width: 600px;
 	margin: 0 auto;
@@ -11,27 +9,32 @@ form {
 	border-radius: 4px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
-
+.table1{
+	width: 565px;
+}
+.table2 {
+	width: 565px;
+}
+#win {
+    width: 35px;
+}
+#lose {
+    width: 35px;
+}
+input[id^="warn"] {
+    width: 40px; 
+}
+#level{
+    width: 55px;
+}
 h1 {
 	text-align: center;
 	padding: 50px;
 }
 
 table {
-	width: 100%;
+	text-align: center;
 	border-collapse: collapse;
-}
-
-th {
-	width: 34%;
-	padding: 10px;
-	border: none;
-}
-
-td {
-	width: 40%;
-	padding: 10px;
-	border: none;
 }
 
 th {
@@ -40,16 +43,17 @@ th {
 	color: #333;
 }
 
-input[type="text"], input[type="password"] {
-	width: 90%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	outline: none;
-	transition: border-color 0.3s;
+button{
+	padding: 8px 16px;
+    background-color: #c8220f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="reset"]:focus {
 	border-color: #c8220f;
 }
 
@@ -81,15 +85,6 @@ input[type="button"]:hover {
 	font-weight: bold;
 }
 
-#postcode, #addr, #detailAddr {
-	width: 100%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	outline: none;
-	transition: border-color 0.3s;
-}
-
 .btn {
 	padding: 20px;
 	text-align: center;
@@ -103,8 +98,15 @@ input[type="button"]:hover {
 	outline: none;
 	transition: border-color 0.3s;
 }
+textarea {
+    width: 549px;
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+    overflow: auto;
+}
 
-button[type="submit"], button[type="button"], button[type="reset"] {
+button[type="submit"], button[type="reset"], button[type="goBack()"] {
 	padding: 10px 20px;
 	background-color: #c8220f;
 	color: #fff;
@@ -115,26 +117,11 @@ button[type="submit"], button[type="button"], button[type="reset"] {
 	transition: background-color 0.3s;
 }
 
-#rn, #rm {
-	width: 90%;
-}
 
-#email, #emadress, #emselect {
-	width: 90%;
+.textarea {
+	width : 750px;
+	height:200px;
 }
-
-#postcode {
-	width: 290px;
-}
-
-#addr {
-	width: 430px;
-}
-
-#detailAddr {
-	width: 430px;
-}
-
-button[type="submit"]:hover, button[type="reset"]:hover, button[type="button"]:hover {
-	background-color: #c8220f;
+warn{
+	text-align: center;
 }

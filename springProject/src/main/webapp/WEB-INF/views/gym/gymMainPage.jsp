@@ -87,11 +87,9 @@
 	</nav>
 
 <script>
-	function openProfile(userId1, userId2){
-		alert("안녕");
-		let options = "width=800, height=500";
-		
-		window.open("${pageContext.request.contextPath}/profile/profileDetailTwice.pr?userId1="+userId1+"&userId2="+userId2, options);
+	function openProfile(userId1, userId2){		
+		window.open("${pageContext.request.contextPath}/profile/profileDetailTwice.pr?userId1="+userId1+"&userId2="+userId2, "_blank", "width=1100px, height=600px top=50px left=200px");
 	}
 </script>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

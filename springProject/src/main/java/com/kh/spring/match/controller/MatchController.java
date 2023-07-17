@@ -724,5 +724,4 @@ public class MatchController {
 
 		return "redirect:/";
 	}
-	
 }

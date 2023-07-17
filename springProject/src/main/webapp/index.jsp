@@ -7,7 +7,7 @@
 	<jsp:param value="홈페이지" name="title"/>
 </jsp:include>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/index.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/index.js"></script>
 

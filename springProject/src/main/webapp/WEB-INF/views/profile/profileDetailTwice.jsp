@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<%-- <jsp:include page="/WEB-INF/views/common/header.jsp" /> --%>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/profileEnroll.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/profile/profileEnroll.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   
 <style>
@@ -26,6 +26,7 @@
 /* 추가 스타일링 */
 .table1, .table2 {
 	border-collapse: collapse;
+	width: 460px;
 }
 
 input[type="text"], input[type="file"] {
@@ -71,6 +72,7 @@ input#weight {
 	outline: none;
 	transition: border-color 0.3s;
 }
+
 button[type="submit"], button[type="reset"], button[type="button"] {
 	padding: 10px 20px;
 	background-color: #c8220f;
@@ -81,6 +83,7 @@ button[type="submit"], button[type="reset"], button[type="button"] {
 	margin-top: 10px;
 	transition: background-color 0.3s;
 }
+
 input#proMajor {
     width: 163px;
 }
@@ -88,7 +91,7 @@ input#proMajor {
 #schedule {
 	display: flex;
 	flex-direction: column;
-	margin-top: 30px;
+	margin-top: 10px;
 	align-items: center;
 }
 
@@ -103,15 +106,16 @@ input#proMajor {
 	flex-direction: column;
 	align-items: center;
 	font-family: 'EF_watermelonSalad';
-	margin-top: 30px;
+	margin-top: 10px;
 	margin-right: 100px;
 }
 
-button#bt {
-	background-color: gray;
+button#bt1, #bt2 {
+	background-color: gray !important;
 }
+
 </style>
-<form name="gameOver" action="${pageContext.request.contextPath}/match/gameOver.ma" method="post">
+<form name="gameOver" action="${pageContext.request.contextPath}/profile/gameOver.pr" method="post">
 	<div id="section">
 	    <div id="container">
             <table border="1" class="table1">
@@ -119,29 +123,26 @@ button#bt {
                 <tr>
                     <th rowspan="3" scope="col">
                         <div class="profile_photo">
-                           <a><img src="${pageContext.request.contextPath}/resources/upload/profile/${profileMember.changeFilename}" width="150" height="150"></a>
+                           <a><img src="${pageContext.request.contextPath}/resources/upload/profile/${profile1.changeFilename}" width="150" height="150"></a>
                         </div>
                     </th>
                     <th scope="col">닉네임</th>
                     <td>
-                        <input type="hidden" id="userId" name="userId" value="${profile1.userId}" readonly>
-                        <input type="text" id="proNick" name="proNick" value="${profile1.proNick}" readonly>
-                    <!--    <input type="button" id="nickc" value="중복확인" onclick="nickCheck();"> -->
+                        <input type="hidden" id="userId1" name="userId1" value="${profile1.userId}" readonly>
+                        ${profile1.proNick}
                     </td>
                 </tr>
 			
                 <!-- 주종목 -->
                 <tr>
                     <th>주종목</th scope="col">
-                    <td scope="col">
-                        <input type="text" id="proMajor" name="proMajor" value="${profile1.proMajor}" readonly>
-                    </td>
+                    <td scope="col">${profile1.proMajor}</td>
                 </tr>
 
                 <!-- 급수 -->
                 <tr>
                     <th scope="col"><label for="level">급수</label></th>
-                    <td scope="col"><input type="text" id="proLevel" name="proLevel" value="${profile1.proLevel}" readonly></td>
+                    <td>${profile1.proLevel}</td>
                 </tr>
 
                 <!-- 프로필 사진 -->
@@ -164,31 +165,44 @@ button#bt {
             <!-- 기타 정보 -->
             <table border="1" class="table2">
                 <tr>
-                    <th scope="col"  width="80px">키</th>
-                    <td scope="col"><input type="text" id="height" name="proHeight" value="${profile1.proHeight}" readonly> cm</td>
-                    <th scope="col">몸무게</th>
-                    <td scope="col"><input type="text" id="weight" name="proWeight" value="${profile1.proWeight}" readonly> kg</td>
+                    <th width="20%">키</th>
+                    <td width="30%">${profile1.proHeight} cm</td>
+                    <th width="20%">몸무게</th>
+                    <td width="30%">${profile1.proWeight} kg</td>
                 </tr>
                 <tr>
-                    <th colspan="4" scope="col">개인대회</th>
+                    <th colspan="4">개인대회</th>
                 </tr>
                 <tr>
-                    <td colspan="4" scope="col">
-                    <textarea class="textarea" name="personal" cols="35" rows="10">${profile1.personal}</textarea>
-                    </td>
+                    <td colspan="4" height="42px">${profile1.personal}</td>
                 </tr>
                 <tr>
 					<th colspan="4">건강상태</th>
 				</tr>
 				<tr>
-					<td colspan="4"><textarea class="textarea" name="note"
-							cols="35" rows="10" readonly>${profile1.note}</textarea></td>
+					<td colspan="4" height="42px">${profile1.note}</td>
 				</tr>
-                <tr>
-                    <td colspan="4">
-						<button type="button" onclick="javascript:history.back()">취소</button>
-                    </td>
-                </tr>
+				<tr>
+					<th scope="col" colspan="4" width="80px" style="background-color: black; color: white;">🥋🥋매치 종료 후 결과 입력해주세요!🥊🥊</th>
+				</tr>
+				<tr>
+					<th scope="col" width="80px" height="48px">경고주기</th>
+                    <td scope="col" colspan="3">
+    					<label><input type="checkbox" name="0" value="0">없음</label>&nbsp;
+    					<label><input type="checkbox" name="user1Warn1" value="1">욕설</label>&nbsp;
+    					<label><input type="checkbox" name="user1Warn2" value="1">지각</label><br>
+    					<label><input type="checkbox" name="user1Warn3" value="1">룰위반</label>&nbsp;
+    					<label><input type="checkbox" name="user1Warn4" value="1">기타비매너</label>&nbsp;
+	                </td>
+				</tr>
+				<tr>
+					<th scope="col" colspan="2" width="80px">경기결과</th> 
+					<td colspan="2">
+						<button type="button" id="bt1" value="win" name="resultValue1" onclick="setResultValue1('win')">승</button>
+						<button type="button" id="bt2" value="lose" name="resultValue1" onclick="setResultValue2('lose')">패</button>
+						<input type="hidden" name="resultValue1" id="resultValue1">
+					</td>
+				</tr>  
             </table>
     </div>
 
@@ -205,24 +219,21 @@ button#bt {
                     </th>
                     <th scope="col">닉네임</th>
                     <td>
-                        <input type="hidden" id="userId" name="userId" value="${profile2.userId}" readonly>
-                        <input type="text" id="proNick" name="proNick" value="${profile2.proNick}" readonly>
-                    <!--    <input type="button" id="nickc" value="중복확인" onclick="nickCheck();"> -->
+                        <input type="hidden" id="userId2" name="userId2" value="${profile2.userId}" readonly>
+                        ${profile2.proNick}
                     </td>
                 </tr>
 			
                 <!-- 주종목 -->
                 <tr>
                     <th>주종목</th scope="col">
-                    <td scope="col">
-                        <input type="text" id="proMajor" name="proMajor" value="${profile2.proMajor}" readonly>
-                    </td>
+                    <td scope="col">${profile2.proMajor}</td>
                 </tr>
 
                 <!-- 급수 -->
                 <tr>
                     <th scope="col"><label for="level">급수</label></th>
-                    <td scope="col"><input type="text" id="proLevel" name="proLevel" value="${profile2.proLevel}"required></td>
+                    <td>${profile2.proLevel}</td>
                 </tr>
 
                 <!-- 프로필 사진 -->
@@ -232,7 +243,7 @@ button#bt {
                             <span class="btn_file">
                                 <input type="file" id="file" name="upFile">
                                 <div id="filepointer">
-                                    <label for="file">클릭하여 사진첨부</label>
+                                    <label for="file"></label>
                                 </div>
                             </span>
                         </div>
@@ -245,25 +256,22 @@ button#bt {
             <!-- 기타 정보 -->
             <table border="1" class="table2">
                 <tr>
-                    <th scope="col"  width="80px">키</th>
-                    <td scope="col"><input type="text" id="height" name="proHeight" value="${profile2.proHeight}" required> cm</td>
-                    <th scope="col">몸무게</th>
-                    <td scope="col"><input type="text" id="weight" name="proWeight" value="${profile2.proWeight}" required> kg</td>
+                    <th width="20%">키</th>
+                    <td width="30%">${profile2.proHeight} cm</td>
+                    <th width="20%">몸무게</th>
+                    <td width="30%">${profile2.proWeight} kg</td>
                 </tr>
                 <tr>
-                    <th colspan="4" scope="col">개인대회</th>
+                    <th colspan="4">개인대회</th>
                 </tr>
                 <tr>
-                    <td colspan="4" scope="col">
-                    <textarea class="textarea" name="personal" cols="35" rows="10">${profile2.personal}</textarea>
-                    </td>
+                    <td colspan="4" height="42px">${profile2.personal}</td>
                 </tr>
                 <tr>
 					<th colspan="4">건강상태</th>
 				</tr>
 				<tr>
-					<td colspan="4"><textarea class="textarea" name="note"
-							cols="35" rows="10">${profile2.note}</textarea></td>
+					<td colspan="4" height="42px">${profile2.note}</td>
 				</tr>
 				<tr>
 					<th scope="col" colspan="4" width="80px" style="background-color: black; color: white;">🥋🥋매치 종료 후 결과 입력해주세요!🥊🥊</th>
@@ -271,18 +279,19 @@ button#bt {
 				<tr>
 					<th scope="col" width="80px" height="48px">경고주기</th>
                     <td scope="col" colspan="3">
-    					<label><input type="checkbox" name="none" value="0">없음</label>&nbsp;
-    					<label><input type="checkbox" name="fuck" value="1">욕설</label>&nbsp;
-    					<label><input type="checkbox" name="late" value="2">지각</label>&nbsp;
-    					<label><input type="checkbox" name="against" value="3">룰위반</label>&nbsp;
-    					<label><input type="checkbox" name="bmanner" value="4">기타비매너</label>&nbsp;
+    					<label><input type="checkbox" value="0">없음</label>&nbsp;
+    					<label><input type="checkbox" name="user2Warn1" value="1">욕설</label>&nbsp;
+    					<label><input type="checkbox" name="user2Warn2" value="1">지각</label><br>
+    					<label><input type="checkbox" name="user2Warn3" value="1">룰위반</label>&nbsp;
+    					<label><input type="checkbox" name="user2Warn4" value="1">기타비매너</label>&nbsp;
 	                </td>
 				</tr>
 				<tr>
 					<th scope="col" colspan="2" width="80px">경기결과</th> 
 					<td colspan="2">
-						<button type="button" id="bt1" value="win" onclick="setResultValue('win')">승</button>
-						<button type="button" id="bt2" value="lose" onclick="setResultValue('lose')">패</button>
+						<button type="button" id="bt1" value="win" onclick="setResultValue2('win')">승</button>
+						<button type="button" id="bt2" value="lose" onclick="setResultValue2('lose')">패</button>
+						<input type="hidden" name="resultValue2" id="resultValue2">
 					</td>
 				</tr>    
             </table>
@@ -292,7 +301,7 @@ button#bt {
 	<table>
     	 <tr>
             <td>
-            <button type="button" onclick="gameOver();">경기종료</button>
+            <button type="submit" id="gameOver">경기종료</button>
             <button type="button" onclick="javascript:history.back();">취소</button>
             </td>
         </tr>
@@ -348,19 +357,25 @@ button#bt {
 		regFrm.nickbtncheck.value = "nickUncheck";
 	}
 	
-	let resultValue = null;
-	
-	function setResultValue(value) {
-	  	resultValue = value;
+	let resultValue1 = null;
+	function setResultValue1(value) {
+		resultValue1 = value;
+		console.log(resultValue1);
 	}
 	
-	document.getElementById('resultForm').onsubmit = function() {
-	   	// 값 전송 버튼을 누를 때 숨겨진 input 태그에 선택한 값을 설정합니다.
-	   	document.getElementById('resultValue').value = resultValue;
-	};
-
-	function gameOver() {	
-		gameOver.submit();
+	let resultValue2 = null;
+	function setResultValue2(value) {
+		resultValue2 = value;
+	  	console.log(resultValue2);
 	}
+	
+	document.getElementById("gameOver").addEventListener("click", function() {		
+		console.log(gameOver);
+		document.getElementById("resultValue1").value = resultValue1;
+	    document.getElementById("resultValue2").value = resultValue2;
+	    
+		document.gameOver.submit();
+		alert("매치 기록이 기록되었습니다.")
+	});
 	
 </script>

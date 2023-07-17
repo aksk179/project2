@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,50 +10,53 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/memberDetail.css">
+<link rel="stylesheet"href="${pageContext.request.contextPath}/resources/css/member/memberDetail.css">
 
 </head>
 <body>
-	<form action="${pageContext.request.contextPath}/member/memberFindId.me" method="post" name="memInfofrm">
-		<h1>아이디 찾기</h1>
+	<form id="from"
+		action="${pageContext.request.contextPath}/member/memberFindId.me"
+		method="post" name="memInfofrm">
+		<h1 id="findId">아이디 찾기</h1>
 		<table class="container">
 			<tbody>
 				<tr>
-					<th><label for="userEmail">이메일</label></th>
-					<td><input type="text" id="userEmail" name="userEmail" placeholder="이메일 주소를 입력하세요" required></td>
-					<td><span id="result"></span></td>
+					<th class="neme"><label for="userEmail">이메일</label></th>
+					<td class="note"><input type="text" id="userEmail" name="userEmail"
+						placeholder="이메일 주소를 입력하세요" required></td>
+					<td class="note"><span id="result"></span></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageId" class="message"></td>
+					<td class="note" colspan="2" id="messageId" class="message"></td>
 				</tr>
-						 <tr>
-					<th><label for="phone" id="phonetitle">휴대폰번호</label></th>
-					<td><input id="phone" type="text" name="phone"
+				<tr>
+					<th class="neme"><label for="phone" id="phonetitle">휴대폰번호</label></th>
+					<td class="note"><input id="phone" type="text" name="phone"
 						placeholder="ex) 010-1111-1111"></td>
-					<td><input type="button" id="phoneChk" class="doubleChk"
+					<td class="note"><input type="button" id="phoneChk" class="doubleChk"
 						value="인증번호 보내기"></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messagePhone" class="successPhoneChk"></td>
-				</tr> 
+					<td class="note" colspan="2" id="messagePhone" class="successPhoneChk"></td>
+				</tr>
 				<tr>
-					<th>인증번호</th>
-					<td><input id="phone2" type="text" disabled required></td>
-					<td><input type="button" id="phoneChk2" class="doubleChk"
+					<th class="neme">인증번호</th>
+					<td class="note"><input id="phone2" type="text" disabled required></td>
+					<td class="note"><input type="button" id="phoneChk2" class="doubleChk"
 						value="본인인증"></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messagePwc" class="message"></td>
-				</tr> 
+					<td class="note" colspan="2" id="messagePwc" class="message"></td>
+				</tr>
 			</tbody>
 		</table>
 		<div class="btn">
-			 <button type="button" onclick="getUserId()">확인</button>
+			<button type="button" onclick="getUserId()">확인</button>
 		</div>
 	</form>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script>
 	
 	$(document).ready(function() {

@@ -8,104 +8,103 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/member.css">
+	href="${pageContext.request.contextPath}/resources/css/member/member.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <!--  <script src="${pageContext.request.contextPath}/resources/js/member.js"></script> -->
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="빈체로 - 회원가입" name="title" />
+</jsp:include>
 </head>
+
 <body>
-	<jsp:include page="/WEB-INF/views/common/header.jsp">
-		<jsp:param value="회원가입" name="title" />
-	</jsp:include>
 
-
-	<form action="/spring/member/memberEnroll.me" method="post">
-		<h1>회원가입</h1>
-		<table class="container">
+	<form id="form" action="/spring/member/memberEnroll.me" method="post" name="pass">
+		<h1 class="h1">회원가입</h1>
+		<table class="container"><!-- 이름 변경시 오류남 1 -->
 			<tbody>
 				<tr>
-					<th><label for="userId">아이디</label></th>
-					<td><input type="text" id="userId" name="userId"
+					<th class="th"><label for="userId">아이디</label></th>
+					<td class="td"><input type="text" id="userId" name="userId"
 						placeholder="아이디를 입력하세요" required></td>
 					<td><input type="button" id="idc" value="중복확인"
 						onclick="idChecka();"> <span id="result"></span> <input
 						type="hidden" name="idbtncheck" value="idUncheck"></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageId" class="message"></td>
+					<td class="td" colspan="2" id="messageId" class="message"></td>
 				</tr>
 				<tr>
 					<th><label for="userPw">비밀번호</label></th>
-					<td><input type="password" id="userPw" name="userPw"
+					<td class="td"><input type="password" id="userPw" name="userPw"
 						placeholder="비밀번호를 입력하세요" required></td>
 					<td></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messagePw" class="message"></td>
+					<td class="td" colspan="2" id="messagePw" class="message"></td>
 				</tr>
 				<tr>
-					<th><label for="pwc">비밀번호확인</label></th>
-					<td><input type="password" id="pwc"
+					<th class="th"><label for="pwc">비밀번호확인</label></th>
+					<td class="td"><input type="password" id="pwc"
 						placeholder="위와 동일한 비밀번호 입력" required></td>
 					<td></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messagePwc" class="message"></td>
+					<td class="td" colspan="2" id="messagePwc" class="message"></td>
 				</tr>
 				<tr>
-					<th><label for="userName">이름</label></th>
-					<td><input type="text" id="userName" name="userName"
+					<th class="th"><label for="userName">이름</label></th>
+					<td class="td"><input type="text" id="userName" name="userName"
 						placeholder="이름을 입력하세요" required></td>
 					<td></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageName" class="message"></td>
+					<td class="td" colspan="2" id="messageName" class="message"></td>
 				</tr>
 				<tr>
-					<th><label for="userRnn">주민등록번호</label></th>
-					<td colspan="1"><input type="text" id="userRnn" name="userRnn"
+					<th class="th"><label for="userRnn">주민등록번호</label></th>
+					<td class="td" colspan="1"><input type="text" id="userRnn" name="userRnn"
 						class="rnnc" placeholder="ex) 910412-1234567"> <!-- onkeyup="nextBlank(6, this.id, 'rm')" -->
 						<!-- &emsp;-&emsp;<input type="text" id="rm" class="rnnc"> --></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageRnn" class="message"></td>
+					<td class="td" colspan="2" id="messageRnn" class="message"></td>
 				</tr>
 				<tr>
-					<th>성별</th>
-					<td>&emsp;<input type="radio" id="userGender"
+					<th class="th">성별</th>
+					<td class="td">&emsp;<input type="radio" id="userGender"
 						name="userGender" value="M" required> 남 &emsp; &emsp; <input
 						type="radio" id="userGender" name="userGender" value="F" required>
 						여
 					</td>
-
 					<td></td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageGender" class="message"></td>
+					<td class="td" colspan="2" id="messageGender" class="message"></td>
 				</tr>
 				<tr>
-					<th><label for="phone" id="phonetitle">휴대폰번호</label></th>
-					<td><input id="phone" type="text" name="phone"
+					<th class="th"><label for="phone" id="phonetitle">휴대폰번호</label></th>
+					<td class="td"><input id="phone" type="text" name="phone"
 						placeholder="ex) 010-1111-1111" required></td>
-					<td><input type="button" id="phoneChk" class="doubleChk"
+					<td class="td"><input type="button" id="phoneChk" class="doubleChk"
 						value="인증번호 보내기"></td>
 				</tr>
 				<tr>
-					<th>인증번호</th>
-					<td><input id="phone2" type="text" disabled required>
+					<th class="th">인증번호</th>
+					<td class="td"><input id="phone2" type="text" disabled required>
 					</td>
-					<td><input type="button" id="phoneChk2" class="doubleChk"
-						value="본인인증" ></td>
+					<td class="td"><input type="button" id="phoneChk2" class="doubleChk"
+						value="본인인증"></td>
 				</tr>
 
 				<tr>
-					<td colspan="2" id="messagePhone" class="successPhoneChk"></td>
+					<td class="td" colspan="2" id="messagePhone" class="successPhoneChk"></td>
 				</tr>
 				<tr>
-					<th><label for="userEmail">이메일</label></th>
-					<td colspan="1"><input type="text" id="userEmail"
+					<th class="th"><label for="userEmail">이메일</label></th>
+					<td class="td" colspan="1"><input type="text" id="userEmail"
 						name="userEmail" placeholder="amuge123@kh.com" required> <!--  @ <input type="text" id="emadress" name="emadress" required> -->
 					</td>
 					<td>
@@ -118,7 +117,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" id="messageEmail" class="message" ></td>
+					<td colspan="2" id="messageEmail" class="message"></td>
 				</tr>
 				<tr>
 					<th></th>
@@ -132,31 +131,39 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td colspan="2"><input name="detailAddress" id="detailAddr"
-						placeholder="상세주소를 입력하세요" required></td>
-				</tr>
-				<tr>
-					<th>개인정보동의</th>
-					<td style="font-size: small">&emsp;<input type="checkBox" name="userInfo" id="userInfo"
-						checked disabled >&emsp;개인정보 동의를 완료하였습니다.</td>
+					<td colspan="2"><input name="detailaddress" id="detailAddr"
+						placeholder="상세주소를 입력하세요" required> <input type="hidden"
+						name="userInfo" id="userInfo" checked readonly></td>
 
-					<td></td>
 				</tr>
 				<tr>
 					<td colspan="2" id="messageRnn" class="message"></td>
 				</tr>
+			</tbody>
 		</table>
-		</tbody>
+
 		<div class="btn">
-			<button type="submit"  onclick="inputCheck()">회원가입</button>
+			<button type="button" onclick="inputCheck()">회원가입</button>
 			&emsp;
 
 		</div>
 	</form>
-<body>
+</body>
+
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 <script type="text/javascript">
 
-function inputCheck() {
+let idCheck = false;
+let pwCheck = false;
+let pwcCheck = false;
+let nameCheck = false;
+let emailCheck = false;
+let rnnCheck1 = false;
+let rnnCheck2 = false;
+let rnnCheck = false;
+let phoneCheck = false;
+
+function inputCheck() {	
   var userId = document.getElementById('userId').value;
   var userPw = document.getElementById('userPw').value;
   var pwc = document.getElementById('pwc').value;
@@ -166,18 +173,18 @@ function inputCheck() {
   var phone2 = document.getElementById('phone2').value;
   var userEmail = document.getElementById('userEmail').value;
   
-  alert("회원가입을 축하합니다!");
+  
   // 아이디 유효성 검사
   var userIdPattern = /^[a-zA-Z0-9]{5,13}$/;
   if (!userIdPattern.test(userId)) {
     alert('아이디는 6~13자의 영문 대소문자와 숫자로만 입력해야 합니다.');
     return false;
-  }
+  } 
 
   // 비밀번호 유효성 검사
-  var userPwPattern = /^[a-zA-Z0-9!@#$%^&*()]{8,16}$/;
+  var userPwPattern = /^[a-zA-Z0-9!@#$%^&*()]{8,15}$/;
   if (!userPwPattern.test(userPw)) {
-    alert('비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자로만 입력해야 합니다.');
+    alert('비밀번호는 8~15자의 영문 대소문자, 숫자, 특수문자로만 입력해야 합니다.');
     return false;
   }
 
@@ -228,8 +235,11 @@ function inputCheck() {
     return false;
   }
 
+  pass.submit();
   // 모든 유효성 검사 통과
-  return true;
+  /* return true;*/
+  alert("회원가입을 축하합니다!"); 
+
   
 }
 
@@ -241,14 +251,13 @@ document.getElementById("userId").addEventListener("focusout", () => {
 
 	if (regExp1.test(inputId)) {
 	    idCheck = true;
-	    messageId.innerHTML = "중복체크하세요.";
 	} else if (inputId === "") {
 	    messageId.innerHTML = "필수 정보입니다.";
 	    idCheck = false;
-	} else {
+	} /* else {
 	    messageId.innerHTML = "첫글자는 반드시 영문자이며, 숫자 포함 총 6~13자로 입력하시오.";
 	    idCheck = false;
-	}
+	} */
 	}, 200);
 	})
 
@@ -256,8 +265,8 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	setTimeout(() => {
 	const inputPw = document.getElementById("userPw").value;
 	let messagePw = document.getElementById("messagePw");
-	//const regExp2 = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
-	const regExp2 = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+	const regExp2 = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
+	//const regExp2 = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
 	if (regExp2.test(inputPw)) {
 	    messagePw.innerHTML = "멋진 비밀번호입니다 !";
@@ -398,7 +407,6 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	 }); */
 	 $("#phoneChk").click(function(){
 		    var phone = $("#phone").val();
-		    
 		    // 정규식 패턴
 		    var phonePattern = /^010-\d{4}-\d{4}$/;
 
@@ -406,9 +414,7 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 		        alert("올바른 휴대폰 번호 형식이 아닙니다.");
 		        return;
 		    }
-
 		    // 이하 코드는 정규식 패턴이 일치하는 경우에만 실행됩니다.
-		    
 		    alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주십시오.");
 
 		    $.ajax({
@@ -445,7 +451,7 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 
 
 	});
-	function deleteMember() {
+	/* function deleteMember() {
 		if(window.confirm("탈퇴하시겠습니까?")){
 		location.href="${pageContext.request.contextPath}/member/deleteMember.me";
 		}
@@ -453,7 +459,7 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	}
 	function nice() {
 		  alert("회원가입을 축하합니다!");
-		}
+		} */
 	function nextBlank(N, Obj, nextB) {
 	   if(document.getElementById(Obj).value.length == N) {
 	      document.getElementById(nextB).focus();
@@ -489,33 +495,21 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	    }).open();
 	}
 
-	let idCheck = false;
-	let pwCheck = false;
-	let pwcCheck = false;
-	let nameCheck = false;
-	let emailCheck = false;
-	let rnnCheck1 = false;
-	let rnnCheck2 = false;
-	let rnnCheck = false;
-	let phoneCheck = false;
-
-	
 
 	function idChecka() {
 	  $.ajax({
-	       url: "/spring/member/id.ch",
+	       url: "${pageContext.request.contextPath}/member/id.ch",
 	       type: "get",
 	       data : {ida : $("#userId").val()},
 	       dataType : "json",
 	      
 	           success(result) {
-	                 console.log(result);
-	           
+	             
 	           const {userId, available} = result;
 	           console.log(result);
 	           
 	           if(available) {
-	              
+	        	  alert("사용가능한 아이디입니다");
 	              $("#messageId").text("멋진 아이디네요 !");
 	              document.getElementById("idc").addEventListener("focusout", () => {
 	                  const inputId = document.getElementById("userId").value;
@@ -527,17 +521,18 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	                  } else if (inputId === " ") {
 	                      messageId.innerHTML = "필수 정보입니다.";
 	                      idCheck = false;
-	                  } else {
-	                      messageId.innerHTML = "첫글자는 반드시 영문자이며, 숫자 포함 총 6~13자로 입력하시오.";
-	                      idCheck = false;
-	                  }
+	                  } //else {
+	                     // messageId.innerHTML = "첫글자는 반드시 영문자이며, 숫자 포함 총 6~13자로 입력하시오.";
+	                     // idCheck = false;
+	                  //}
 	              })
 
 	              iddCheck = true;
 	              
 	              $("#idbtncheck").val("idCheck");
 	           } else {
-	              $("#messageId").text("이미 사용중이거나 탈퇴한 아이디입니다");
+	        	   alert("이미 사용이거나 탈퇴한 아이디입니다");
+	             // $("#messageId").text("이미 사용중이거나 탈퇴한 아이디입니다");
 	              iddCheck = false;
 	              $("#idbtncheck").val("idUncheck");
 	           }
@@ -566,11 +561,3 @@ document.getElementById("userPw").addEventListener("focusout", () => {
 	regFrm.idbtncheck.value = "idUncheck";
 	}
 </script>
-
-
-	<div class="footer" align="center" style="padding: 50px;">
-
-		<p>&copy; 2023 VINCERO. All rights reserved.</p>
-	</div>
-
-</html>

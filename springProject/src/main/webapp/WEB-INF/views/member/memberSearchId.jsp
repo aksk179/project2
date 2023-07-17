@@ -3,8 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<link rel="stylesheet"
-   href="${pageContext.request.contextPath}/resources/css/memberSearchId.css">
+<link rel="stylesheet"href="${pageContext.request.contextPath}/resources/css/member/memberSearchId.css">
 <!DOCTYPE html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"/>
 <script src="${pageContext.request.contextPath}/resources/js/member.js"/>
@@ -37,7 +36,7 @@ function getUserId() {
 </head>
 <body>
 	<form onsubmit="return false;">
-		<h1>아이디 찾기</h1>
+		<h1 id="h1">아이디 찾기</h1>
 		<table class="container">
 			<tbody>
 				<tr>

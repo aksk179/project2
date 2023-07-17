@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import com.kh.spring.common.SpringUtils;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.model.vo.Member;
 import com.kh.spring.profile.model.service.ProfileService;
+import com.kh.spring.profile.model.vo.GameOver;
 import com.kh.spring.profile.model.vo.Profile;
 
 @Controller
@@ -205,6 +207,85 @@ public class ProfileController {
 		 model.addAttribute("profile1", profile1);
 		 model.addAttribute("profile2", profile2);
 		 
-		 return "profile/profileDetailTwice";
+		 return "/profile/profileDetailTwice";
 	 }
+	 
+	 @RequestMapping(value = "/gameOver.pr", method = RequestMethod.POST)
+		public String gameOver(GameOver gameOver) {
+			System.out.println("gameOver() =======================================");
+			int result = 0;
+			int w1 = 0, w2 = 0, w3 = 0, w4 = 0, warn1 = 0, warn2 = 0, warn3 = 0, warn4 = 0, win = 0, lose = 0;
+			
+			w1 = gameOver.getUser1Warn1();
+			w2 = gameOver.getUser1Warn2();
+			w3 = gameOver.getUser1Warn3();
+			w4 = gameOver.getUser1Warn4();
+			
+			Profile profile = new Profile();
+			profile = profileService.selectOneProfile(gameOver.getUserId1());
+
+			warn1 = w1 + profile.getWarn1();
+			warn2 = w2 + profile.getWarn2();
+			warn3 = w3 + profile.getWarn3();
+			warn4 = w4 + profile.getWarn4();
+					
+			String ggValue1 = gameOver.getResultValue1();	
+			System.out.println(ggValue1);
+			
+			if(ggValue1.equals("win")) {
+				win = 1 + profile.getWin(); 
+			} else if (ggValue1.equals("lose")) {
+				lose = 1 + profile.getLose();
+			}
+			
+			Profile profile1 = new Profile();
+			profile1.setUserId(gameOver.getUserId1());
+			profile1.setWarn1(warn1);
+			profile1.setWarn2(warn2);
+			profile1.setWarn3(warn3);
+			profile1.setWarn4(warn4);
+			profile1.setWin(win);
+			profile1.setLose(lose);
+
+			System.out.println(profile1);
+			
+			result = profileService.updateProfile(profile1);
+			
+			////////////////////////////////////////////////////
+			w1 = gameOver.getUser1Warn1();
+			w2 = gameOver.getUser1Warn2();
+			w3 = gameOver.getUser1Warn3();
+			w4 = gameOver.getUser1Warn4();
+			
+			profile = new Profile();
+			profile = profileService.selectOneProfile(gameOver.getUserId2());
+
+			warn1 = w1 + profile.getWarn1();
+			warn2 = w2 + profile.getWarn2();
+			warn3 = w3 + profile.getWarn3();
+			warn4 = w4 + profile.getWarn4();
+					
+			String ggValue2 = gameOver.getResultValue2();	
+			System.out.println(ggValue2);
+			
+			if(ggValue2.equals("win")) {
+				win = 1 + profile.getWin(); 
+			} else if (ggValue1.equals("lose")) {
+				lose = 1 + profile.getLose();
+			}
+			
+			Profile profile2 = new Profile();
+			profile2.setUserId(gameOver.getUserId2());
+			profile2.setWarn1(warn1);
+			profile2.setWarn2(warn2);
+			profile2.setWarn3(warn3);
+			profile2.setWarn4(warn4);
+			profile2.setWin(win);
+			profile2.setLose(lose);
+
+			System.out.println(profile2);
+			
+			result = profileService.updateProfile(profile2);
+			return "";
+		}
 }

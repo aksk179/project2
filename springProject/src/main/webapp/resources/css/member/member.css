@@ -1,41 +1,40 @@
-    form{
-		padding: 20px;
-		align: center;
+#form {
+	padding: 20px;
+	align: center;
 }
+
 .container {
 	width: 600px;
 	margin: 0 auto;
-	font-family: 'Arial', sans-serif;
 	background-color: #f7f7f7;
 	border-radius: 4px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1{
+.h1 {
 	text-align: center;
 	padding: 50px;
 }
+
+/* 이름 변경시 오류남 1 */
 table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-th {
+.th {
 	width: 34%;
 	padding: 10px;
 	border: none;
-}
-
-td {
-	width: 40%;
-	padding: 10px;
-	border: none;
-}
-
-th {
 	text-align: center;
 	background-color: #eaeaea;
 	color: #333;
+}
+
+.td {
+	width: 40%;
+	padding: 10px;
+	border: none;
 }
 
 input[type="text"], input[type="password"] {
@@ -64,6 +63,7 @@ input[type="button"] {
 input[type="button"]:hover {
 	background-color: #c8220f;
 }
+
 button[type="button"] {
 	padding: 8px 16px;
 	background-color: #c8220f;
@@ -77,12 +77,12 @@ button[type="button"] {
 button[type="button"]:hover {
 	background-color: #c8220f;
 }
+
 .doubleChk {
 	background-color: #008cba;
 }
 
 .message {
-	font-style: italic;
 	color: #ff0000;
 }
 
@@ -99,10 +99,12 @@ button[type="button"]:hover {
 	outline: none;
 	transition: border-color 0.3s;
 }
-.btn{
-	padding :20px;
-	text-align : center;
+
+.btn {
+	padding: 20px;
+	text-align: center;
 }
+
 #emselect {
 	width: 100%;
 	padding: 10px;
@@ -145,4 +147,4 @@ button[type="submit"], button[type="reset"] {
 
 button[type="submit"]:hover, button[type="reset"]:hover {
 	background-color: #c8220f;
-	
+}
