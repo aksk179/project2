@@ -60,7 +60,8 @@
 		WHERE 1=1
 		<if test="matchNo		!= null">AND MATCH_NO   = #{matchNo}</if>
 		<if test="userId1		!= null">AND USER_ID1   = #{userId1}</if>
-		<if test="no			!= null">AND NO         = #{no}</if>
+		<if test="userId2       != null">AND USER_ID2   = #{userId2}</if>
+		<if test="no			!= null">AND NO         = #{no}     </if>
 	</update>
 	
 	<select id="selectMatchList" resultMap="scheduleIfvMap" parameterType="map">
@@ -317,5 +318,49 @@
 		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID
 		JOIN PROFILE P2 ON M.USER_ID2 = P2.USER_ID
 		WHERE M.NO = #{no}
+	</select>
+	
+	<select id="selectPayUser1" resultMap="MatchMap">
+		SELECT USER_ID1
+    	FROM MATCH M
+    	JOIN ALARM A ON M.NO = A.NO
+    	WHERE M.NO = #{no}
+    	AND ALARM_STATUS = 1
+    	AND A.RECEIVER_ID = #{userId}
+	</select>
+	
+	<select id="selectPayUser2" resultMap="MatchMap">
+		SELECT USER_ID2
+    	FROM MATCH M
+    	JOIN ALARM A ON M.NO = A.NO
+    	WHERE M.NO = #{no}
+    	AND ALARM_STATUS = 1
+    	AND A.RECEIVER_ID = #{userId}
+	</select>
+	
+	<update id="updatePay1">
+		UPDATE MATCH
+    	SET 
+    	USER1_PAY = #{user1Pay},
+    	USER1_PAYSTATUS = 1
+    	WHERE NO = #{no}
+    	AND USER_ID1 = #{userId1}
+	</update>
+	
+	<update id="updatePay2">
+		UPDATE MATCH
+    	SET 
+    	USER2_PAY = #{user2Pay},
+    	USER2_PAYSTATUS = 1
+    	WHERE NO = #{no}
+    	AND USER_ID2 = #{userId2}
+	</update>
+	
+	<select id="selectPayStatus" resultMap="MatchMap">
+		SELECT USER1_PAYSTATUS, USER2_PAYSTATUS
+		FROM MATCH
+		WHERE NO = #{no}
+		AND USER_ID1 = #{userId1}
+		AND USER_ID2 = #{userId2}
 	</select>
 </mapper>

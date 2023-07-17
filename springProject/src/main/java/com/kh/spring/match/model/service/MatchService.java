@@ -78,4 +78,16 @@ public interface MatchService {
 	List<Match> selectListChal(String userId2);
 
 	MatchList selectOneMatch(int no);
+
+	Match selectPayUser1(int no, String userId);
+
+	Match selectPayUser2(int no, String userId);
+
+	int updatePay1(Match match);
+
+	int updatePay2(Match match);
+
+	Match selectPayStatus(int no, String userId1, String userId2);
+
+
 }

@@ -703,25 +703,135 @@ public class MatchController {
 
 		return Integer.toString(randomNumber);
 	}
-
-	@RequestMapping("/payment.ma")
+	
+	///////////////////////////////////////////////////////////
+	
+	@GetMapping("/payment.ma")
 	public String payment() {
 		return "match/pay";
 	}
+	
+    @GetMapping("/p_bank.ma")
+    public String p_bank() {
+        return "match/p_bank";
+    }
+    
+    @GetMapping("/p_mobile.ma")
+    public String p_mobile() {
+        return "match/p_mobile";
+    }
 
-	@RequestMapping("/p_bank.ma")
-	public String p_bank() {
-		return "match/p_bank";
-	}
+	@ResponseBody
+    @RequestMapping(value = "/payment.ma", method = RequestMethod.POST)
+    public String payment(@RequestBody Match match) {
+    	int no = match.getNo();
+    	System.out.println(no);
+    	
+    	Gson gson = new Gson();
+		JsonObject jsonObject = new JsonObject();
+		
+		if(no > 0) {
+	        jsonObject.addProperty("result", "OK");
+	        jsonObject.addProperty("msg", "결제되었습니다.");
+	        jsonObject.addProperty("no", no);
+        } else {
+		    jsonObject.addProperty("result", "NOT_OK");
+		    jsonObject.addProperty("msg", "다시 결제해주세요.");
+		}                 
 
-	@RequestMapping("/p_mobile.ma")
-	public String p_mobile() {
-		return "match/p_mobile";
-	}
+		// JsonObject를 Json 문자열로 변환
+		String jsonStr = gson.toJson(jsonObject);
 
-	@PostMapping("/p_mobilePass.ma")
-	public String p_mobilePass(String userId, String userName, String userEmail, Model model) {
+		// 생성된 Json 문자열 출력
+		System.out.println(jsonStr);
+		
+		return jsonStr;
+    }
+    
+    @RequestMapping(value = "/p_bankPay.ma", method = RequestMethod.POST)
+    public String p_bankPay(HttpSession session, String userPay, int no) {
+    	System.out.println(userPay);
+    	System.out.println(no);
+    	int result = 0;
+    	String userId1 = "";
+    	String userId2 = "";
+    	
+    	Gson gson = new Gson();
+		JsonObject jsonObject = new JsonObject();
+       	   	
+    	//1. user_id1이 나인지 user_id2가 나인지 확인
+    	Member member = (Member) session.getAttribute("loginMember");
+		String userId = member.getUserId();
+		
+		Match match = new Match();
+		
+    	// 1. no에 해당하는 payStatus 상태를 읽음
+    	Match match4 = matchService.selectPayStatus(no, userId1, userId2);
+    	int u1ps = match4.getUser1Paystatus();
+    	int u2ps = match4.getUser2Paystatus();
 
-		return "redirect:/";
-	}
+		
+
+		// 유저1,2 구하기
+    	Match match1 = matchService.selectPayUser1(no, userId);
+    	userId1 = match1.getUserId1();
+    	
+    	Match match2 = matchService.selectPayUser2(no, userId);
+    	userId2 = match2.getUserId2();
+
+    	//2. user_id1이 나면 user1_pay, user1_paystatus update
+    	if(userId.equals(userId1)) {	
+    		System.out.println("USER1이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u1ps == 1) {
+    			jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 수락 되었습니다.");
+	        // 3. 상태가 1이 아니면 결제진행
+    		} else if(u1ps == 0) {
+    			match.setNo(no);
+    			match.setUser1Pay(userPay);
+    			match.setUserId1(userId);
+    			
+    			System.out.println(match);
+    			result = matchService.updatePay1(match);		
+    		}
+		//3. user_id2이 나면 user2_pay, user2_paystatus update
+    	} else if (userId.equals(userId2)) {
+    		System.out.println("user2이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u2ps == 1) {
+    			jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 수락 되었습니다.");
+    		} else if(u2ps == 0) {
+    			match.setNo(no);
+    			match.setUser2Pay(userPay);
+    			match.setUserId2(userId);
+    			
+    			System.out.println(match);
+    			result = matchService.updatePay2(match);
+    		}		
+    	}
+
+    	//4. user1_paystatus, user2_paystatus 둘 다 1이면 match_status 4로 업데이트
+    	Match match3 = matchService.selectPayStatus(no, userId1, userId2);
+    	int user1PayStatus = match3.getUser1Paystatus();
+    	int user2PayStatus = match3.getUser2Paystatus();
+    	match3.setNo(no);
+    	match3.setMatchStatus(4);
+    	match3.setUserId1(userId1);
+    	match3.setUserId2(userId2);
+    	
+    	System.out.println(match3);
+    	if(user1PayStatus == 1 && user2PayStatus == 1) {
+    		result = matchService.updateMatch(match3);
+    	}
+    	
+    	return "/match/matchList";
+    }
+   
+    @PostMapping("/p_mobilePass.ma")
+	   public String p_mobilePass(String userId, String userName, String userEmail, Model model) {
+	       
+	   return "redirect:/";
+	   }
 }

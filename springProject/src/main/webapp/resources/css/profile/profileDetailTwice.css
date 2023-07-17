@@ -43,16 +43,6 @@ th {
 	color: #333;
 }
 
-button{
-	padding: 8px 16px;
-    background-color: #c8220f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
 input[type="text"]:focus, input[type="password"]:focus, input[type="reset"]:focus {
 	border-color: #c8220f;
 }
@@ -106,7 +96,28 @@ textarea {
     overflow: auto;
 }
 
-button[type="submit"], button[type="reset"], button[type="goBack()"] {
+.button1 {
+	padding: 8px 16px;
+	background-color: #c8220f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button2 {
+	padding: 10px 20px;
+	background-color: gray;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+	transition: background-color 0.3s;
+}
+
+.red {
 	padding: 10px 20px;
 	background-color: #c8220f;
 	color: #fff;
@@ -117,6 +128,15 @@ button[type="submit"], button[type="reset"], button[type="goBack()"] {
 	transition: background-color 0.3s;
 }
 
+/* button{
+	padding: 8px 16px;
+    background-color: gray;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+} */
 
 .textarea {
 	width : 750px;
@@ -126,6 +146,6 @@ warn{
 	text-align: center;
 }
 
-.srvbtn button:active {
+/* .button2:active {
 	background-color: #c8220f;	
-}
+} */

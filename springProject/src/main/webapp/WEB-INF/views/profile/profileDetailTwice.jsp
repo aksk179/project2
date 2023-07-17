@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%-- <jsp:include page="/WEB-INF/views/common/header.jsp" /> --%>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/profile/profileEnroll.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/profile/profileDetailTwice.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   
 <style>
@@ -73,17 +73,6 @@ input#weight {
 	transition: border-color 0.3s;
 }
 
-button[type="submit"], button[type="reset"], button[type="button"] {
-	padding: 10px 20px;
-	background-color: #c8220f;
-	color: #fff;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	margin-top: 10px;
-	transition: background-color 0.3s;
-}
-
 input#proMajor {
     width: 163px;
 }
@@ -108,10 +97,6 @@ input#proMajor {
 	font-family: 'EF_watermelonSalad';
 	margin-top: 10px;
 	margin-right: 100px;
-}
-
-button#bt1, #bt2 {
-	background-color: gray !important;
 }
 
 </style>
@@ -198,8 +183,8 @@ button#bt1, #bt2 {
 				<tr>
 					<th scope="col" colspan="2" width="80px">경기결과</th> 
 					<td colspan="2">
-						<button type="button" id="bt1" value="win" name="resultValue1" onclick="setResultValue1('win')">승</button>
-						<button type="button" id="bt2" value="lose" name="resultValue1" onclick="setResultValue2('lose')">패</button>
+						<button type="button" id="winButton1" class="button2" value="1" name="resultValue1" onclick="setResultValue1('1')">승</button>
+						<button type="button" id="loseButton1" class="button2" value="0" name="resultValue1" onclick="setResultValue1('0')">패</button>
 						<input type="hidden" name="resultValue1" id="resultValue1">
 					</td>
 				</tr>  
@@ -289,8 +274,8 @@ button#bt1, #bt2 {
 				<tr>
 					<th scope="col" colspan="2" width="80px">경기결과</th> 
 					<td colspan="2">
-						<button type="button" id="bt1" value="win" onclick="setResultValue2('win')">승</button>
-						<button type="button" id="bt2" value="lose" onclick="setResultValue2('lose')">패</button>
+						<button type="button" id="winButton2" class="button2" value="1" name="resultValue2" onclick="setResultValue2('1')">승</button>
+						<button type="button" id="loseButton2" class="button2" value="0" name="resultValue2" onclick="setResultValue2('0')">패</button>
 						<input type="hidden" name="resultValue2" id="resultValue2">
 					</td>
 				</tr>    
@@ -301,8 +286,8 @@ button#bt1, #bt2 {
 	<table>
     	 <tr>
             <td>
-            <button type="submit" id="gameOver">경기종료</button>
-            <button type="button" onclick="javascript:history.back();">취소</button>
+            <button type="submit" class="button1" id="gameOver">경기종료</button>
+            <button type="button" class="button1" onclick="javascript:history.back();">취소</button>
             </td>
         </tr>
     </table>
@@ -358,24 +343,47 @@ button#bt1, #bt2 {
 	}
 	
 	let resultValue1 = null;
-	function setResultValue1(value) {
+	function setResultValue1(value) { 
 		resultValue1 = value;
-		console.log(resultValue1);
-	}
+		if (value === 1) {
+		    document.getElementById('winButton1').classList.add('red');
+		    document.getElementById('loseButton1').classList.remove('red');
+		    document.getElementById('winButton2').classList.remove('red');
+		    document.getElementById('loseButton2').classList.add('red');
+		} else if (value === 1) {
+		    document.getElementById('winButton1').classList.remove('red');
+		    document.getElementById('loseButton1').classList.add('red');
+		    document.getElementById('winButton2').classList.add('red');
+		    document.getElementById('loseButton2').classList.remove('red');
+		}
+		console.log(resultValue1);			
+	};
 	
 	let resultValue2 = null;
 	function setResultValue2(value) {
 		resultValue2 = value;
-	  	console.log(resultValue2);
-	}
+		if (value === 1) {
+		    document.getElementById('winButton2').classList.add('red');
+		    document.getElementById('loseButton2').classList.remove('red');
+		    document.getElementById('winButton1').classList.remove('red');
+		    document.getElementById('loseButton1').classList.add('red');
+		} else if (value === 1) {
+		    document.getElementById('winButton2').classList.remove('red');
+		    document.getElementById('loseButton2').classList.add('red');
+		    document.getElementById('winButton1').classList.add('red');
+		    document.getElementById('loseButton1').classList.remove('red');
+		}
+		console.log(resultValue2);
+	};
 	
 	document.getElementById("gameOver").addEventListener("click", function() {		
 		console.log(gameOver);
 		document.getElementById("resultValue1").value = resultValue1;
-	    document.getElementById("resultValue2").value = resultValue2;
+	    document.getElementById("resultValue2").value = resultValue2;			    
 	    
 		document.gameOver.submit();
-		alert("매치 기록이 기록되었습니다.")
+		alert("매치 기록이 기록되었습니다.");
+		window.close();
 	});
 	
 </script>

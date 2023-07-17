@@ -82,4 +82,15 @@ public interface MatchDao {
 	List<Match> selectListChal(String userId2);
 
 	MatchList selectOneMatch(@Param("no")int no);
+
+	Match selectPayUser1(@Param("no")int no, @Param("userId")String userId);
+
+	Match selectPayUser2(@Param("no")int no, @Param("userId")String userId);
+
+	int updatePay1(Match match);
+
+	int updatePay2(Match match);
+
+	Match selectPayStatus(@Param("no")int no, @Param("userId1")String userId1, @Param("userId2")String userId2);
+
 }

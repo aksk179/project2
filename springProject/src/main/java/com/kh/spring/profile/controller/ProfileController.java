@@ -229,33 +229,25 @@ public class ProfileController {
 			warn3 = w3 + profile.getWarn3();
 			warn4 = w4 + profile.getWarn4();
 					
-			String ggValue1 = gameOver.getResultValue1();	
-			System.out.println(ggValue1);
-			
-			if(ggValue1.equals("win")) {
-				win = 1 + profile.getWin(); 
-			} else if (ggValue1.equals("lose")) {
-				lose = 1 + profile.getLose();
-			}
+			String score1 = gameOver.getResultValue1();	
+			System.out.println(score1);
 			
 			Profile profile1 = new Profile();
 			profile1.setUserId(gameOver.getUserId1());
 			profile1.setWarn1(warn1);
 			profile1.setWarn2(warn2);
 			profile1.setWarn3(warn3);
-			profile1.setWarn4(warn4);
-			profile1.setWin(win);
-			profile1.setLose(lose);
+			profile1.setWarn4(warn4);			
 
 			System.out.println(profile1);
 			
 			result = profileService.updateProfile(profile1);
 			
 			////////////////////////////////////////////////////
-			w1 = gameOver.getUser1Warn1();
-			w2 = gameOver.getUser1Warn2();
-			w3 = gameOver.getUser1Warn3();
-			w4 = gameOver.getUser1Warn4();
+			w1 = gameOver.getUser2Warn1();
+			w2 = gameOver.getUser2Warn2();
+			w3 = gameOver.getUser2Warn3();
+			w4 = gameOver.getUser2Warn4();
 			
 			profile = new Profile();
 			profile = profileService.selectOneProfile(gameOver.getUserId2());
@@ -268,19 +260,13 @@ public class ProfileController {
 			String ggValue2 = gameOver.getResultValue2();	
 			System.out.println(ggValue2);
 			
-			if(ggValue2.equals("win")) {
-				win = 1 + profile.getWin(); 
-			} else if (ggValue1.equals("lose")) {
-				lose = 1 + profile.getLose();
-			}
-			
 			Profile profile2 = new Profile();
 			profile2.setUserId(gameOver.getUserId2());
 			profile2.setWarn1(warn1);
 			profile2.setWarn2(warn2);
 			profile2.setWarn3(warn3);
 			profile2.setWarn4(warn4);
-			profile2.setWin(win);
+			
 			profile2.setLose(lose);
 
 			System.out.println(profile2);

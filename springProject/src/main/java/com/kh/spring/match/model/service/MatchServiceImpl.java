@@ -185,4 +185,29 @@ public class MatchServiceImpl implements MatchService{
 		return matchDao.selectOneMatch(no);
 	}
 
+	@Override
+	public Match selectPayUser1(int no, String userId) {
+		return matchDao.selectPayUser1(no, userId);
+	}
+
+	@Override
+	public Match selectPayUser2(int no, String userId) {
+		return matchDao.selectPayUser2(no, userId);
+	}
+
+	@Override
+	public int updatePay1(Match match) {
+		return matchDao.updatePay1(match);
+	}
+
+	@Override
+	public int updatePay2(Match match) {
+		return matchDao.updatePay2(match);
+	}
+
+	@Override
+	public Match selectPayStatus(int no, String userId1, String userId2) {
+		return matchDao.selectPayStatus(no, userId1, userId2);
+	}
+
 }

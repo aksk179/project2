@@ -11,7 +11,8 @@
 
 <style>
 	table {
-		width: 100%;
+		width: 80%;
+		margin: 0 auto;
 	}
 	.dateform {
 		width: 14%;

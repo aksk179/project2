@@ -118,7 +118,7 @@
 								+	"</td>";
 							} else if(data[i].alarmStatus == 1) {
 						content	+= 	"<td>"
-								+		"<button type='button' style='align:right;' onclick='pay();'>결제</button>"
+								+		"<button type='button' style='align:right;' onclick='pay(`"+ data[i].no +"`);'>결제</button>"
 								+	"</td>"	;
 							} else if(data[i].alarmStatus == 2) {						
 						content	+= 	"<td>"
@@ -234,25 +234,26 @@
 	}
 	
 	//결제 버튼
-	function pay() {
-        $.ajax({
-          url: "${pageContext.request.contextPath}/match/payment.ma",
-          method: "GET",
-          success: function(response) {
-            // 페이지 이동 또는 필요한 작업 수행
-            // response에는 서버에서 반환한 데이터가 포함됩니다.
-            console.log("결제 페이지로 이동");
-            console.log(response);
-            // 예: 페이지 이동
-            window.location.href = "${pageContext.request.contextPath}/match/payment.ma";
-          },
-          error: function(xhr, status, error) {
-            console.log("결제 에러");
-            console.log(status);
-          }
-        });
-      }
-      
+	function pay(no) {
+		var pay = {};
+		pay.no = no;
+
+		$.ajax({
+			url: "${pageContext.request.contextPath}/match/payment.ma",
+			type: "POST",
+			data: JSON.stringify(pay),
+			dataType: "JSON",
+	        contentType : "application/json",
+			success : function(data, status, xhr) {
+				console.log(data.result);
+				console.log(data.no);
+	            window.location.href = "${pageContext.request.contextPath}/match/payment.ma?no="+data.no;
+			},
+			error : function(xhr, status, error) {
+				alert(status);
+			}
+		});	
+    }     
 
        var modal = document.getElementById("paymentModal");
 
