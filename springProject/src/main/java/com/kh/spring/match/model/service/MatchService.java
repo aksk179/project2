@@ -41,9 +41,9 @@ public interface MatchService {
 
 	List<MatchList> matchListFilterNick(String searchInput, RowBounds rowBounds);
 
-	List<MatchList> matchListFilterDow(String dowString, RowBounds rowBounds);
+	List<MatchList> matchListFilterDow(int dowInt, RowBounds rowBounds);
 
-	int selectTotalRecordMatchListDow(String dowString);
+	int selectTotalRecordMatchListDow(int dowInt);
 	
 	int deleteMatch(Schedule schedule);
 	
@@ -79,6 +79,22 @@ public interface MatchService {
 
 	MatchList selectOneMatch(int no);
 
+	int chalCancelUpdate(Match toCancelMatchData);
+
+	int challengerStatusDecision(Match toCancelMatchData);
+
+	int selectTotalRecordMatchListRegChal(String userId);
+
+	List<MatchList> matchListRegChal(String userId, RowBounds rowBounds);
+
+	int selectTotalRecordMatchListWaitingRegPay(String userId3);
+
+	List<MatchList> myMatchWaitingRegPay(String userId3, RowBounds rowBounds);
+
+	int selectTotalRecordMatchListWaitingChalPay(String userId4);
+
+	List<MatchList> myMatchWaitingChalPay(String userId4, RowBounds rowBounds);
+
 	Match selectPayUser1(int no, String userId);
 
 	Match selectPayUser2(int no, String userId);
@@ -87,7 +103,12 @@ public interface MatchService {
 
 	int updatePay2(Match match);
 
-	Match selectPayStatus(int no, String userId1, String userId2);
+	Match selectPayStatus(int no);
 
+	List<Match> selectStatus0(Match match2);
+
+	int updateMatch8(Match match4);
+
+	Match selcUpdMatch(Match match);
 
 }

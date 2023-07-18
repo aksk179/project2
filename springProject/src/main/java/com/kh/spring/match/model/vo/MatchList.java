@@ -36,6 +36,13 @@ public class MatchList {
 	//////////////////////////
 	private String gymName;
 	private String proNick2;
+	private int score1;
+	private int score2;
+	private String challenger1Nick;
+	private String challenger2Nick;
+	private String challenger3Nick;
+	private String challenger4Nick;
+	private String challenger5Nick;
 	private int matchStatus;
 	private int gymNo;
 }

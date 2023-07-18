@@ -91,13 +91,13 @@ public class MatchServiceImpl implements MatchService{
 	}
 
 	@Override
-	public List<MatchList> matchListFilterDow(String dowString, RowBounds rowBounds) {
-		return matchDao.matchListFilterDow(dowString, rowBounds);
+	public List<MatchList> matchListFilterDow(int dowInt, RowBounds rowBounds) {
+		return matchDao.matchListFilterDow(dowInt, rowBounds);
 	}
 
 	@Override
-	public int selectTotalRecordMatchListDow(String dowString) {
-		return matchDao.selectTotalRecordMatchListDow(dowString);
+	public int selectTotalRecordMatchListDow(int dowInt) {
+		return matchDao.selectTotalRecordMatchListDow(dowInt);
 	}
 
 	@Override
@@ -184,6 +184,46 @@ public class MatchServiceImpl implements MatchService{
 	public MatchList selectOneMatch(int no) {
 		return matchDao.selectOneMatch(no);
 	}
+	
+	@Override
+	public int chalCancelUpdate(Match toCancelMatchData) {
+		return matchDao.chalCancelUpdate(toCancelMatchData);
+	}
+
+	@Override
+	public int challengerStatusDecision(Match toCancelMatchData) {
+		return matchDao.challengerStatusDecision(toCancelMatchData);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListRegChal(String userId) {
+		return matchDao.selectTotalRecordMatchListRegChal(userId);
+	}
+
+	@Override
+	public List<MatchList> matchListRegChal(String userId, RowBounds rowBounds) {
+		return matchDao.matchListRegChal(userId, rowBounds);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListWaitingRegPay(String userId3) {
+		return matchDao.selectTotalRecordMatchListWaitingRegPay(userId3);
+	}
+
+	@Override
+	public List<MatchList> myMatchWaitingRegPay(String userId3, RowBounds rowBounds) {
+		return matchDao.myMatchWaitingRegPay(userId3, rowBounds);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListWaitingChalPay(String userId4) {
+		return matchDao.selectTotalRecordMatchListWaitingChalPay(userId4);
+	}
+	
+	@Override
+	public List<MatchList> myMatchWaitingChalPay(String userId4, RowBounds rowBounds) {
+		return matchDao.myMatchWaitingChalPay(userId4, rowBounds);
+	}
 
 	@Override
 	public Match selectPayUser1(int no, String userId) {
@@ -206,8 +246,23 @@ public class MatchServiceImpl implements MatchService{
 	}
 
 	@Override
-	public Match selectPayStatus(int no, String userId1, String userId2) {
-		return matchDao.selectPayStatus(no, userId1, userId2);
+	public Match selectPayStatus(int no) {
+		return matchDao.selectPayStatus(no);
+	}
+
+	@Override
+	public List<Match> selectStatus0(Match match2) {
+		return matchDao.selectStatus0(match2);
+	}
+
+	@Override
+	public int updateMatch8(Match match4) {
+		return matchDao.updateMatch8(match4);
+	}
+
+	@Override
+	public Match selcUpdMatch(Match match) {
+		return matchDao.selcUpdMatch(match);
 	}
 
 }

@@ -45,9 +45,9 @@ public interface MatchDao {
 
 	List<MatchList> matchListFilterNick(String searchInput, RowBounds rowBounds);
 
-	List<MatchList> matchListFilterDow(String dowString, RowBounds rowBounds);
+	List<MatchList> matchListFilterDow(int dowInt, RowBounds rowBounds);
 
-	int selectTotalRecordMatchListDow(String dowString);
+	int selectTotalRecordMatchListDow(int dowInt);
 	
 	int deleteMatch(Schedule schedule);
 	
@@ -82,6 +82,22 @@ public interface MatchDao {
 	List<Match> selectListChal(String userId2);
 
 	MatchList selectOneMatch(@Param("no")int no);
+	
+	int chalCancelUpdate(Match toCancelMatchData);
+
+	int challengerStatusDecision(Match toCancelMatchData);
+
+	int selectTotalRecordMatchListRegChal(String userId);
+
+	List<MatchList> matchListRegChal(String userId, RowBounds rowBounds);
+
+	int selectTotalRecordMatchListWaitingRegPay(String userId3);
+
+	List<MatchList> myMatchWaitingRegPay(String userId3, RowBounds rowBounds);
+
+	int selectTotalRecordMatchListWaitingChalPay(String userId4);
+
+	List<MatchList> myMatchWaitingChalPay(String userId4, RowBounds rowBounds);
 
 	Match selectPayUser1(@Param("no")int no, @Param("userId")String userId);
 
@@ -91,6 +107,12 @@ public interface MatchDao {
 
 	int updatePay2(Match match);
 
-	Match selectPayStatus(@Param("no")int no, @Param("userId1")String userId1, @Param("userId2")String userId2);
+	Match selectPayStatus(@Param("no")int no);
+
+	List<Match> selectStatus0(Match match2);
+
+	int updateMatch8(Match match4);
+
+	Match selcUpdMatch(Match match);
 
 }

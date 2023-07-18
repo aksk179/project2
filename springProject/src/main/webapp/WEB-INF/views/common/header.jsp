@@ -57,7 +57,7 @@
 	let checkAlarmId;
 	
 	$(document).ready(function(){
-	    checkAlarmId = setInterval(checkAlarmAjax, 10000); // 1초 간격으로 마지막 데이터 이후 입력 시	        
+	    checkAlarmId = setInterval(checkAlarmAjax, 5000); // 1초 간격으로 마지막 데이터 이후 입력 시	        
 	}); 
 	
 	//새로운 알람 있는지 체크 있으면 이미지 변경
@@ -109,7 +109,7 @@
 		        	}
 		        	
 					let content = $("#header_pop_up").html();
-		        	console.log(content);									
+		        	//console.log(content);									
 						content += "<tr>"
 								+ 	"<td>" + data[i].alarmTime + "</td>"
 								+   "<td>" + data[i].alarmMsg + "</td>";
@@ -127,7 +127,7 @@
 								+	"</td>"		;					
 							}
 						content	+=  "</tr>";
-					console.log("content에 있는 내용 : " + content);
+					//console.log("content에 있는 내용 : " + content);
 					$("#header_pop_up").html(content);
 					//document.getElementById("pop-up").value = content;
 	        	}
@@ -190,7 +190,8 @@
 	}
 	
 	//수락 버튼
-	function accept(no) {				
+	function accept(no) {		
+		console.log(no);
 		var accept = {};
 		accept.no = no;
 

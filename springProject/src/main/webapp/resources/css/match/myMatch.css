@@ -3,8 +3,7 @@ body {
 	margin: 0 auto;
 }
 
-#matchList {
-	background-image: url("../../img/match/ring3.jpg");
+#myMatch {
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -16,7 +15,7 @@ body {
     height: 1400px;
 }
 
-#matchList #game {
+#myMatch #myGame {
     background-color: rgba(0,0,20,0.3);
     border-radius: 30px;
     backdrop-filter: blur(10px);
@@ -25,26 +24,24 @@ body {
    	font-size: 13px;
    	width: 90%;
    	height: 80%;
-   	
 }
 
-#matchList table {
+#myMatch table {
 	width: 90%;
 	border-spacing: 0px;
 }
 
-#matchList #table {
+#myMatch #table {
 	display: flex;
 	justify-content: center;
 	margin-top: 30px;
 }
 
-#matchList table th {
+#myMatch table th {
 	 background-color: rgba(0,0,128,0);
 	 height: 60px;
 	 font-size: 25px;
-	 color: black;
-	 text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+	 color: white;
 }
 
 #matchButton button {
@@ -63,17 +60,17 @@ body {
 	
 }
 
-#matchList td {
-	height: 100px;
+#myMatch td {
+	height: 200px;
 	text-align: center;
 	background-color: rgba(0,0,128,0);
 }
 
-#matchList tbody tr:hover {
+#myMatch tbody tr:hover {
 	background-color: rgba(0,0,20,0.2);
 }
 
-#matchList button {
+#myMatch button {
 	color: white;
 	background-color: rgba(0,78,128,0.5);
 	border-radius: 30px;
@@ -88,21 +85,21 @@ body {
 	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
 }
 
-#matchList button:hover {
+#myMatch button:hover {
 	font-size: 13px;
 	color: black;
 	font-weight: bold;
 	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
 }
 
-#matchList button:active {
+#myMatch button:active {
 	font-size: 13px;
 }
 
-#matchList nav {
+#myMatch nav {
 	margin-top: 50px;
 }
-#matchList nav a {
+#myMatch nav a {
 	color: white;
 	text-decoration: none;
 	background-color: rgba(0,78,128,0.5);
@@ -112,7 +109,12 @@ body {
 	
 }
 
-#matchList nav li {
+#myMatch a {
+	text-decoration: none;
+	color: white;
+}
+
+#myMatch nav li {
 	text-decoration: none;
 	list-style: none;
 	float: left;
@@ -123,7 +125,7 @@ body {
 	flex-direction: row;
 }
 
-#matchList select, input {
+#myMatch select, input {
 	font-size: 12px;
 	background-color: rgba(255,255,255,0.5);
 	border-width: 0px;
@@ -131,16 +133,16 @@ body {
 	padding: 20px;
 }
 
-#matchList select {
+#myMatch select {
 	margin-inline: 5px;
 }
 
-#matchList select:hover {
+#myMatch select:hover {
 	background-color: rgba(255,255,255,1);
 }
 
 
-#matchList input {
+#myMatch input {
 	margin-inline: 3px;
 }
 
@@ -170,3 +172,32 @@ body {
 #view input:hover {
 	background-color: rgba(255,255,255,1);
 }
+
+#myMatch .nickName {
+	float:left;
+	font-size: 14px;
+}
+
+#myMatch .nickName3 {
+	float: center;
+	font-size: 14px;
+}
+
+#myMatch .nickName2 {
+	float: center;
+	font-size: 14px;
+}
+
+
+#myMatch .nickNameButton button {
+	font-size: 13px;
+	border-radius: 0px;
+	padding: 1px 4px;
+}
+
+#myMatch .nickNameButton {
+	
+	float:right;
+	
+}
+

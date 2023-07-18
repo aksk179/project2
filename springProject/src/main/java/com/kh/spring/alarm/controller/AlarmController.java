@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -100,6 +99,7 @@ public class AlarmController {
 			String alarmTime = ar.getAlarmTime2();
 			String readYn = ar.getReadYn();
 			
+			System.out.println("받은 사람, 보낸 사람 : " + receiverId + senderId);
 			int staTemp = ar.getAlarmStatus();
 			String alarmStatus = Integer.toString(staTemp);
 			
@@ -159,11 +159,12 @@ public class AlarmController {
 	
 	@ResponseBody
 	@RequestMapping(value="/acceptMatch.al", method = RequestMethod.POST)
-	public String acceptMatch(HttpSession session, @RequestBody Alarm alarm, Model model, RedirectAttributes redirectAttr) {
+	public String acceptMatch(HttpSession session, @RequestBody Alarm alarm, Model model) {
 		System.out.println("accept매치 시작=========================================");
 		// 1. matchNo에 해당하는 상태를 읽음
 		// 2. 상태가 3이면 이미 수락되었습니다.를 return
 		// 3. 상태가 3이 아니면 알람메시지+상태를 3으로 update
+		// 4. 나머지 사람들은 알람메시지+상태를 6으로 update
 		System.out.println(alarm.getNo());
 		
 		Gson gson = new Gson();
@@ -181,6 +182,9 @@ public class AlarmController {
 			} else if(matchList.getMatchStatus() == 6) {
 				jsonObject.addProperty("result", "OK");
 		        jsonObject.addProperty("msg", "이미 거절 되었습니다.");
+			} else if(matchList.getMatchStatus() == 8) {
+				jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "다른 매치가 성사되어 취소되었습니다.");
 			} else {
 				String userId1 = matchList.getUserId1();
 				String userId2 = matchList.getUserId2();
@@ -229,6 +233,29 @@ public class AlarmController {
 				match.setMatchStatus(3);
 				
 				result = matchService.updateMatch(match);
+				
+				if(result > 0) {
+			        jsonObject.addProperty("result", "OK");
+			        jsonObject.addProperty("msg", "수락되었습니다.");
+		        }	
+				
+				//나머지 사람들에게 메세지 보내고 상태 8로 update
+				String matchNo = matchList.getMatchNo();
+				Match match2 = new Match();
+				match2.setMatchNo(matchNo);
+				
+				List<Match> match3 = matchService.selectStatus0(match2);
+				System.out.println(match3);
+				for(Match m : match3) {
+					if(m.getMatchStatus() == 0 || m.getMatchStatus() == 1) {
+						Match match4 = new Match();
+						match4.setMatchNo(matchNo);
+						match4.setUserId1(userId);
+						result = matchService.updateMatch8(match4);
+						System.out.println(result);
+					}			
+					
+				}
 			
 				if(result > 0) {
 			        jsonObject.addProperty("result", "OK");
@@ -238,7 +265,7 @@ public class AlarmController {
 		} else {
 	        jsonObject.addProperty("result", "NOT_OK");
 	        jsonObject.addProperty("msg", "이미 취소된 매치입니다.");
-        }                 
+        }             
  
         // JsonObject를 Json 문자열로 변환
         String jsonStr = gson.toJson(jsonObject);
@@ -251,7 +278,7 @@ public class AlarmController {
 	
 	@ResponseBody
 	@RequestMapping(value="/rejectMatch.al", method = RequestMethod.POST)
-	public String rejectMatch(HttpSession session, @RequestBody Alarm alarm, Model model, RedirectAttributes redirectAttr) {
+	public String rejectMatch(HttpSession session, @RequestBody Alarm alarm, Model model) {
 		System.out.println("reject매치 시작=========================================");
 		// 1. matchNo에 해당하는 상태를 읽음
 		// 2. 상태가 3이면 이미 수락되었습니다.를 return
@@ -302,7 +329,7 @@ public class AlarmController {
 				alarm2.setSenderId(userId1);
 				alarm2.setAlarmMsg(alarmMsg2);
 				alarm2.setReadYn("N");
-				alarm2.setAlarmStatus(1);
+				alarm2.setAlarmStatus(0);
 				alarm2.setNo(alarm.getNo());
 				result = alarmService.insertAlarm(alarm2);
 				

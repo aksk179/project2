@@ -80,11 +80,13 @@ public class MatchController {
 			              @RequestParam(defaultValue="gender") String gender,
 			              @RequestParam(defaultValue="loc") String locations,
 			              @RequestParam(defaultValue="") String searchInput,
-			              @RequestParam(defaultValue="dows") String dowFromSelect,
+			              @RequestParam(defaultValue="8") int dowFromSelect,
 			              @RequestParam(defaultValue="") String userId1,
 			              @RequestParam(defaultValue="") String userId2) {
 		int totalRecord = 0;
-		String dowString = null;
+		int dowInt = 8;
+		String filterType = null;
+		String filterTypeValue = null;
 		if(gender.equals("M") || gender.equals("F")) {
 			totalRecord = matchService.selectTotalRecordMatchListGender(gender);
 		} else if(locations.equals("서울") ||
@@ -101,34 +103,25 @@ public class MatchController {
 			totalRecord = matchService.selectTotalRecordMatchListLocation(locations);
 		} else if(!("".equals(searchInput))) {
 			totalRecord = matchService.selectTotalRecordMatchListNick(searchInput);
-		} else if(dowFromSelect.equals("monday") ||
-				  dowFromSelect.equals("tuesday") ||
-				  dowFromSelect.equals("wednesday") ||
-				  dowFromSelect.equals("thursday") ||
-				  dowFromSelect.equals("friday") ||
-				  dowFromSelect.equals("saturday") ||
-				  dowFromSelect.equals("sunday")) {
-			if(dowFromSelect.equals("monday")) {
-				dowString = "monday";
-			} else if(dowFromSelect.equals("tuesday")) {
-				dowString = "tuesday";
-			} else if(dowFromSelect.equals("wednesday")) {
-				dowString = "wednesday";
-			} else if(dowFromSelect.equals("thursday")) {
-				dowString = "thursday";
-			} else if(dowFromSelect.equals("friday")) {
-				dowString = "friday";
-			} else if(dowFromSelect.equals("saturday")) {
-				dowString = "saturday";
+		} else if(1<= dowFromSelect && dowFromSelect <=7) {
+			if(dowFromSelect == 2) {
+				dowInt = 2;
+			} else if(dowFromSelect == 3) {
+				dowInt = 3;
+			} else if(dowFromSelect == 4) {
+				dowInt = 4;
+			} else if(dowFromSelect == 5) {
+				dowInt = 5;
+			} else if(dowFromSelect == 6) {
+				dowInt = 6;
+			} else if(dowFromSelect == 7) {
+				dowInt = 7;
 			} else {
-				dowString = "sunday";
+				dowInt = 1;
 			}
-			
-			totalRecord = matchService.selectTotalRecordMatchListDow(dowString);
-		
+			totalRecord = matchService.selectTotalRecordMatchListDow(dowInt);
 		} else if(!(userId1.equals(""))) {
-			totalRecord = matchService.selectTotalRecordMatchListReg(userId1);
-			
+			totalRecord = matchService.selectTotalRecordMatchListReg(userId1);	
 		} else if(!(userId2.equals(""))) {
 			totalRecord = matchService.selectTotalRecordMatchListChal(userId2);
 			
@@ -146,6 +139,8 @@ public class MatchController {
 		
 		if(gender.equals("M") || gender.equals("F")) {
 			matchList = matchService.matchListFilterGender(gender, rowBounds);
+			filterType = "gender";
+			filterTypeValue = gender;
 		} else if(locations.equals("서울") ||
 				  locations.equals("경기") ||
 				  locations.equals("충청") ||
@@ -158,35 +153,40 @@ public class MatchController {
 				  locations.equals("광주") ||
 				  locations.equals("제주")) {
 			matchList = matchService.matchListFilterLocation(locations, rowBounds);
+			filterType = "locations";
+			filterTypeValue = locations;
 		} else if(!("".equals(searchInput))) {
 			matchList = matchService.matchListFilterNick(searchInput, rowBounds);
-		} else if(dowFromSelect.equals("monday") ||
-				  dowFromSelect.equals("tuesday") ||
-				  dowFromSelect.equals("wednesday") ||
-				  dowFromSelect.equals("thursday") ||
-				  dowFromSelect.equals("friday") ||
-				  dowFromSelect.equals("saturday") ||
-				  dowFromSelect.equals("sunday")) {
-			if(dowFromSelect.equals("monday")) {
-				dowString = "monday";
-			} else if(dowFromSelect.equals("tuesday")) {
-				dowString = "tuesday";
-			} else if(dowFromSelect.equals("wednesday")) {
-				dowString = "wednesday";
-			} else if(dowFromSelect.equals("thursday")) {
-				dowString = "thursday";
-			} else if(dowFromSelect.equals("friday")) {
-				dowString = "friday";
-			} else if(dowFromSelect.equals("saturday")) {
-				dowString = "saturday";
+			filterType = "searchInput";
+			filterTypeValue = searchInput;
+		} else if(1<= dowFromSelect && dowFromSelect <=7) {
+			if(dowFromSelect == 2) {
+				dowInt = 2;
+			} else if(dowFromSelect == 3) {
+				dowInt = 3;
+			} else if(dowFromSelect == 4) {
+				dowInt = 4;
+			} else if(dowFromSelect == 5) {
+				dowInt = 5;
+			} else if(dowFromSelect == 6) {
+				dowInt = 6;
+			} else if(dowFromSelect == 7) {
+				dowInt = 7;
 			} else {
-				dowString = "sunday";
+				dowInt = 1;
 			}
-				matchList = matchService.matchListFilterDow(dowString, rowBounds);
+			
+			matchList = matchService.matchListFilterDow(dowInt, rowBounds);
+			filterType = "dowFromSelect";
+			filterTypeValue = String.valueOf(dowFromSelect);
 		} else if(!(userId1.equals(""))) {
 			matchList = matchService.matchListReg(userId1, rowBounds);
+			filterType = "userId1";
+			filterTypeValue = userId1;
 		} else if(!(userId2.equals(""))) {
 			matchList = matchService.matchListChal(userId2, rowBounds);
+			filterType = "userId2";
+			filterTypeValue = userId2;
 		} else {
 		  matchList = matchService.selectMatchingList(rowBounds);
 		}
@@ -194,7 +194,6 @@ public class MatchController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
 		
 		for(int i=0; i<matchList.size(); i++) {
-			System.out.print(matchList.size());
 			matchList.get(i).getMatchdate();
 			LocalDateTime date = matchList.get(i).getMatchdate();
 			matchList.get(i).setMatchdatestring(formatter.format(date));
@@ -203,16 +202,13 @@ public class MatchController {
 			
 			List<ChallengerList> challengerMembers = matchService.toChallengerList(matchListTmp);
 			
-			System.out.println(challengerMembers);
 			
 				for(int j=0; j<challengerMembers.size(); j++) {
 				
 					if(challengerMembers.get(j) != null) {
-						System.out.println(challengerMembers.size());
 						if(matchList.get(i).getChallenger1() == null) {
 							String ch1 = challengerMembers.get(j).getUserId2();
 							matchList.get(i).setChallenger1(ch1);
-							System.out.println(matchList.get(i).getChallenger1());
 						} else if(matchList.get(i).getChallenger2() == null) {
 							matchList.get(i).setChallenger2(challengerMembers.get(j).getUserId2());
 						} else if(matchList.get(i).getChallenger3() == null) {
@@ -227,23 +223,126 @@ public class MatchController {
 					}
 					
 				}
-			
-			System.out.println(matchList.get(i).getChallenger1());
-			System.out.println(matchList.get(i).getChallenger2());
-			System.out.println(matchList.get(i).getChallenger3());
-			System.out.println(matchList.get(i).getChallenger4());
-			System.out.println(matchList.get(i).getChallenger5());
-	
 		}
 		
 		model.addAttribute("matchList", matchList);
 		model.addAttribute("pi", pi);
+		model.addAttribute("filterType", filterType);
+		model.addAttribute("filterTypeValue", filterTypeValue);
 	}
 	
+	@GetMapping("/myMatch.ma")
+	public void myMatch(@RequestParam(defaultValue="1") int nowPage, Model model,
+						@RequestParam(defaultValue="") String userId1,
+						@RequestParam(defaultValue="") String userId2,
+						@RequestParam(defaultValue="") String userId,
+						@RequestParam(defaultValue="") String userId3,
+						@RequestParam(defaultValue="") String userId4) {
+		int totalRecord = 0;
+		String filterType = null;
+		String filterTypeValue = null;
+		if(!(userId1.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListReg(userId1);
+		} else if(!(userId2.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListChal(userId2);
+		} else if(!(userId3.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListWaitingRegPay(userId3);
+		} else if(!(userId4.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListWaitingChalPay(userId4);
+		} else {
+			totalRecord = matchService.selectTotalRecordMatchListReg(userId);
+		}
+		
+		int limit = 5;
+		int offset = (nowPage - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		PageInfo pi = Pagination.getPageInfo(totalRecord, nowPage, limit, 3);
+		
+		List<MatchList> myMatch = null;
+		
+		if(!(userId1.equals(""))) {
+			myMatch = matchService.matchListReg(userId1, rowBounds);
+			filterType = "userId1";
+			filterTypeValue = userId1;
+		} else if(!(userId2.equals(""))) {
+			myMatch = matchService.matchListChal(userId2, rowBounds);
+			filterType = "userId2";
+			filterTypeValue = userId2;
+		} else if(!(userId3.equals(""))) {
+			myMatch = matchService.myMatchWaitingRegPay(userId3, rowBounds);
+			filterType = "userId3";
+			filterTypeValue = userId3;
+		} else if(!(userId4.equals(""))) {
+			myMatch = matchService.myMatchWaitingChalPay(userId4, rowBounds);
+			filterType = "userId4";
+			filterTypeValue = userId4;
+		} else {
+			myMatch = matchService.matchListReg(userId, rowBounds);
+			filterType = "userId1";
+			filterTypeValue = userId1;
+		}
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
+		
+		for(int i=0; i<myMatch.size(); i++) {
+			myMatch.get(i).getMatchdate();
+		LocalDateTime date = myMatch.get(i).getMatchdate();
+		myMatch.get(i).setMatchdatestring(formatter.format(date));
+		
+		MatchList myMatchTmp = myMatch.get(i);
+		
+		List<ChallengerList> challengerMembers = matchService.toChallengerList(myMatchTmp);
+		Profile ch2 = null;
+		
+		
+			for(int j=0; j<challengerMembers.size(); j++) {
+			
+				if(challengerMembers.get(j) != null) {
+					if(myMatch.get(i).getChallenger1() == null) {
+						String ch1 = challengerMembers.get(j).getUserId2();
+						myMatch.get(i).setChallenger1(ch1);
+					} else if(myMatch.get(i).getChallenger2() == null) {
+						myMatch.get(i).setChallenger2(challengerMembers.get(j).getUserId2());
+					} else if(myMatch.get(i).getChallenger3() == null) {
+						myMatch.get(i).setChallenger3(challengerMembers.get(j).getUserId2());
+					} else if(myMatch.get(i).getChallenger4() == null) {
+						myMatch.get(i).setChallenger4(challengerMembers.get(j).getUserId2());
+					} else if(myMatch.get(i).getChallenger5() == null) {
+						myMatch.get(i).setChallenger5(challengerMembers.get(j).getUserId2());
+					} else {
+						model.addAttribute("msg", "신청자초과");
+					}
+				}
+				
+			}
+			if(myMatch.get(i).getChallenger1() != null) {
+				myMatch.get(i).setChallenger1Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger1()).getProNick());
+			}
+			if(myMatch.get(i).getChallenger2() != null) {
+				myMatch.get(i).setChallenger2Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger2()).getProNick());
+			}
+			if(myMatch.get(i).getChallenger3() != null) {
+				myMatch.get(i).setChallenger3Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger3()).getProNick());
+			}
+			if(myMatch.get(i).getChallenger4() != null) {
+				myMatch.get(i).setChallenger4Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger4()).getProNick());
+			}
+			if(myMatch.get(i).getChallenger5() != null) {
+				myMatch.get(i).setChallenger5Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger5()).getProNick());
+			}
+			
+		}
+		
+		model.addAttribute("filterType", filterType);
+		model.addAttribute("filterTypeValue", filterTypeValue);
+		model.addAttribute("myMatch", myMatch);
+		model.addAttribute("pi", pi);
+		
+	}
 	@GetMapping("/challengerAdd.ma")
 	public String challengerAdd(@RequestParam int no, @RequestParam String userId1, @RequestParam String userId2, @RequestParam String matchdateString, 
-								@RequestParam String matchTime, @RequestParam String gymName, @RequestParam String proNick1, RedirectAttributes redirectAtt) {
-			
+								@RequestParam String matchTime, @RequestParam String gymName, @RequestParam String proNick1, @RequestParam String matchNo, RedirectAttributes redirectAtt) {
+			System.out.println("넘어온 값들 : " + no + userId1 + userId2 + matchdateString + matchTime + gymName + proNick1 + matchNo);
 			// 로그인을 하고, 신청버튼을 누르면, 그 해당 매치의 시퀀스 번호, 신청자의 아이디가 들어온다.
 			// 해당 매치의 시퀀스 번호는 무조건, 매치상태가 1이다(원조).
 			// 해당 매치의 시퀀스 번호를 매개로 해서, 해당 매치 테이블의 모든 데이터를 복사해 온다.
@@ -274,7 +373,6 @@ public class MatchController {
 			
 			alarm.setReadYn("N");
 			alarm.setAlarmStatus(2);
-			alarm.setNo(no);
 			
 			System.out.println(alarm);
 			
@@ -294,12 +392,23 @@ public class MatchController {
 				try {
 					int result = matchService.challengerUpdate(toUpdateMatchData);
 					System.out.println("match테이블 업데이트 성공");
+				
+					Match match = new Match();
+					match.setMatchNo(matchNo);
+					match.setUserId1(userId1);
+					match.setUserId2(userId2);
+					System.out.println(match);
+					
+					Match match2 = new Match();
+					match2 = matchService.selcUpdMatch(match);
+					alarm.setNo(match2.getNo());
+					
 					int result2 = alarmService.insertAlarm(alarm);
 					System.out.println(result2);
 					System.out.println("alarm테이블 insert 성공");
-					redirectAtt.addFlashAttribute("challengeMsg", "도전 신청이 완료 되었습니다.");
+					redirectAtt.addFlashAttribute("msg", "도전 신청이 완료 되었습니다.");
 				} catch(Exception e) {
-					redirectAtt.addFlashAttribute("challengeMsg", "오류로 인해, 실패 했습니다.");
+					redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
 				}
 			} else if(challengerInsertDecision2 == 1) {
 				System.out.println("else if문 들어왔어");
@@ -312,16 +421,30 @@ public class MatchController {
 						toInputMatchData.setMatchStatus(0);
 						try {
 							int result = matchService.challengerInsert(toInputMatchData);
+							System.out.println("match테이블 인서트 성공");
+							
+							Match match = new Match();
+							match.setMatchNo(matchNo);
+							match.setUserId1(userId1);
+							match.setUserId2(userId2);
+							System.out.println(match);
+							
+							Match match2 = new Match();
+							match2 = matchService.selcUpdMatch(match);
+							alarm.setNo(match2.getNo());
+							
 							int result2 = alarmService.insertAlarm(alarm);
-							redirectAtt.addFlashAttribute("challengeMsg", "도전 신청이 완료 되었습니다.");
+							System.out.println(result2);
+							System.out.println("alarm테이블 insert 성공");
+							redirectAtt.addFlashAttribute("msg", "도전 신청이 완료 되었습니다.");
 						} catch(Exception e) {
-							redirectAtt.addFlashAttribute("challengeMsg", "오류로 인해, 실패 했습니다.");
+							redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
 						}
 					} else {
-						redirectAtt.addFlashAttribute("challengeMsg", "당신은 이미 이 매치에 도전 신청을 했습니다.");
+						redirectAtt.addFlashAttribute("msg", "당신은 이미 이 매치에 도전 신청을 했습니다.");
 					}
 				} else {
-					redirectAtt.addFlashAttribute("challengeMsg", "최대도전자 인원이 5명이라, 신청이 불가합니다.");
+					redirectAtt.addFlashAttribute("msg", "최대도전자 인원이 5명이라, 신청이 불가합니다.");
 				}
 			} 
 		
@@ -329,7 +452,7 @@ public class MatchController {
 	}
 	
 	@GetMapping("/regCancel.ma")
-	public String regCancel(@RequestParam String matchNo, @RequestParam String userId1, RedirectAttributes redirectAtt) {
+	public String regCancel(@RequestParam String matchNo, @RequestParam String userId1, RedirectAttributes redirectAtt, @RequestParam(defaultValue="") String from) {
 		Match matchTmp = new Match();
 		matchTmp.setMatchNo(matchNo);
 		matchTmp.setUserId1(userId1);
@@ -341,37 +464,89 @@ public class MatchController {
 			redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
 		}
 		
-		return "redirect:/match/matchList.ma?nowPage="+1;
+		if(from.equals("myMatch")) {
+			return "redirect:/match/myMatch.ma?nowPage="+1+"&userId="+userId1;
+		} else {
+			return "redirect:/match/matchList.ma?nowPage="+1;
+		}
 	}
 	
 	@GetMapping("/chalCancel.ma")
-	public String chalCancel(@RequestParam int no, @RequestParam String userId2, RedirectAttributes redirectAtt) {
-			System.out.println("chal"+ no + userId2);
+	public String chalCancel(@RequestParam int no, @RequestParam String userId2, RedirectAttributes redirectAtt, @RequestParam(defaultValue="") String from) {
 			Match toCopyMatchData = matchService.toCopyMatchData(no);
-			System.out.println(toCopyMatchData);
 			
 			int challengerCancelDecision = matchService.challengerInsertDecision3(toCopyMatchData);
-			System.out.println(challengerCancelDecision);
 			
-			if(2 <= challengerCancelDecision && challengerCancelDecision <= 5) {
-				
+			if(1 <= challengerCancelDecision && challengerCancelDecision <= 5) {
 				Match toCancelMatchData = matchService.toCopyMatchData(no);
 				toCancelMatchData.setUserId2(userId2);
-				System.out.println(toCancelMatchData);
-				try {
-					int result = matchService.chalCancel(toCancelMatchData);
-					redirectAtt.addFlashAttribute("msg", "매치에 신청된 도전이 취소되었습니다.");
-				} catch(Exception e) {
-					redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
+				int challengerCancelDecision2 = matchService.challengerStatusDecision(toCancelMatchData);
+				
+				if(challengerCancelDecision2 == 1) {
+					try {
+						int result = matchService.chalCancelUpdate(toCancelMatchData);
+						redirectAtt.addFlashAttribute("msg", "매치에 신청된 도전이 취소되었습니다.");
+					} catch(Exception e) {
+						redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
+					}
+				} else {
+					try {
+						int result = matchService.chalCancel(toCancelMatchData);
+						redirectAtt.addFlashAttribute("msg", "매치에 신청된 도전이 취소되었습니다.");
+					} catch(Exception e) {
+						redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
+					}
 				}
+				
+			} else {
+				redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
 			}
-			
-			
-			
-		return "redirect:/match/matchList.ma?nowPage="+1;
+			if(from.equals("myMatch")) {
+	
+					return "redirect:/match/myMatch.ma?nowPage="+1+"&userId="+userId2;
+				
+			} else {
+				return "redirect:/match/matchList.ma?nowPage="+1;
+			}
 	}
 	
-	
+	@GetMapping("/chalCancelFromMe.ma")
+	public String chalCancel(@RequestParam int no, @RequestParam String userId2, RedirectAttributes redirectAtt, @RequestParam(defaultValue="") String from, @RequestParam(defaultValue="") String loginUserId) {
+			Match toCopyMatchData = matchService.toCopyMatchData(no);
+			
+			int challengerCancelDecision = matchService.challengerInsertDecision3(toCopyMatchData);
+			
+			if(1 <= challengerCancelDecision && challengerCancelDecision <= 5) {
+				Match toCancelMatchData = matchService.toCopyMatchData(no);
+				toCancelMatchData.setUserId2(userId2);
+				int challengerCancelDecision2 = matchService.challengerStatusDecision(toCancelMatchData);
+				
+				if(challengerCancelDecision2 == 1) {
+					try {
+						int result = matchService.chalCancelUpdate(toCancelMatchData);
+						redirectAtt.addFlashAttribute("msg", "매치에 신청된 도전이 취소되었습니다.");
+					} catch(Exception e) {
+						redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
+					}
+				} else {
+					try {
+						int result = matchService.chalCancel(toCancelMatchData);
+						redirectAtt.addFlashAttribute("msg", "매치에 신청된 도전이 취소되었습니다.");
+					} catch(Exception e) {
+						redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
+					}
+				}
+				
+			} else {
+				redirectAtt.addFlashAttribute("msg", "오류로 인해, 실패 했습니다.");
+			}
+			if(from.equals("myMatch")) {
+					return "redirect:/match/myMatch.ma?nowPage="+1+"&userId="+loginUserId;
+				
+			} else {
+				return "redirect:/match/matchList.ma?nowPage="+1;
+			}
+	}
 	
 	
 	
@@ -554,22 +729,87 @@ public class MatchController {
         JsonObject jsonObject = new JsonObject();		
 		
 		for(MatchRegInfo mri : matchRegInfoList) {		
-			//System.out.println(mri.toString());
+			System.out.println(mri.toString());
 
 			String matchNo = mri.getCode();
 			int gymNo = mri.getGymNo();
-
+			
 			Member member = (Member) session.getAttribute("loginMember");
 			String userId = member.getUserId();
 			System.out.println(userId);
 			System.out.println(mri.getGymNo());
 			
-			Gym gym = gymService.getGymByUserId(userId);
-			System.out.println(gym.getGymNo());
+			Member member2 = memberSevice.selectOneMember(userId);
 			
-			if(mri.getGymNo() == gym.getGymNo()) {
-		        jsonObject.addProperty("result", "NOT_OK");
-		        jsonObject.addProperty("msg", "규정 상 본인 체육관에서는 매치를 할 수 없습니다. 다른 체육관을 이용해주세요.");
+			if(member2.getUserType().equals("coach")) {
+				Gym gym = gymService.getGymByUserId(userId);
+				System.out.println(gym.getGymNo());
+			
+				if(mri.getGymNo() == gym.getGymNo()) {
+			        jsonObject.addProperty("result", "NOT_OK");
+			        jsonObject.addProperty("msg", "규정 상 본인 체육관에서는 매치를 할 수 없습니다. 다른 체육관을 이용해주세요.");
+				} else {
+					String delYnCge = mri.getValue();
+					System.out.println("mri에서 가져온 값 : " + matchNo + gymNo + delYnCge);
+					int num = mri.getNum();
+					
+					match.setMatchNo(matchNo);
+					match.setGymNo(gymNo);
+					match.setUserId1(userId);
+					match.setMatchStatus(1);
+					match.setDelYn(delYnCge);
+					match.setNum(num);
+					Match matchOne = matchService.selectMatch(match);
+					//System.out.println(matchOne);
+					
+					// 문자열
+			        String dateStr = mri.getMatchday();
+			 
+			        // 포맷터
+			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			        
+			        // 문자열 -> Date
+			        LocalDateTime date = LocalDateTime.parse(dateStr);
+					
+					//if(matchNo, gymNo, userId1 가 db에 없으면)
+					//	insert
+					//있으면
+					//} else {
+					//  update
+					//}	       
+					if(matchOne == null) {		
+						match.setMatchdate(date);
+						match.setMatchtime(mri.getMatchtime());
+						match.setMatchStatus(1);
+						match.setDelYn(mri.getValue());
+						
+						//System.out.println("insert문");
+						result = matchService.registerMatch(match);
+						
+						if(result > 0) {
+					        jsonObject.addProperty("result", "OK");
+					        jsonObject.addProperty("msg", "등록되었습니다.");
+				        } else {
+					        jsonObject.addProperty("result", "NOT_OK");
+					        jsonObject.addProperty("msg", "등록 실패했습니다.");
+				        } 
+					} else {
+						//System.out.println("updat문");
+		
+						match.setDelYn(mri.getValue());				
+						System.out.println(match);
+						
+						result = matchService.updateMatch(match);
+						
+						if(result > 0) {
+					        jsonObject.addProperty("result", "OK");
+					        jsonObject.addProperty("msg", "등록되었습니다.");
+				        } else {
+					        jsonObject.addProperty("result", "NOT_OK");
+					        jsonObject.addProperty("msg", "등록 실패했습니다.");
+				        } 
+					} 	
+				}
 			} else {
 				String delYnCge = mri.getValue();
 				System.out.println("mri에서 가져온 값 : " + matchNo + gymNo + delYnCge);
@@ -631,6 +871,7 @@ public class MatchController {
 				        jsonObject.addProperty("msg", "등록 실패했습니다.");
 			        } 
 				} 	
+			
 			}
 			
 		}		
@@ -723,24 +964,57 @@ public class MatchController {
 
 	@ResponseBody
     @RequestMapping(value = "/payment.ma", method = RequestMethod.POST)
-    public String payment(@RequestBody Match match) {
+    public String payment(@RequestBody Match match, HttpSession session) {
     	int no = match.getNo();
     	System.out.println(no);
+    	
+    	int u1ps = 0;
+    	int u2ps = 0;
+    	String userId1 = "";
+    	String userId2 = "";
     	
     	Gson gson = new Gson();
 		JsonObject jsonObject = new JsonObject();
 		
-		if(no > 0) {
-	        jsonObject.addProperty("result", "OK");
-	        jsonObject.addProperty("msg", "결제되었습니다.");
-	        jsonObject.addProperty("no", no);
-        } else {
-		    jsonObject.addProperty("result", "NOT_OK");
-		    jsonObject.addProperty("msg", "다시 결제해주세요.");
-		}                 
-
-		// JsonObject를 Json 문자열로 변환
-		String jsonStr = gson.toJson(jsonObject);
+		//1. user_id1이 나인지 user_id2가 나인지 확인
+    	Member member = (Member) session.getAttribute("loginMember");
+    	String userId = member.getUserId();
+    	
+    	// 1. no에 해당하는 payStatus 상태를 읽음
+    	Match match5 = matchService.toCopyMatchData(no);
+    	System.out.println(match5);
+    	// 유저1,2 구하기
+    	userId1 = match5.getUserId1();
+    	userId2 = match5.getUserId2();
+    	u1ps = match5.getUser1Paystatus();
+    	u2ps = match5.getUser2Paystatus();
+    	
+    	Match match2 = new Match();
+    	//2. user_id1이 나면 user1_pay, user1_paystatus update
+    	if(userId.equals(userId1)) {	
+    		System.out.println("USER1이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u1ps == 1) {
+    			jsonObject.addProperty("result", "OK");
+    			jsonObject.addProperty("msg", "이미 결제 되었습니다.");
+    			// 3. 상태가 1이 아니면 결제진행
+    		} else if(u1ps == 0) {
+    	        jsonObject.addProperty("no", no);
+    		} 
+    	//3. user_id2이 나면 user2_pay, user2_paystatus update
+    	} else if (userId.equals(userId2)) {
+    		System.out.println("user2이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u2ps == 1) {
+    			jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "이미 결제 되었습니다.");
+    		} else if(u2ps == 0) {
+    	        jsonObject.addProperty("no", no);
+    		}
+    	}
+    	
+    	// JsonObject를 Json 문자열로 변환
+		String jsonStr = gson.toJson(jsonObject);             
 
 		// 생성된 Json 문자열 출력
 		System.out.println(jsonStr);
@@ -753,67 +1027,65 @@ public class MatchController {
     	System.out.println(userPay);
     	System.out.println(no);
     	int result = 0;
+    	int u1ps = 0;
+    	int u2ps = 0;
     	String userId1 = "";
     	String userId2 = "";
     	
     	Gson gson = new Gson();
 		JsonObject jsonObject = new JsonObject();
-       	   	
+		
     	//1. user_id1이 나인지 user_id2가 나인지 확인
     	Member member = (Member) session.getAttribute("loginMember");
-		String userId = member.getUserId();
-		
-		Match match = new Match();
-		
-    	// 1. no에 해당하는 payStatus 상태를 읽음
-    	Match match4 = matchService.selectPayStatus(no, userId1, userId2);
-    	int u1ps = match4.getUser1Paystatus();
-    	int u2ps = match4.getUser2Paystatus();
-
-		
-
-		// 유저1,2 구하기
-    	Match match1 = matchService.selectPayUser1(no, userId);
-    	userId1 = match1.getUserId1();
+    	String userId = member.getUserId();
     	
-    	Match match2 = matchService.selectPayUser2(no, userId);
-    	userId2 = match2.getUserId2();
-
-    	//2. user_id1이 나면 user1_pay, user1_paystatus update
-    	if(userId.equals(userId1)) {	
-    		System.out.println("USER1이랑 같아!");
-    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
-    		if(u1ps == 1) {
-    			jsonObject.addProperty("result", "OK");
-		        jsonObject.addProperty("msg", "이미 수락 되었습니다.");
-	        // 3. 상태가 1이 아니면 결제진행
-    		} else if(u1ps == 0) {
-    			match.setNo(no);
-    			match.setUser1Pay(userPay);
-    			match.setUserId1(userId);
-    			
-    			System.out.println(match);
-    			result = matchService.updatePay1(match);		
-    		}
-		//3. user_id2이 나면 user2_pay, user2_paystatus update
-    	} else if (userId.equals(userId2)) {
-    		System.out.println("user2이랑 같아!");
-    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
-    		if(u2ps == 1) {
-    			jsonObject.addProperty("result", "OK");
-		        jsonObject.addProperty("msg", "이미 수락 되었습니다.");
-    		} else if(u2ps == 0) {
-    			match.setNo(no);
-    			match.setUser2Pay(userPay);
-    			match.setUserId2(userId);
-    			
-    			System.out.println(match);
-    			result = matchService.updatePay2(match);
-    		}		
-    	}
+    	// 1. no에 해당하는 payStatus 상태를 읽음
+//    	Match match5 = matchService.toCopyMatchData(no);
+//    	System.out.println(match5);
+//    	// 유저1,2 구하기
+//    	userId1 = match5.getUserId1();
+//    	userId2 = match5.getUserId2();
+//    	u1ps = match5.getUser1Paystatus();
+//    	u2ps = match5.getUser2Paystatus();
+//    	
+//    	Match match = new Match();
+//    	//2. user_id1이 나면 user1_pay, user1_paystatus update
+//    	if(userId.equals(userId1)) {	
+//    		System.out.println("USER1이랑 같아!");
+//    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+//    		if(u1ps == 1) {
+//    			jsonObject.addProperty("result", "OK");
+//    			jsonObject.addProperty("msg", "이미 결제 되었습니다.");
+//    			// 3. 상태가 1이 아니면 결제진행
+//    		} else if(u1ps == 0) {
+//    			match.setNo(no);
+//    			match.setUser1Pay(userPay);
+//    			match.setUserId1(userId);
+//    			
+//    			System.out.println(match);
+//    			result = matchService.updatePay1(match);		
+//    		}
+//
+//       	   	
+//		//3. user_id2이 나면 user2_pay, user2_paystatus update
+//    	} else if (userId.equals(userId2)) {
+//    		System.out.println("user2이랑 같아!");
+//    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+//    		if(u2ps == 1) {
+//    			jsonObject.addProperty("result", "OK");
+//		        jsonObject.addProperty("msg", "이미 결제 되었습니다.");
+//    		} else if(u2ps == 0) {
+//    			match.setNo(no);
+//    			match.setUser2Pay(userPay);
+//    			match.setUserId2(userId);
+//    			
+//    			System.out.println(match);
+//    			result = matchService.updatePay2(match);
+//    		}		
+//    	}
 
     	//4. user1_paystatus, user2_paystatus 둘 다 1이면 match_status 4로 업데이트
-    	Match match3 = matchService.selectPayStatus(no, userId1, userId2);
+    	Match match3 = matchService.selectPayStatus(no);
     	int user1PayStatus = match3.getUser1Paystatus();
     	int user2PayStatus = match3.getUser2Paystatus();
     	match3.setNo(no);

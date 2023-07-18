@@ -71,6 +71,7 @@
 		WHERE M.USER_ID1 = #{userId}
 		AND M.MATCHDATE BETWEEN TO_DATE(#{matchdate} || ' 00:00:00', 'YYYY/MM/DD HH24:MI:SS') AND TO_DATE(#{matchdate} || ' 23:59:59', 'YYYY/MM/DD HH24:MI:SS')
 		AND M.DEL_YN     = 'N'
+		AND (MATCH_STATUS = 1 OR MATCH_STATUS = 3)
 		ORDER BY M.MATCHTIME
 	</select>
 	
@@ -81,7 +82,7 @@
 	</select>
 	
 	<select id="selectMatchingList" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2
 		  from match m, gym g, profile p
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
@@ -90,7 +91,7 @@
 	</select>
 	
 	<select id="matchListFilterGender" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2
 		  from match m, gym g, profile p, member r
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
@@ -120,7 +121,7 @@
 	</select>
 	
 	<select id="matchListFilterLocation" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2
 		  from match m, gym g, profile p
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
@@ -135,11 +136,11 @@
 		            where m.gym_no = g.gym_no
 		            and m.user_id1 = p.user_id
 		            and p.pro_nick Like '%' || #{searchInput} || '%'
-		            and m.user_id2 is null
+		             and m.match_status = 1
 	</select>
 	
 	<select id="matchListFilterNick" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2
 		  from match m, gym g, profile p
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
@@ -149,11 +150,11 @@
 	</select>
 	
 	<select id="matchListFilterDow" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2
 		  from match m, gym g, profile p
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
-		   and to_char(m.matchdate, 'day') = #{dowString}
+		   and to_char(m.matchdate, 'D') = #{dowInt}
 		   and m.match_status = 1
 		 order by m.no desc
 	</select>
@@ -163,9 +164,8 @@
 		  from match m, gym g, profile p
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
-		   and to_char(m.matchdate, 'day') = #{dowString}
+		   and to_char(m.matchdate, 'D') = #{dowInt}
 		   and m.match_status = 1
-		 order by m.no desc
 	</select>
 	
 	<delete id="deleteMatch">
@@ -227,7 +227,12 @@
 				#{score1},
 				#{score2},
 				#{matchStatus},
-				#{delYn}
+				#{delYn},
+				#{num},
+				default,
+				default,
+				default,
+				default
 			)
 	</insert>
 	
@@ -238,11 +243,10 @@
 		   and m.user_id1 = p.user_id
 		   and m.match_status = 1
 		   and m.user_id1 = #{userId1}
-		 order by m.no desc
 	</select>
 	
 	<select id="matchListReg" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status
 		  from match m, gym g, profile p
 		 where m.gym_no = g.gym_no
 		   and m.user_id1 = p.user_id
@@ -257,12 +261,13 @@
 		  where m.gym_no = g.gym_no
 		    and m.user_id1 = p.user_id
 		    and m.match_status = 1
-		    and m.user_id2 = #{userId2}
-		  order by m.no desc
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId2})
 	</select>
 	
 	<select id="matchListChal" resultMap="MatchListMap">
-		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status
 		  from match m, gym g, profile p
 		  where m.gym_no = g.gym_no
 		    and m.user_id1 = p.user_id
@@ -270,6 +275,49 @@
 		    and (m.match_no, m.user_id1) in (select match_no, user_id1
 		                                       from match
 		                                      where user_id2 = #{userId2})
+		  order by m.no desc
+	</select>
+	
+	<select id="selectTotalRecordMatchListWaitingRegPay" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 3
+		   and m.user_id1 = #{userId3}
+		   
+	</select>
+	
+	<select id="selectTotalRecordMatchListWaitingChalPay" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 3
+		   and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId4})
+	</select>
+	
+	<select id="myMatchWaitingRegPay" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 3
+		   and m.user_id1 = #{userId3}
+		 order by m.no desc
+	</select>
+	
+	<select id="myMatchWaitingChalPay" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 3
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId4})
 		  order by m.no desc
 	</select>
 	
@@ -287,6 +335,15 @@
 		   and user_id1 = #{userId1}
 	</delete>
 	
+	<select id="challengerStatusDecision" resultType="_int">
+		select count(*)
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+		   and user_id2 = #{userId2}
+		   and match_status = 1
+	</select>
+	
 	<delete id="chalCancel">
 		delete
 		  from match
@@ -296,14 +353,14 @@
 		   and match_status = 0
 	</delete>
 	
-	<delete id="chalCancelUpdate">
-		delete
-		  from match
+	<update id="chalCancelUpdate">
+		update match
+		   set user_id2 = null
 		 where match_no = #{matchNo}
 		   and user_id1 = #{userId1}
 		   and user_id2 = #{userId2}
-		   and match_status = 0
-	</delete>
+		   and match_status = 1
+	</update>
 	
 	<select id="selectListChal" resultMap="MatchMap">
 		select *
@@ -312,7 +369,7 @@
 	</select>
 	
 	<select id="selectOneMatch" resultMap="MatchListMap">
-		SELECT M.USER_ID1, M.USER_ID2, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2, M.MATCH_STATUS
+		SELECT M.USER_ID1, M.USER_ID2, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2, M.MATCH_STATUS, M.MATCH_NO
 		FROM MATCH M
 		JOIN GYM G ON M.GYM_NO = G.GYM_NO
 		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID
@@ -360,6 +417,27 @@
 		SELECT USER1_PAYSTATUS, USER2_PAYSTATUS
 		FROM MATCH
 		WHERE NO = #{no}
+	</select>
+	
+	<select id="selectStatus0" resultMap="MatchMap">
+		SELECT *
+		FROM MATCH
+		WHERE MATCH_NO = #{matchNo}
+	</select>
+	
+	<update id="updateMatch8">
+		UPDATE MATCH
+		SET
+		MATCH_STATUS = 8
+		WHERE MATCH_NO = #{matchNo}
+		AND USER_ID1 = #{userId1}
+		AND (MATCH_STATUS = 0 OR MATCH_STATUS = 1)
+	</update>
+	
+	<select id="selcUpdMatch" resultMap="MatchMap">
+		SELECT *
+		FROM MATCH
+		WHERE MATCH_NO = #{matchNo}
 		AND USER_ID1 = #{userId1}
 		AND USER_ID2 = #{userId2}
 	</select>
