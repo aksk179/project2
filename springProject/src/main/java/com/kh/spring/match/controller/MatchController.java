@@ -339,6 +339,7 @@ public class MatchController {
 		model.addAttribute("pi", pi);
 		
 	}
+	
 	@GetMapping("/challengerAdd.ma")
 	public String challengerAdd(@RequestParam int no, @RequestParam String userId1, @RequestParam String userId2, @RequestParam String matchdateString, 
 								@RequestParam String matchTime, @RequestParam String gymName, @RequestParam String proNick1, @RequestParam String matchNo, RedirectAttributes redirectAtt) {

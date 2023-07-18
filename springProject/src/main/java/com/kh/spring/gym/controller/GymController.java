@@ -67,18 +67,19 @@ public class GymController {
 	}
 	
 	@PostMapping("/joinEnrollForm.gym")
-	public String joinEnrollForm(Gym gym, Model model) {
+	public String joinEnrollForm(Gym gym, RedirectAttributes redirectAttr) {
 		int result = 0;
 			try {
 				result = gymService.insertJoin(gym);
 				System.out.println(result);
-				model.addAttribute("msg", "가맹신청이 등록되었습니다.");
+				redirectAttr.addFlashAttribute("msg", "가맹신청이 등록되었습니다.");
+				return "redirect:/";
 			} catch (Exception e) {
 				System.out.println(result);
-				model.addAttribute("msg", "이미 가맹신청이 된 id인지, 전화번호와 사업자번호가 이미 등록된 것인지 확인하세요.");
+				redirectAttr.addFlashAttribute("msg", "이미 가맹신청이 된 id인지, 전화번호와 사업자번호가 이미 등록된 것인지 확인하세요.");
+				return "/gym/joinEnroll";
 			}
 	
-		return "/support/vincero";
 	}
 
 	// 체육관 메인페이지 
@@ -129,20 +130,20 @@ public class GymController {
 
 	
 	// 내 체육관 정보보기 
-	@GetMapping("/gymForm.gym")
-	public String gymForm(int gymNo, Model model) {
-		Gym gym = gymService.myGym(gymNo);
-		model.addAttribute("gym", gym);
-		return "gym/gymForm";
-	}
-	
-	// 내 체육관 정보 가져오기(수정)
-	@GetMapping("/gymUpdate.gym")
-	public String selectMyGym(int gymNo, Model model) {
-		Gym gym = gymService.selectMyGym(gymNo);
-		model.addAttribute("gym", gym);
-		return "gym/gymUpdate";
-	}
+//	@GetMapping("/gymForm.gym")
+//	public String gymForm(@RequestParam String userId, Model model) {
+//		Gym gym = gymService.myGym(userId);
+//		model.addAttribute("gym", gym);
+//		return "gym/gymForm";
+//	}
+//	
+//	// 내 체육관 정보 가져오기(수정)
+//	@GetMapping("/gymUpdate.gym")
+//	public String selectMyGym(String userId, Model model) {
+//		Gym gym = gymService.selectMyGym(userId);
+//		model.addAttribute("gym", gym);
+//		return "gym/gymUpdate";
+//	}
 	
 	// 내 체육관 정보 보내기(수정)
 	@PostMapping("/gymUpdate.gym")
@@ -155,11 +156,13 @@ public class GymController {
 		} else {
 			redirectAttr.addFlashAttribute("msg", "체육관 정보수정 실패");
 		}
-		return "redirect:/gym/gymForm.gym?gymNo=" + gym.getGymNo();
+		return "redirect:/gym/gymForm.gym?userId=" + gym.getUserId();
 	}
 	
 	@GetMapping("/gymCalendar.gym")
-	public void gymCalendar() {}
+	public String gymCalendar() {
+		return "gym/gymCalendar";
+	}
 	
 	@GetMapping("/gymCalendarSelect.gym")
 	public String gymCalendarSelect(@RequestParam String y, @RequestParam String m, Model model) {
@@ -367,10 +370,16 @@ public class GymController {
 				sum += result;
 				System.out.println("sum = " + sum);		
 			}
+			sum += result;
+			System.out.println("sum = " + sum);		
 		}//토탈 FOR문 끝
 		if(sum==totalCodes.length) {
 			model.addAttribute("msg", "일정이 취소되었습니다.");
-		} 
+		} else if(sum==0) {
+			model.addAttribute("msg", "관장 id로 로그인이 되었는지, 등록되지 않은 날을 선택한지 확인하세요.");
+		} else {
+			model.addAttribute("msg", "일정이 취소되었습니다.");
+		}
 		return "/gym/gymCalendar";
 	}
 }

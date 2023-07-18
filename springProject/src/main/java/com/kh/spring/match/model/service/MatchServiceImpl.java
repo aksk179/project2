@@ -265,4 +265,9 @@ public class MatchServiceImpl implements MatchService{
 		return matchDao.selcUpdMatch(match);
 	}
 
+	@Override
+	public int updateUser2Null(Match match) {
+		return matchDao.updateUser2Null(match);
+	}
+
 }

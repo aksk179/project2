@@ -115,4 +115,6 @@ public interface MatchDao {
 
 	Match selcUpdMatch(Match match);
 
+	int updateUser2Null(Match match);
+
 }

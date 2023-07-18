@@ -298,9 +298,19 @@ public class AlarmController {
 			if(matchList.getMatchStatus() == 3) {
 				jsonObject.addProperty("result", "OK");
 		        jsonObject.addProperty("msg", "이미 수락 되었습니다. 취소하시려면 내 경기 화면에서 해주세요");
-			} else if(matchList.getMatchStatus() == 6) {
+			} else if(matchList.getMatchStatus() == 6 || matchList.getMatchStatus() == 8) {
 				jsonObject.addProperty("result", "OK");
 		        jsonObject.addProperty("msg", "이미 거절 되었습니다.");
+			} else if(matchList.getMatchStatus() == 1) {		
+				Match match = new Match();
+				match.setUserId2(matchList.getUserId2());
+				match.setMatchNo(matchList.getMatchNo());
+				
+				result = matchService.updateUser2Null(match);	
+				if(result > 0) {
+			        jsonObject.addProperty("result", "OK");
+			        jsonObject.addProperty("msg", "거절되었습니다.");
+		        }
 			} else {
 				String userId1 = matchList.getUserId1();
 				String userId2 = matchList.getUserId2();

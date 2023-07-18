@@ -111,4 +111,6 @@ public interface MatchService {
 
 	Match selcUpdMatch(Match match);
 
+	int updateUser2Null(Match match);
+
 }

@@ -441,4 +441,13 @@
 		AND USER_ID1 = #{userId1}
 		AND USER_ID2 = #{userId2}
 	</select>
+	
+	<update id="updateUser2Null">
+		UPDATE MATCH
+		SET
+		USER_ID1 = NULL
+		WHERE MATCH_NO = #{matchNo}
+		AND USER_ID1 = #{userId1}
+		AND MATCH_STATUS = 1
+	</update>
 </mapper>
