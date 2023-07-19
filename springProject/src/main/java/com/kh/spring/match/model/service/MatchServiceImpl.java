@@ -184,7 +184,7 @@ public class MatchServiceImpl implements MatchService{
 	public MatchList selectOneMatch(int no) {
 		return matchDao.selectOneMatch(no);
 	}
-	
+
 	@Override
 	public int chalCancelUpdate(Match toCancelMatchData) {
 		return matchDao.chalCancelUpdate(toCancelMatchData);
@@ -223,6 +223,127 @@ public class MatchServiceImpl implements MatchService{
 	@Override
 	public List<MatchList> myMatchWaitingChalPay(String userId4, RowBounds rowBounds) {
 		return matchDao.myMatchWaitingChalPay(userId4, rowBounds);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListAfterRegPay(String userId5) {
+		return matchDao.selectTotalRecordMatchListAfterRegPay(userId5);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListAfterChalPay(String userId6) {
+		return matchDao.selectTotalRecordMatchListAfterChalPay(userId6);
+	}
+
+	@Override
+	public List<MatchList> myMatchAfterRegPay(String userId5, RowBounds rowBounds) {
+		return matchDao.myMatchAfterRegPay(userId5, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> myMatchAfterChalPay(String userId6, RowBounds rowBounds) {
+		return matchDao.myMatchAfterChalPay(userId6, rowBounds);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListAfterRegEnd(String userId7) {
+		return matchDao.selectTotalRecordMatchListAfterRegEnd(userId7);
+	}
+
+	@Override
+	public int selectTotalRecordMatchListAfterChalEnd(String userId8) {
+		return matchDao.selectTotalRecordMatchListAfterChalEnd(userId8);
+	}
+
+	@Override
+	public List<MatchList> myMatchAfterRegEnd(String userId7, RowBounds rowBounds) {
+		return matchDao.myMatchAfterRegEnd(userId7, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> myMatchAfterChalEnd(String userId8, RowBounds rowBounds) {
+		return matchDao.myMatchAfterChalEnd(userId8, rowBounds);
+	}
+
+	@Override
+	public int selectTotalRecordMainListGender(String gender) {
+		return matchDao.selectTotalRecordMainListGender(gender);
+	}
+
+	@Override
+	public int selectTotalRecordMainListLocation(String locations) {
+		return matchDao.selectTotalRecordMainListLocation(locations);
+	}
+
+	@Override
+	public int selectTotalRecordMainListNick(String searchInput) {
+		return matchDao.selectTotalRecordMainListNick(searchInput);
+	}
+
+	@Override
+	public int selectTotalRecordMainListDow(int dowInt) {
+		return matchDao.selectTotalRecordMainListDow(dowInt);
+	}
+
+	@Override
+	public int selectTotalRecordMainListReg(String userId1) {
+		return matchDao.selectTotalRecordMainListReg(userId1);
+	}
+
+	@Override
+	public int selectTotalRecordMainListChal(String userId2) {
+		return matchDao.selectTotalRecordMainListChal(userId2);
+	}
+
+
+	@Override
+	public List<MatchList> mainListFilterGender(String gender, RowBounds rowBounds) {
+		return matchDao.mainListFilterGender(gender, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> mainListFilterLocation(String locations, RowBounds rowBounds) {
+		return matchDao.mainListFilterLocation(locations, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> mainListFilterNick(String searchInput, RowBounds rowBounds) {
+		return matchDao.mainListFilterNick(searchInput, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> mainListFilterDow(int dowInt, RowBounds rowBounds) {
+		return matchDao.mainListFilterDow(dowInt, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> mainListReg(String userId1, RowBounds rowBounds) {
+		return matchDao.mainListReg(userId1, rowBounds);
+	}
+
+	@Override
+	public List<MatchList> mainListChal(String userId2, RowBounds rowBounds) {
+		return matchDao.mainListChal(userId2, rowBounds);
+	}
+
+	@Override
+	public int selectTotalRecordMainListBeforeEnd() {
+		return matchDao.selectTotalRecordMainListBeforeEnd();
+	}
+
+	@Override
+	public int selectTotalRecordMainListAfterEnd() {
+		return matchDao.selectTotalRecordMainListAfterEnd();
+	}
+
+	@Override
+	public List<MatchList> mainListBeforeEnd(RowBounds rowBounds) {
+		return matchDao.mainListBeforeEnd(rowBounds);
+	}
+
+	@Override
+	public List<MatchList> mainListAfterEnd(RowBounds rowBounds) {
+		return matchDao.mainListAfterEnd(rowBounds);
 	}
 
 	@Override

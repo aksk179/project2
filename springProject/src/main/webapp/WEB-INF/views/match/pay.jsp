@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +57,7 @@ form {
         <div class="modal-content" >
             <h3>결제 방법 선택</h3>
             <div class="button-row">
-                <button onclick="location.href='${pageContext.request.contextPath}/match/p_bank.ma?no=${param.no}'" class="button">계좌이체</button>
+                <button onclick="location.href='${pageContext.request.contextPath}/match/p_bank.ma?no=${no}'" class="button">계좌이체</button>
                 <button onclick="location.href='${pageContext.request.contextPath}/match/p_mobile.ma'" class="button">휴대폰결제</button>
             </div>
         </div>

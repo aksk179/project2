@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <style type="text/css">
 	table {
 		width: 500px;
@@ -134,7 +137,7 @@
 	}
 </style>
     <H1>가상계좌</H1>
-    <form action="${pageContext.request.contextPath}/match/p_bankPay.ma" method="post">
+    <form>
         <table align="center">
         <tr>
 	        	<th>입금자</th>
@@ -144,15 +147,14 @@
 	        	<th>금액</th>
 	        	<th colspan="2">
 	        		20,000원
-	        		<input type="hidden" name="userPay" value="20,000원">
-	        		<input type="hidden" name="no" value="${param.no}">
+	        		<input type="hidden" id="no" name="no" value="${no}">
 	        	</th>
 	        </tr>
-	        	        <tr>
+	        <tr>
 	        	<th>예금주</th>
 	        	<th colspan="2">(주) 빈체로</th>
 	        </tr>
-	        	        <tr>
+	        <tr>
 	        	<th>승인일시</th>
 	        	<th colspan="2" id="sysdatatime"></th>
 	        </tr>
@@ -176,19 +178,48 @@
                 <td colspan="2"><input name="bankNo" id="bankNo" disabled></td>
             </tr>
             <tr>
-                <th colspan="3"><button type="submit">확인</button></th>
+                <th colspan="3"><button type="button" onclick="pBankSubmit();">확인</button></th>
             </tr>
         </table>
     </form>
 </body>
 
 <script>
-   
-   var currentDate = new Date();
-   var currentDateTime = currentDate.toLocaleString();
 
-   // Update the element with the current date and time
-   document.getElementById("sysdatatime").innerText = currentDateTime;
+	function pBankSubmit() {
+		var no = $('#no').val();
+		
+		var data = {};
+		data.no = no;
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/match/p_bankPay.ma",
+			type: "POST",
+			data: JSON.stringify(data),
+			dataType: "JSON",
+	        contentType : "application/json",
+			success : function(data, status, xhr) {
+				console.log(data.result);
+				
+				if(data.result === 'OK') {
+					alert(data.msg);
+					window.close();
+				} else {
+					alert(data.msg);
+				}
+			},
+			error : function(xhr, status, error) {
+				alert(status);
+			}
+		});
+    }
+	
+   
+    var currentDate = new Date();
+    var currentDateTime = currentDate.toLocaleString();
+
+    // Update the element with the current date and time
+    document.getElementById("sysdatatime").innerText = currentDateTime;
    
         function selectbank() {
             var bankSelect = document.getElementById("bank");

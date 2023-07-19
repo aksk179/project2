@@ -25,4 +25,7 @@
 		<img src="${pageContext.request.contextPath}/resources/img/match2.png" alt="match2" width="1024px" height="346px">
 	</div>
 </div>
+
+${msg}
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

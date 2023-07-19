@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.ListUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -121,12 +122,10 @@ public class MatchController {
 			}
 			totalRecord = matchService.selectTotalRecordMatchListDow(dowInt);
 		} else if(!(userId1.equals(""))) {
-			totalRecord = matchService.selectTotalRecordMatchListReg(userId1);	
+			totalRecord = matchService.selectTotalRecordMatchListReg(userId1);
 		} else if(!(userId2.equals(""))) {
 			totalRecord = matchService.selectTotalRecordMatchListChal(userId2);
-			
 	    } else {
-			
 			totalRecord = matchService.selectTotalRecordMatchList();
 		}
 		
@@ -237,10 +236,15 @@ public class MatchController {
 						@RequestParam(defaultValue="") String userId2,
 						@RequestParam(defaultValue="") String userId,
 						@RequestParam(defaultValue="") String userId3,
-						@RequestParam(defaultValue="") String userId4) {
+						@RequestParam(defaultValue="") String userId4,
+						@RequestParam(defaultValue="") String userId5,
+						@RequestParam(defaultValue="") String userId6,
+						@RequestParam(defaultValue="") String userId7,
+						@RequestParam(defaultValue="") String userId8) {
 		int totalRecord = 0;
 		String filterType = null;
 		String filterTypeValue = null;
+		
 		if(!(userId1.equals(""))) {
 			totalRecord = matchService.selectTotalRecordMatchListReg(userId1);
 		} else if(!(userId2.equals(""))) {
@@ -249,9 +253,19 @@ public class MatchController {
 			totalRecord = matchService.selectTotalRecordMatchListWaitingRegPay(userId3);
 		} else if(!(userId4.equals(""))) {
 			totalRecord = matchService.selectTotalRecordMatchListWaitingChalPay(userId4);
+		} else if(!(userId5.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListAfterRegPay(userId5);
+		} else if(!(userId6.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListAfterChalPay(userId6);
+		} else if(!(userId7.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListAfterRegEnd(userId7);
+		} else if(!(userId8.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMatchListAfterChalEnd(userId8);
 		} else {
 			totalRecord = matchService.selectTotalRecordMatchListReg(userId);
 		}
+		
+		
 		
 		int limit = 5;
 		int offset = (nowPage - 1) * limit;
@@ -276,6 +290,22 @@ public class MatchController {
 			myMatch = matchService.myMatchWaitingChalPay(userId4, rowBounds);
 			filterType = "userId4";
 			filterTypeValue = userId4;
+		} else if(!(userId5.equals(""))) {
+			myMatch = matchService.myMatchAfterRegPay(userId5, rowBounds);
+			filterType = "userId5";
+			filterTypeValue = userId5;
+		} else if(!(userId6.equals(""))) {
+			myMatch = matchService.myMatchAfterChalPay(userId6, rowBounds);
+			filterType = "userId6";
+			filterTypeValue = userId6;
+		} else if(!(userId7.equals(""))) {
+			myMatch = matchService.myMatchAfterRegEnd(userId7, rowBounds);
+			filterType = "userId7";
+			filterTypeValue = userId7;
+		} else if(!(userId8.equals(""))) {
+			myMatch = matchService.myMatchAfterChalEnd(userId8, rowBounds);
+			filterType = "userId8";
+			filterTypeValue = userId8;
 		} else {
 			myMatch = matchService.matchListReg(userId, rowBounds);
 			filterType = "userId1";
@@ -294,9 +324,7 @@ public class MatchController {
 		List<ChallengerList> challengerMembers = matchService.toChallengerList(myMatchTmp);
 		Profile ch2 = null;
 		
-		
 			for(int j=0; j<challengerMembers.size(); j++) {
-			
 				if(challengerMembers.get(j) != null) {
 					if(myMatch.get(i).getChallenger1() == null) {
 						String ch1 = challengerMembers.get(j).getUserId2();
@@ -313,22 +341,47 @@ public class MatchController {
 						model.addAttribute("msg", "신청자초과");
 					}
 				}
+			}	
 				
-			}
 			if(myMatch.get(i).getChallenger1() != null) {
 				myMatch.get(i).setChallenger1Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger1()).getProNick());
+				Match match = new Match();
+				match.setUserId1(myMatch.get(i).getUserId1());
+				match.setUserId2(myMatch.get(i).getChallenger1());
+				match.setMatchNo(myMatch.get(i).getMatchNo());
+				myMatch.get(i).setChallenger1No(matchService.selcUpdMatch(match).getNo());
 			}
 			if(myMatch.get(i).getChallenger2() != null) {
 				myMatch.get(i).setChallenger2Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger2()).getProNick());
+				Match match = new Match();
+				match.setUserId1(myMatch.get(i).getUserId1());
+				match.setUserId2(myMatch.get(i).getChallenger1());
+				match.setMatchNo(myMatch.get(i).getMatchNo());
+				myMatch.get(i).setChallenger2No(matchService.selcUpdMatch(match).getNo());
 			}
 			if(myMatch.get(i).getChallenger3() != null) {
 				myMatch.get(i).setChallenger3Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger3()).getProNick());
+				Match match = new Match();
+				match.setUserId1(myMatch.get(i).getUserId1());
+				match.setUserId2(myMatch.get(i).getChallenger1());
+				match.setMatchNo(myMatch.get(i).getMatchNo());
+				myMatch.get(i).setChallenger3No(matchService.selcUpdMatch(match).getNo());
 			}
 			if(myMatch.get(i).getChallenger4() != null) {
 				myMatch.get(i).setChallenger4Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger4()).getProNick());
+				Match match = new Match();
+				match.setUserId1(myMatch.get(i).getUserId1());
+				match.setUserId2(myMatch.get(i).getChallenger1());
+				match.setMatchNo(myMatch.get(i).getMatchNo());
+				myMatch.get(i).setChallenger4No(matchService.selcUpdMatch(match).getNo());
 			}
 			if(myMatch.get(i).getChallenger5() != null) {
 				myMatch.get(i).setChallenger5Nick(profileService.selectOneProfile(myMatch.get(i).getChallenger5()).getProNick());
+				Match match = new Match();
+				match.setUserId1(myMatch.get(i).getUserId1());
+				match.setUserId2(myMatch.get(i).getChallenger1());
+				match.setMatchNo(myMatch.get(i).getMatchNo());
+				myMatch.get(i).setChallenger5No(matchService.selcUpdMatch(match).getNo());
 			}
 			
 		}
@@ -337,7 +390,138 @@ public class MatchController {
 		model.addAttribute("filterTypeValue", filterTypeValue);
 		model.addAttribute("myMatch", myMatch);
 		model.addAttribute("pi", pi);
+	}
+	
+	@GetMapping("/mainList.ma")
+	public void mainList(@RequestParam(defaultValue="1") int nowPage, Model model,
+			              @RequestParam(defaultValue="loc") String locations,
+			              @RequestParam(defaultValue="8") int dowFromSelect,
+			              @RequestParam(defaultValue="") String userId1,
+			              @RequestParam(defaultValue="") String userId2,
+			              @RequestParam(defaultValue="") String before,
+			              @RequestParam(defaultValue="") String after) {
+		int totalRecord = 0;
+		int dowInt = 8;
+		String filterType = null;
+		String filterTypeValue = null;
+		if(locations.equals("서울") ||
+				  locations.equals("경기") ||
+				  locations.equals("충청") ||
+				  locations.equals("대전") ||
+				  locations.equals("강원") ||
+				  locations.equals("경상") ||
+				  locations.equals("대구") ||
+				  locations.equals("부산") ||
+				  locations.equals("전라") ||
+				  locations.equals("광주") ||
+				  locations.equals("제주")) {
+			totalRecord = matchService.selectTotalRecordMainListLocation(locations);
+		} else if(1<= dowFromSelect && dowFromSelect <=7) {
+			if(dowFromSelect == 2) {
+				dowInt = 2;
+			} else if(dowFromSelect == 3) {
+				dowInt = 3;
+			} else if(dowFromSelect == 4) {
+				dowInt = 4;
+			} else if(dowFromSelect == 5) {
+				dowInt = 5;
+			} else if(dowFromSelect == 6) {
+				dowInt = 6;
+			} else if(dowFromSelect == 7) {
+				dowInt = 7;
+			} else {
+				dowInt = 1;
+			}
+			totalRecord = matchService.selectTotalRecordMainListDow(dowInt);
+		} else if(!(userId1.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMainListReg(userId1);
+		} else if(!(userId2.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMainListChal(userId2);
+		} else if(!(before.equals(""))) {
+			totalRecord = matchService.selectTotalRecordMainListBeforeEnd();
+	    } else if(!(after.equals(""))) {
+	    	totalRecord = matchService.selectTotalRecordMainListAfterEnd();
+	    } else {
+	    	totalRecord = matchService.selectTotalRecordMainListBeforeEnd();
+	    }
+	    	
+		int limit = 10;
+		int offset = (nowPage - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		PageInfo pi = Pagination.getPageInfo(totalRecord, nowPage, limit, 3);
 		
+		List<MatchList> matchList = null;
+		
+		if(locations.equals("서울") ||
+				  locations.equals("경기") ||
+				  locations.equals("충청") ||
+				  locations.equals("대전") ||
+				  locations.equals("강원") ||
+				  locations.equals("경상") ||
+				  locations.equals("대구") ||
+				  locations.equals("부산") ||
+				  locations.equals("전라") ||
+				  locations.equals("광주") ||
+				  locations.equals("제주")) {
+			matchList = matchService.mainListFilterLocation(locations, rowBounds);
+			filterType = "locations";
+			filterTypeValue = locations;
+		} else if(1<= dowFromSelect && dowFromSelect <=7) {
+			if(dowFromSelect == 2) {
+				dowInt = 2;
+			} else if(dowFromSelect == 3) {
+				dowInt = 3;
+			} else if(dowFromSelect == 4) {
+				dowInt = 4;
+			} else if(dowFromSelect == 5) {
+				dowInt = 5;
+			} else if(dowFromSelect == 6) {
+				dowInt = 6;
+			} else if(dowFromSelect == 7) {
+				dowInt = 7;
+			} else {
+				dowInt = 1;
+			}
+			
+			matchList = matchService.mainListFilterDow(dowInt, rowBounds);
+			filterType = "dowFromSelect";
+			filterTypeValue = String.valueOf(dowFromSelect);
+		} else if(!(userId1.equals(""))) {
+			matchList = matchService.mainListReg(userId1, rowBounds);
+			filterType = "userId1";
+			filterTypeValue = userId1;
+		} else if(!(userId2.equals(""))) {
+			matchList = matchService.mainListChal(userId2, rowBounds);
+			filterType = "userId2";
+			filterTypeValue = userId2;
+		} else if(!(before.equals(""))) {
+			matchList = matchService.mainListBeforeEnd(rowBounds);
+			filterType = "before";
+			filterTypeValue = before;
+		} else if(!(after.equals(""))) {
+			matchList = matchService.mainListAfterEnd(rowBounds);
+			filterType = "after";
+			filterTypeValue = after;
+		} else {
+			matchList = matchService.mainListBeforeEnd(rowBounds);
+			filterType = "before";
+			filterTypeValue = before;
+		}
+		
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
+		
+		for(int i=0; i<matchList.size(); i++) {
+			LocalDateTime date = matchList.get(i).getMatchdate();
+			matchList.get(i).setMatchdatestring(formatter.format(date));
+			Profile profile = profileService.selectOneProfile(matchList.get(i).getUserId2());
+			String proNick2 = profile.getProNick();
+			matchList.get(i).setProNick2(proNick2);
+		}
+		model.addAttribute("matchList", matchList);
+		model.addAttribute("pi", pi);
+		model.addAttribute("filterType", filterType);
+		model.addAttribute("filterTypeValue", filterTypeValue);
 	}
 	
 	@GetMapping("/challengerAdd.ma")
@@ -374,7 +558,7 @@ public class MatchController {
 			
 			alarm.setReadYn("N");
 			alarm.setAlarmStatus(2);
-			
+					
 			System.out.println(alarm);
 			
 			Match toCopyMatchData = matchService.toCopyMatchData(no);
@@ -392,7 +576,7 @@ public class MatchController {
 				toUpdateMatchData.setUserId2(userId2);
 				try {
 					int result = matchService.challengerUpdate(toUpdateMatchData);
-					System.out.println("match테이블 업데이트 성공");
+					System.out.println("match테이블 업데이트 성공");			
 				
 					Match match = new Match();
 					match.setMatchNo(matchNo);
@@ -403,7 +587,7 @@ public class MatchController {
 					Match match2 = new Match();
 					match2 = matchService.selcUpdMatch(match);
 					alarm.setNo(match2.getNo());
-					
+		               
 					int result2 = alarmService.insertAlarm(alarm);
 					System.out.println(result2);
 					System.out.println("alarm테이블 insert 성공");
@@ -510,6 +694,8 @@ public class MatchController {
 				return "redirect:/match/matchList.ma?nowPage="+1;
 			}
 	}
+	
+	
 	
 	@GetMapping("/chalCancelFromMe.ma")
 	public String chalCancel(@RequestParam int no, @RequestParam String userId2, RedirectAttributes redirectAtt, @RequestParam(defaultValue="") String from, @RequestParam(defaultValue="") String loginUserId) {
@@ -949,20 +1135,11 @@ public class MatchController {
 	///////////////////////////////////////////////////////////
 	
 	@GetMapping("/payment.ma")
-	public String payment() {
+	public String payment(@RequestParam int no, Model model) {
+		model.addAttribute("no", no);
 		return "match/pay";
 	}
 	
-    @GetMapping("/p_bank.ma")
-    public String p_bank() {
-        return "match/p_bank";
-    }
-    
-    @GetMapping("/p_mobile.ma")
-    public String p_mobile() {
-        return "match/p_mobile";
-    }
-
 	@ResponseBody
     @RequestMapping(value = "/payment.ma", method = RequestMethod.POST)
     public String payment(@RequestBody Match match, HttpSession session) {
@@ -996,10 +1173,11 @@ public class MatchController {
     		System.out.println("USER1이랑 같아!");
     		// 2. 상태가 1이면 이미 결제되었습니다.를 return
     		if(u1ps == 1) {
-    			jsonObject.addProperty("result", "OK");
+    			jsonObject.addProperty("result", "PAY_OK");
     			jsonObject.addProperty("msg", "이미 결제 되었습니다.");
     			// 3. 상태가 1이 아니면 결제진행
     		} else if(u1ps == 0) {
+    			jsonObject.addProperty("result", "PAY_NOT_OK");
     	        jsonObject.addProperty("no", no);
     		} 
     	//3. user_id2이 나면 user2_pay, user2_paystatus update
@@ -1010,6 +1188,7 @@ public class MatchController {
     			jsonObject.addProperty("result", "OK");
 		        jsonObject.addProperty("msg", "이미 결제 되었습니다.");
     		} else if(u2ps == 0) {
+    			jsonObject.addProperty("result", "PAY_NOT_OK");
     	        jsonObject.addProperty("no", no);
     		}
     	}
@@ -1022,16 +1201,27 @@ public class MatchController {
 		
 		return jsonStr;
     }
+	
+	
+    @GetMapping("/p_bank.ma")
+    public String p_bank(@RequestParam int no, Model model) {
+    	model.addAttribute("no", no);
+    	return "match/p_bank";
+    }
     
+    //결제
+    @ResponseBody
     @RequestMapping(value = "/p_bankPay.ma", method = RequestMethod.POST)
-    public String p_bankPay(HttpSession session, String userPay, int no) {
-    	System.out.println(userPay);
-    	System.out.println(no);
+    public String p_bankPay(HttpSession session, @RequestBody Match match2) {
+    	System.out.println(match2.getNo());
+    	int no = match2.getNo();
+    	
     	int result = 0;
     	int u1ps = 0;
     	int u2ps = 0;
     	String userId1 = "";
     	String userId2 = "";
+    	String userPay = "20,000원";
     	
     	Gson gson = new Gson();
 		JsonObject jsonObject = new JsonObject();
@@ -1041,70 +1231,221 @@ public class MatchController {
     	String userId = member.getUserId();
     	
     	// 1. no에 해당하는 payStatus 상태를 읽음
-//    	Match match5 = matchService.toCopyMatchData(no);
-//    	System.out.println(match5);
-//    	// 유저1,2 구하기
-//    	userId1 = match5.getUserId1();
-//    	userId2 = match5.getUserId2();
-//    	u1ps = match5.getUser1Paystatus();
-//    	u2ps = match5.getUser2Paystatus();
-//    	
-//    	Match match = new Match();
-//    	//2. user_id1이 나면 user1_pay, user1_paystatus update
-//    	if(userId.equals(userId1)) {	
-//    		System.out.println("USER1이랑 같아!");
-//    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
-//    		if(u1ps == 1) {
-//    			jsonObject.addProperty("result", "OK");
-//    			jsonObject.addProperty("msg", "이미 결제 되었습니다.");
-//    			// 3. 상태가 1이 아니면 결제진행
-//    		} else if(u1ps == 0) {
-//    			match.setNo(no);
-//    			match.setUser1Pay(userPay);
-//    			match.setUserId1(userId);
-//    			
-//    			System.out.println(match);
-//    			result = matchService.updatePay1(match);		
-//    		}
-//
-//       	   	
-//		//3. user_id2이 나면 user2_pay, user2_paystatus update
-//    	} else if (userId.equals(userId2)) {
-//    		System.out.println("user2이랑 같아!");
-//    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
-//    		if(u2ps == 1) {
-//    			jsonObject.addProperty("result", "OK");
-//		        jsonObject.addProperty("msg", "이미 결제 되었습니다.");
-//    		} else if(u2ps == 0) {
-//    			match.setNo(no);
-//    			match.setUser2Pay(userPay);
-//    			match.setUserId2(userId);
-//    			
-//    			System.out.println(match);
-//    			result = matchService.updatePay2(match);
-//    		}		
-//    	}
+    	Match match5 = matchService.toCopyMatchData(no);
+    	System.out.println(match5);
+    	// 유저1,2 구하기
+    	userId1 = match5.getUserId1();
+    	userId2 = match5.getUserId2();
+    	u1ps = match5.getUser1Paystatus();
+    	u2ps = match5.getUser2Paystatus();
+    	
+    	Match match = new Match();
+    	//2. user_id1이 나면 user1_pay, user1_paystatus update
+    	if(userId.equals(userId1)) {	
+    		System.out.println("USER1이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u1ps == 0) {
+    			match.setNo(no);
+    			match.setUser1Pay(userPay);
+    			match.setUser1Paystatus(1);
+    			match.setUserId1(userId);
+    			
+    			System.out.println(match);
+    			result = matchService.updatePay1(match);
+    			
+    			if(result > 0) {
+    				jsonObject.addProperty("result", "OK");
+    		        jsonObject.addProperty("msg", "결제 되었습니다.");
+    			} else {
+    				jsonObject.addProperty("result", "NOT_OK");
+    		        jsonObject.addProperty("msg", "다시 결제 시도해주세요.");
+    			}
+    		}
+
+       	   	
+		//3. user_id2이 나면 user2_pay, user2_paystatus update
+    	} else if (userId.equals(userId2)) {
+    		System.out.println("user2이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u2ps == 0) {
+    			match.setNo(no);
+    			match.setUser2Pay(userPay);
+    			match.setUser2Paystatus(1);
+    			match.setUserId2(userId);
+    			
+    			System.out.println(match);
+    			result = matchService.updatePay2(match);
+    			
+    			if(result > 0) {
+    				jsonObject.addProperty("result", "OK");
+    		        jsonObject.addProperty("msg", "결제 되었습니다.");
+    			} else {
+    				jsonObject.addProperty("result", "NOT_OK");
+    		        jsonObject.addProperty("msg", "다시 결제 시도해주세요.");
+    			}
+    		}		
+    	}
 
     	//4. user1_paystatus, user2_paystatus 둘 다 1이면 match_status 4로 업데이트
     	Match match3 = matchService.selectPayStatus(no);
     	int user1PayStatus = match3.getUser1Paystatus();
     	int user2PayStatus = match3.getUser2Paystatus();
-    	match3.setNo(no);
-    	match3.setMatchStatus(4);
-    	match3.setUserId1(userId1);
-    	match3.setUserId2(userId2);
-    	
-    	System.out.println(match3);
+
     	if(user1PayStatus == 1 && user2PayStatus == 1) {
+	    	match3.setNo(no);
+	    	match3.setMatchStatus(4);
+	    	match3.setUserId1(userId1);
+	    	match3.setUserId2(userId2);
+	    	
+	    	System.out.println(match3);
     		result = matchService.updateMatch(match3);
+    		
+    		if(result > 0) {
+				jsonObject.addProperty("result", "OK");
+		        jsonObject.addProperty("msg", "결제 되었습니다.");
+			} else {
+				jsonObject.addProperty("result", "NOT_OK");
+		        jsonObject.addProperty("msg", "다시 결제 시도해주세요.");
+			}
     	}
     	
-    	return "/match/matchList";
+    	// JsonObject를 Json 문자열로 변환
+		String jsonStr = gson.toJson(jsonObject);             
+	
+		// 생성된 Json 문자열 출력
+		System.out.println(jsonStr);
+		
+		return jsonStr;
     }
-   
+    
+    //환불
+    @RequestMapping(value = "/p_bankRefund.py", method = RequestMethod.GET)
+    public String p_bankRefund(@RequestParam int no, HttpSession session) {
+    	//int no = match.getNo();
+    	System.out.println(no);
+    	
+    	int result = 0;
+    	int u1ps = 0;
+    	int u2ps = 0;
+    	String userId1 = "";
+    	String userId2 = "";
+    	
+    	Gson gson = new Gson();
+		JsonObject jsonObject = new JsonObject();
+		
+		// 1. user_id1이 나인지 user_id2가 나인지 확인
+    	Member member = (Member) session.getAttribute("loginMember");
+    	String userId = member.getUserId();
+    	
+    	// 1. 내 매치인지 no로 조회
+    	// 1. no에 해당하는 payStatus 상태를 읽음  	
+		// 2. user_id1이 나면 user1_pay, user1_paystatus default로 update
+		// 3. user_id2이 나면 user2_pay, user2_paystatus default로 update
+    	// 4. user1_paystatus, user2_paystatus 둘 다 1이면 match_status 4로 업데이트
+
+		// 1. no에 해당하는 payStatus 상태를 읽음
+    	Match match2 = matchService.toCopyMatchData(no);
+    	System.out.println(match2);
+    	
+    	// 유저1,2 구하기
+    	userId1 = match2.getUserId1();
+    	userId2 = match2.getUserId2();
+    	u1ps = match2.getUser1Paystatus();
+    	u2ps = match2.getUser2Paystatus();
+    	
+    	Match match3 = new Match();
+    	//2. user_id1이 나면 user1_pay, user1_paystatus default로 update
+    	if(userId.equals(userId1)) {	
+    		System.out.println("USER1이랑 같아!");
+    		// 2. 상태가 0이면 이미 환불되었습니다.를 return
+    		if(u1ps == 0) {
+    			jsonObject.addProperty("result", "PAY_OK");
+    			jsonObject.addProperty("msg", "이미 환불 되었습니다.");
+    			// 3. 상태가 0이 아니면 환불진행
+    		} else if(u1ps == 1) {    			
+    			match3.setNo(no);
+    			match3.setUser1Pay("0");
+    			match3.setUser1Paystatus(0);
+    			match3.setUserId1(userId);
+    			
+    			System.out.println(match3);
+    			result = matchService.updatePay1(match3);
+    			
+    			if(result > 0) {
+    				jsonObject.addProperty("result", "PAY_OK");
+    		        jsonObject.addProperty("msg", "환불 되었습니다.");
+    			} else {
+    				jsonObject.addProperty("result", "PAY_NOT_OK");
+    		        jsonObject.addProperty("msg", "다시 환불 시도해주세요.");
+    			}
+    		} 
+    	//3. user_id2이 나면 user2_pay, user2_paystatus default로 update
+    	} else if (userId.equals(userId2)) {
+    		System.out.println("user2이랑 같아!");
+    		// 2. 상태가 1이면 이미 결제되었습니다.를 return
+    		if(u2ps == 0) {
+    			jsonObject.addProperty("result", "PAY_OK");
+    			jsonObject.addProperty("msg", "이미 환불 되었습니다.");
+    			// 3. 상태가 0이 아니면 환불진행
+    		} else if(u2ps == 1) {
+    			match3.setNo(no);
+    			match3.setUser2Pay("0");
+    			match3.setUser2Paystatus(0);
+    			match3.setUserId2(userId);
+    			
+    			System.out.println(match3);
+    			result = matchService.updatePay2(match3);
+    			
+    			if(result > 0) {
+    				jsonObject.addProperty("result", "PAY_OK");
+    		        jsonObject.addProperty("msg", "환불 되었습니다.");
+    			} else {
+    				jsonObject.addProperty("result", "PAY_NOT_OK");
+    		        jsonObject.addProperty("msg", "다시 환불 시도해주세요.");
+    			}
+       		}
+    	}
+
+    	//4. user1_paystatus, user2_paystatus 둘 다 0이면 match_status 7로 업데이트
+    	Match match4 = matchService.selectPayStatus(no);
+    	int user1PayStatus = match4.getUser1Paystatus();
+    	int user2PayStatus = match4.getUser2Paystatus();
+
+    	if(user1PayStatus == 0 && user2PayStatus == 0) {
+    		match4.setNo(no);
+    		match4.setMatchStatus(7);
+    		match4.setUserId1(userId1);
+    		match4.setUserId2(userId2);
+	    	
+	    	System.out.println(match4);
+    		result = matchService.updateMatch(match4);
+    		
+    		if(result > 0) {
+				jsonObject.addProperty("result", "PAY_OK");
+		        jsonObject.addProperty("msg", "환불 되었습니다.");
+			} else {
+				jsonObject.addProperty("result", "PAY_NOT_OK");
+		        jsonObject.addProperty("msg", "다시 환불 시도해주세요.");
+			}
+    	}
+    	
+    	// JsonObject를 Json 문자열로 변환
+		String jsonStr = gson.toJson(jsonObject);             
+	
+		// 생성된 Json 문자열 출력
+		System.out.println(jsonStr);
+		
+		return jsonStr;
+    }
+	
+	
+    @GetMapping("/p_mobile.ma")
+    public String p_mobile() {
+        return "match/p_mobile";
+    }
+    
     @PostMapping("/p_mobilePass.ma")
-	   public String p_mobilePass(String userId, String userName, String userEmail, Model model) {
-	       
-	   return "redirect:/";
-	   }
+    public String p_mobilePass(String userId, String userName, String userEmail, Model model) {      
+    	return "redirect:/";
+    }
 }

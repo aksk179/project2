@@ -82,7 +82,7 @@ public interface MatchDao {
 	List<Match> selectListChal(String userId2);
 
 	MatchList selectOneMatch(@Param("no")int no);
-	
+
 	int chalCancelUpdate(Match toCancelMatchData);
 
 	int challengerStatusDecision(Match toCancelMatchData);
@@ -99,6 +99,55 @@ public interface MatchDao {
 
 	List<MatchList> myMatchWaitingChalPay(String userId4, RowBounds rowBounds);
 
+	int selectTotalRecordMatchListAfterRegPay(String userId5);
+
+	int selectTotalRecordMatchListAfterChalPay(String userId6);
+
+	List<MatchList> myMatchAfterRegPay(String userId5, RowBounds rowBounds);
+
+	List<MatchList> myMatchAfterChalPay(String userId6, RowBounds rowBounds);
+
+	int selectTotalRecordMatchListAfterRegEnd(String userId7);
+
+	int selectTotalRecordMatchListAfterChalEnd(String userId8);
+
+	List<MatchList> myMatchAfterRegEnd(String userId7, RowBounds rowBounds);
+
+	List<MatchList> myMatchAfterChalEnd(String userId8, RowBounds rowBounds);
+
+	int selectTotalRecordMainListGender(String gender);
+
+	int selectTotalRecordMainListLocation(String locations);
+
+	int selectTotalRecordMainListNick(String searchInput);
+
+	int selectTotalRecordMainListDow(int dowInt);
+
+	int selectTotalRecordMainListReg(String userId1);
+
+	int selectTotalRecordMainListChal(String userId2);
+
+
+	List<MatchList> mainListFilterGender(String gender, RowBounds rowBounds);
+
+	List<MatchList> mainListFilterLocation(String locations, RowBounds rowBounds);
+
+	List<MatchList> mainListFilterNick(String searchInput, RowBounds rowBounds);
+
+	List<MatchList> mainListFilterDow(int dowInt, RowBounds rowBounds);
+
+	List<MatchList> mainListReg(String userId1, RowBounds rowBounds);
+
+	List<MatchList> mainListChal(String userId2, RowBounds rowBounds);
+
+	int selectTotalRecordMainListBeforeEnd();
+
+	int selectTotalRecordMainListAfterEnd();
+
+	List<MatchList> mainListBeforeEnd(RowBounds rowBounds);
+
+	List<MatchList> mainListAfterEnd(RowBounds rowBounds);
+	
 	Match selectPayUser1(@Param("no")int no, @Param("userId")String userId);
 
 	Match selectPayUser2(@Param("no")int no, @Param("userId")String userId);

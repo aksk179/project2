@@ -74,7 +74,7 @@
                                             </c:otherwise>
                                         </c:choose></td>
                                     <td><button class="myMatchbtn" type="button"
-                                            onclick="location.href='#'">내경기</button></td>
+                                            onclick="location.href='${pageContext.request.contextPath}/match/myMatch.ma'">내경기</button></td>
                                 </tr>
                                 <tr>
                                     <c:choose>
@@ -118,7 +118,7 @@
                 <div class="modal-content">
                     <h3>폰결제환불</h3>
                     <div class="button-row">
-                        <button onclick="location.href='${pageContext.request.contextPath}/member/p_bankBack.py'" class="button">계좌이체</button>
+                        <button onclick="location.href='${pageContext.request.contextPath}/match/p_mobileBack.py'" class="button">폰 결제 환불</button>
                     </div>
                 </div>
             </div>
@@ -127,7 +127,7 @@
                 <div class="modal-content">
                     <h3>계좌이체환불</h3>
                     <div class="button-row">
-                        <button onclick="location.href='${pageContext.request.contextPath}/member/p_mobileBack.py'" class="button">휴대폰결제</button>
+                        <button onclick="location.href='${pageContext.request.contextPath}/match/p_bankRefund.py'" class="button">계좌 이체 환불</button>
                     </div>
                 </div>
             </div>

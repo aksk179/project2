@@ -164,7 +164,7 @@ public class AlarmController {
 		// 1. matchNo에 해당하는 상태를 읽음
 		// 2. 상태가 3이면 이미 수락되었습니다.를 return
 		// 3. 상태가 3이 아니면 알람메시지+상태를 3으로 update
-		// 4. 나머지 사람들은 알람메시지+상태를 6으로 update
+		// 4. 나머지 사람들은 알람메시지+상태를 8(거절 당한)으로 update
 		System.out.println(alarm.getNo());
 		
 		Gson gson = new Gson();

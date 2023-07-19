@@ -17,8 +17,8 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home() {
-		return "forward:/index.jsp";
+	public String home(Model model) {
+		return "/index";
 	}
 	
 }

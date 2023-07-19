@@ -238,7 +238,7 @@
 	function pay(no) {
 		var pay = {};
 		pay.no = no;
-
+		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/match/payment.ma",
 			type: "POST",
@@ -248,12 +248,17 @@
 			success : function(data, status, xhr) {
 				console.log(data.result);
 				console.log(data.no);
-	            window.location.href = "${pageContext.request.contextPath}/match/payment.ma?no="+data.no;
+				
+				if(data.result === 'PAY_OK') {
+					alert(data.msg);
+				} else {
+		    		window.open("${pageContext.request.contextPath}/match/payment.ma?no="+data.no, "_blank", "width=800px, height=600px top=50px left=200px");					
+				}
 			},
 			error : function(xhr, status, error) {
 				alert(status);
 			}
-		});	
+		});
     }     
 
        var modal = document.getElementById("paymentModal");
