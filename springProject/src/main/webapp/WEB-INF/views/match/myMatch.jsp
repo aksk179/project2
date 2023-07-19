@@ -217,27 +217,18 @@
                      	</c:choose>
                      </td>
                   </tr>
+                  <!-- Bank Back Modal -->
+					<div id="bankBackModal" class="modal">
+					    <div class="modal-content">
+					        <h3>계좌이체환불</h3>
+					        <div class="button-row">
+					            <button onclick="refund('${myMatch.no}');" class="button">계좌 이체 환불</button>
+					        </div>
+					    </div>
+					</div>
                </c:forEach>
          </tbody>
       </table>
-      <!-- Mobile Back Modal -->
-      <div id="mobileBackModal" class="modal">
-          <div class="modal-content">
-              <h3>폰결제환불</h3>
-              <div class="button-row">
-                  <button onclick="location.href='${pageContext.request.contextPath}/match/p_mobileBack.py'" class="button">폰 결제 환불</button>
-              </div>
-          </div>
-      </div>
-      <!-- Bank Back Modal -->
-      <div id="bankBackModal" class="modal">
-          <div class="modal-content">
-              <h3>계좌이체환불</h3>
-              <div class="button-row">
-                  <button onclick="location.href='${pageContext.request.contextPath}/match/p_bankRefund?no=${myMatch.no}" class="button">계좌 이체 환불</button>
-              </div>
-          </div>
-      </div>
    </div>   
 </div>
    <nav aria-label="Page navigation example">
@@ -368,7 +359,6 @@ function afterChalEnd(userId8) {
 			success : function(data, status, xhr) {
 				console.log(data.result);
 				alert(data.msg);
-				readAlarmAjax();
 			},
 			error : function(xhr, status, error) {
 				alert(status);
@@ -398,63 +388,36 @@ function afterChalEnd(userId8) {
 		});
     }
 	
-	function refund(no) {
-		alert("안녕");
-          if (!confirm("신청하시겠습니까?")) {
-             alert("취소를 누르셨습니다.");
-          } else {
-        	  alert("환불을 신청하셨습니다.");
-        	  
-        	  var refund = {};
-        	  refund.no = no;
+	//환불
+	function refund(no) {	
+		var refund = {};
+		refund.no = no;
+		
+        if (!confirm("환불 하시겠습니까?")) {
+           alert("취소를 누르셨습니다.");
+        } else {
+        	alert("환불을 신청하셨습니다.");  
+        	console.log(refund);
 
-      		  $.ajax({
-      		 	url: "${pageContext.request.contextPath}/match/p_bankRefund.ma",
-      		 	type: "GET",
-      			data: JSON.stringify(refund),
-      			dataType: "JSON",
-      	        contentType : "application/json",
-      			success : function(data, status, xhr) {
-      				console.log(data.result);
-      				console.log(data.no);
-      			},
-      			error : function(xhr, status, error) {
-      				alert(status);
-      			}
-      		 }); 
+      		$.ajax({
+	      		url: "${pageContext.request.contextPath}/match/p_bankRefund.py",
+	      		type: "POST",
+	      		data: JSON.stringify(refund),
+	      		dataType: "JSON",
+	      	    contentType : "application/json",
+	      		success : function(data, status, xhr) {
+	      			console.log(data.result);
+	      			console.log(data.no);
+	      			alert(data.msg);
+	      		},
+	      		error : function(xhr, status, error) {
+	      			alert(status);
+	      		}
+      		}); 
           }
 	}
 	
-	//결제 모달
-	var paymentModal = document.getElementById("paymentModal");
-
-	function openPaymentModal() {
-        paymentModal.style.display = "block";
-        document.addEventListener("click", closeModalOutsidePayment);
-    }
-	
-	function closeModalOutsidePayment(event) {
-        if (event.target === paymentModal) {
-            paymentModal.style.display = "none";
-            document.removeEventListener("click", closeModalOutsidePayment);
-        }
-    }
-
-   
-    var mobileBackModal = document.getElementById("mobileBackModal");
-
-    function openMobileBackModal() {
-        mobileBackModal.style.display = "block";
-        document.addEventListener("click", closeModalOutsideMobileBack);
-    }
-
-    function closeModalOutsideMobileBack(event) {
-        if (event.target === mobileBackModal) {
-            mobileBackModal.style.display = "none";
-            document.removeEventListener("click", closeModalOutsideMobileBack);
-        }
-    }
-   
+	//환불 모달  
     var bankBackModal = document.getElementById("bankBackModal");
 
     function openBankBackModal() {

@@ -303,10 +303,39 @@ public class AlarmController {
 		        jsonObject.addProperty("msg", "이미 거절 되었습니다.");
 			} else if(matchList.getMatchStatus() == 1) {		
 				Match match = new Match();
-				match.setUserId2(matchList.getUserId2());
+				match.setUserId1(matchList.getUserId1());
 				match.setMatchNo(matchList.getMatchNo());
 				
 				result = matchService.updateUser2Null(match);	
+				
+				////////////////////////////////////////////////////
+				
+				String userId1 = matchList.getUserId1();
+				String userId2 = matchList.getUserId2();
+				String proNick = matchList.getProNick();
+				String proNick2 = matchList.getProNick2();
+				String gymName = matchList.getGymName();
+				
+				LocalDateTime dateTemp = matchList.getMatchdate();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 dd일 E요일").withLocale(Locale.forLanguageTag("ko"));
+				String matchdateString = formatter.format(dateTemp);
+				System.out.println(matchdateString);
+				
+				String matchTime = matchList.getMatchtime();
+				int no2 = matchList.getNo();
+				
+				Alarm alarm2 = new Alarm();
+				
+				//userId2이 userId1로부터 받음.
+				String alarmMsg2 = "죄송합니다. " + proNick + "님과의 " + gymName + " " + matchdateString + " " + matchTime + " 매치가 거절되었습니다.";
+				alarm2.setReceiverId(userId2);
+				alarm2.setSenderId(userId1);
+				alarm2.setAlarmMsg(alarmMsg2);
+				alarm2.setReadYn("N");
+				alarm2.setAlarmStatus(0);
+				alarm2.setNo(alarm.getNo());
+				result = alarmService.insertAlarm(alarm2);
+				
 				if(result > 0) {
 			        jsonObject.addProperty("result", "OK");
 			        jsonObject.addProperty("msg", "거절되었습니다.");

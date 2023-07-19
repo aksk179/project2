@@ -263,8 +263,7 @@ public class MatchController {
 			totalRecord = matchService.selectTotalRecordMatchListAfterChalEnd(userId8);
 		} else {
 			totalRecord = matchService.selectTotalRecordMatchListReg(userId);
-		}
-		
+		}	
 		
 		
 		int limit = 5;
@@ -1319,9 +1318,10 @@ public class MatchController {
     }
     
     //환불
-    @RequestMapping(value = "/p_bankRefund.py", method = RequestMethod.GET)
-    public String p_bankRefund(@RequestParam int no, HttpSession session) {
-    	//int no = match.getNo();
+    @ResponseBody
+    @RequestMapping(value = "/p_bankRefund.py", method = RequestMethod.POST)
+    public String p_bankRefund(@RequestBody Match match, HttpSession session) {
+    	int no = match.getNo();
     	System.out.println(no);
     	
     	int result = 0;

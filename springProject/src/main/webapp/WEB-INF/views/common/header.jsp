@@ -261,18 +261,18 @@
 		});
     }     
 
-       var modal = document.getElementById("paymentModal");
+    var modal = document.getElementById("paymentModal");
 
-       function openModal() {
-           modal.style.display = "block";
-           document.addEventListener("click", closeModalOutside);
-       }
+    function openModal() {
+        modal.style.display = "block";
+        document.addEventListener("click", closeModalOutside);
+    }
 
-       function closeModalOutside(event) {
-           if (event.target === modal) {
-               modal.style.display = "none";
-               document.removeEventListener("click", closeModalOutside);
-           }
-       }
+    function closeModalOutside(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            document.removeEventListener("click", closeModalOutside);
+        }
+    }
 
 </script>
